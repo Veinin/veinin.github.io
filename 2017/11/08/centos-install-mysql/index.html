@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CentOS,MySQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="介绍2013年10月，MySQL开发团队正式启动了对 Yum 版本库的支持。这意味着您现在可以确保您拥有从源代码直接安装的最新版本的 MySQL！本文将在全新的CentOS 6中安装 MySQL 5.7。5.7是当前默认最新版本，当然你也可以选择直接安装其他版本，可参考本文关于 选择指定版本安装章节。">
+<meta name="keywords" content="CentOS,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos 从官方 Yum Repositories 安装 MySQL">
+<meta property="og:url" content="http://veinin.com/2017/11/08/centos-install-mysql/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="介绍2013年10月，MySQL开发团队正式启动了对 Yum 版本库的支持。这意味着您现在可以确保您拥有从源代码直接安装的最新版本的 MySQL！本文将在全新的CentOS 6中安装 MySQL 5.7。5.7是当前默认最新版本，当然你也可以选择直接安装其他版本，可参考本文关于 选择指定版本安装章节。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://veinin.com/images/02_centos_install_mysql_download.jpg">
+<meta property="og:image" content="http://veinin.com/images/03_centos_install_mysql_link.jpg">
+<meta property="og:updated_time" content="2017-11-08T14:12:47.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Centos 从官方 Yum Repositories 安装 MySQL">
+<meta name="twitter:description" content="介绍2013年10月，MySQL开发团队正式启动了对 Yum 版本库的支持。这意味着您现在可以确保您拥有从源代码直接安装的最新版本的 MySQL！本文将在全新的CentOS 6中安装 MySQL 5.7。5.7是当前默认最新版本，当然你也可以选择直接安装其他版本，可参考本文关于 选择指定版本安装章节。">
+<meta name="twitter:image" content="http://veinin.com/images/02_centos_install_mysql_download.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2017/11/08/centos-install-mysql/"/>
+
+
+
+
+
+  <title>Centos 从官方 Yum Repositories 安装 MySQL | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2017/11/08/centos-install-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Centos 从官方 Yum Repositories 安装 MySQL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-08T21:55:49+08:00">
+                2017-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/08/centos-install-mysql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/08/centos-install-mysql/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>2013年10月，MySQL开发团队正式启动了对 Yum 版本库的支持。这意味着您现在可以确保您拥有从源代码直接安装的最新版本的 MySQL！<br>本文将在全新的CentOS 6中安装 MySQL 5.7。5.7是当前默认最新版本，当然你也可以选择直接安装其他版本，可参考本文关于 <a href="http://localhost:8080/2017/11/08/centos-install-mysql/#选择指定版本安装" target="_blank" rel="noopener">选择指定版本安装</a>章节。</p>
+<a id="more"></a>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>Yum 版本库文件需要从 MYSQL 开发者网站下载，安装完成后，使用 <code>yum update</code> 来确保你运行的是最新的MySQL版本，包括其安全更新，Yum 会帮你解决任何依赖关系，这使你安装过程变成很简单。</p>
+<p>刚开始，你需要访问 <a href="https://dev.mysql.com/downloads/repo/" target="_blank" rel="noopener">MySQL Repositories</a> ，选择 <a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">MySQL Yum Repository</a>，根据你 CentOS 的版本，选择相应的下载链接，然后点击 Download。<br><img src="/images/02_centos_install_mysql_download.jpg" alt=""></p>
+<p>右键 “No thanks, just start my download.” ， 点击 “复制链接地址”。<br><img src="/images/03_centos_install_mysql_link.jpg" alt=""></p>
+<p>登录到您的服务器，根据复制的连接地址然后下载此文件。以下只是一个示例网址 - 你可能需要检查这个地址是否正确：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql57-community-release-el6-11.noarch.rpm</span><br></pre></td></tr></table></figure></p>
+<p>从本地文件中安装下载好的 rpm 文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum localinstall mysql57-community-release-el6-11.noarch.rpm</span><br></pre></td></tr></table></figure></p>
+<p>您现在已经在服务器上从官方存储库安装了，但尚未安装任何软件。存储库包括MySQL服务器，MySQL Workbench管理工具和ODBC驱动程序。让我们安装MySQL服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install mysql-community-server</span><br></pre></td></tr></table></figure></p>
+<p>启动 MySQL 服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysqld start</span><br></pre></td></tr></table></figure></p>
+<p>配置MySQL在重新启动时自动启动：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chkconfig mysqld on</span><br><span class="line">chkconfig --list mysqld</span><br></pre></td></tr></table></figure></p>
+<p>到此，你的MySQL服务已经安装完成。</p>
+<hr>
+<h2 id="重置-Root-密码"><a href="#重置-Root-密码" class="headerlink" title="重置 Root 密码"></a>重置 Root 密码</h2><p>如果你安装的是 MySQL 5.7 版本，root 密码会自动生成，并在启动日志 /var/log/mysqld.log 里面输出。</p>
+<p>获取初始密码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;password&quot; /var/log/mysqld.log</span><br><span class="line">2017-11-08T05:09:31.492454Z 1 [Note] A temporary password is generated for root@localhost: 1!Ta0EEis-yR</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">登录 root 账号，如果默认密码为空，请去除 -p 参数：</span><br><span class="line">mysql -uroot -p &apos;1!Ta0EEis-yR&apos;</span><br></pre></td></tr></table></figure>
+<p>用你的新密码替换字符串 “ your_new_password “，如果你的版本是 5.6 或之前版本，请使用一下命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UPDATE mysql.user SET Password=PASSWORD(&apos;your_new_password&apos;) WHERE User=&apos;root&apos;;</span><br><span class="line">flush privileges;</span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
+<p>如果你的版本是 5.7 版本，请使用以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER USER() IDENTIFIED BY &apos; your_new_password &apos;;</span><br></pre></td></tr></table></figure></p>
+<p>如果提示：ERROR 1819 (HY000): Your password does not satisfy the current policy requirements，那是因为默认开启了简单密码检查政策，你可以通过以下命令关闭其功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set global validate_password_policy=0;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="选择指定版本安装"><a href="#选择指定版本安装" class="headerlink" title="选择指定版本安装"></a>选择指定版本安装</h2><p>使用 MySQL Yum 存储库时，默认情况下选择最新的 GA 版本（当前为 MySQL 5.7）进行安装。</p>
+<p>在 MySQL Yum 存储库中，MySQL社区服务器的不同版本托管在不同的子库中。最新的 GA 系列（目前是 MySQL 5.7）的子库是默认启用的，所有其他系列的子库（例如MySQL 5.6版本）默认是禁用的。可以使用以下命令查看 MySQL Yum 存储库中的所有子存储库，并查看其中哪些被启用或禁用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all | grep mysql</span><br></pre></td></tr></table></figure></p>
+<p>如果要安装最新的版本，不需要配置。如果要选择特定版本，请在运行安装命令之前，禁用最新 GA 版本的子库，并启用特定版本的子库。如果你的平台支持 yum-config-manager，你可以通过以下这些命令来实现，这些命令将禁用 5.7 版本的 subrepository，并启用5.6 版本的 subrepository：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-config-manager --disable mysql57-community</span><br><span class="line">sudo yum-config-manager --enable mysql56-community</span><br></pre></td></tr></table></figure></p>
+<p>除了使用 yum-config-manager 命令之外，还可以通过手动编辑 /etc/yum.repos.d/mysql-community.repo 文件来选择发行版，项目是一个典型的文件系列子库的条目信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[mysql57-community]</span><br><span class="line">name=MySQL 5.7 Community Server</span><br><span class="line">baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span><br></pre></td></tr></table></figure></p>
+<p>找到要配置的子库的条目，然后编辑该 enabled 选项。指定 enabled=0 禁用子库，或 enabled=1 启用子库。例如，要安装MySQL 5.6，请确保您拥有 enabled=0 MySQL 5.7版本的上述子目录条目，并且具有 enabled=1 MySQL 5.6版本的条目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Enable to use MySQL 5.6</span><br><span class="line">[mysql56-community]</span><br><span class="line">name=MySQL 5.6 Community Server</span><br><span class="line">baseurl=http://repo.mysql.com/yum/mysql-5.6-community/el/6/$basearch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span><br></pre></td></tr></table></figure></p>
+<p>最后再运行安装命令（mysql-community-server），那么你安装到的是你想要的指定版本的 MySQL。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/01/lua-serialize-table/" rel="next" title="Lua 表序列化与反序列化">
+                <i class="fa fa-chevron-left"></i> Lua 表序列化与反序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/12/reading-notes-monotasking/" rel="prev" title="《单核工作法》读书笔记">
+                《单核工作法》读书笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置-Root-密码"><span class="nav-number">3.</span> <span class="nav-text">重置 Root 密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择指定版本安装"><span class="nav-number">4.</span> <span class="nav-text">选择指定版本安装</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2017/11/08/centos-install-mysql/';
+          this.page.identifier = '2017/11/08/centos-install-mysql/';
+          this.page.title = 'Centos 从官方 Yum Repositories 安装 MySQL';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux,Linux 命令行," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="什么是 LinuxLinux可划分为以下四部分： Linux内核 系统内存管理 软件程序管理 硬件设备管理 文件系统管理  GNU工具GNU组织（GNU是GNU’s Not Unix的缩写），模仿Unix操作系统开发一系列标准的计算机系统工具，但没有可以运行它们的内核系统。">
+<meta name="keywords" content="Linux,Linux 命令行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Linux 命令行与shell脚本编程大全》读书笔记（命令行部分）">
+<meta property="og:url" content="http://veinin.com/2017/11/24/reading-notes-linux-command-lime/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="什么是 LinuxLinux可划分为以下四部分： Linux内核 系统内存管理 软件程序管理 硬件设备管理 文件系统管理  GNU工具GNU组织（GNU是GNU’s Not Unix的缩写），模仿Unix操作系统开发一系列标准的计算机系统工具，但没有可以运行它们的内核系统。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-26T15:36:17.768Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Linux 命令行与shell脚本编程大全》读书笔记（命令行部分）">
+<meta name="twitter:description" content="什么是 LinuxLinux可划分为以下四部分： Linux内核 系统内存管理 软件程序管理 硬件设备管理 文件系统管理  GNU工具GNU组织（GNU是GNU’s Not Unix的缩写），模仿Unix操作系统开发一系列标准的计算机系统工具，但没有可以运行它们的内核系统。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2017/11/24/reading-notes-linux-command-lime/"/>
+
+
+
+
+
+  <title>《Linux 命令行与shell脚本编程大全》读书笔记（命令行部分） | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2017/11/24/reading-notes-linux-command-lime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Linux 命令行与shell脚本编程大全》读书笔记（命令行部分）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-24T23:30:00+08:00">
+                2017-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/24/reading-notes-linux-command-lime/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/24/reading-notes-linux-command-lime/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是-Linux"><a href="#什么是-Linux" class="headerlink" title="什么是 Linux"></a>什么是 Linux</h2><p>Linux可划分为以下四部分：</p>
+<h3 id="Linux内核"><a href="#Linux内核" class="headerlink" title="Linux内核"></a>Linux内核</h3><ul>
+<li>系统内存管理</li>
+<li>软件程序管理</li>
+<li>硬件设备管理</li>
+<li>文件系统管理</li>
+</ul>
+<h3 id="GNU工具"><a href="#GNU工具" class="headerlink" title="GNU工具"></a>GNU工具</h3><p>GNU组织（GNU是GNU’s Not Unix的缩写），模仿Unix操作系统开发一系列标准的计算机系统工具，但没有可以运行它们的内核系统。</p>
+<a id="more"></a>
+<ul>
+<li><p><strong>核心GNU工具</strong><br>该项目移植了很多常见的Unix系统命令行工具。供Linux系统使用的这组核心工具被称为coreutils（coreutilities）软件包。由三部分构成：用以处理文件的工具、用以操作文本的工具、用以管理进程的工具</p>
+</li>
+<li><p><strong>shell</strong><br>GNU/Linux shell是一种特殊的交互式工具。它为用户提供了启动程序、管理文件系统中的文件以及运行在Linux系统上的进程的途径。 shell的核心是命令行提示符。命令行提示符是shell负责交互的部分。它允许你输入文本命令，然后解释命令，并在内核中执行。所有Linux发行版默认的shell都是bash shell。</p>
+</li>
+</ul>
+<h3 id="图形化桌面环境"><a href="#图形化桌面环境" class="headerlink" title="图形化桌面环境"></a>图形化桌面环境</h3><ul>
+<li>X Window系统</li>
+<li>KDE桌面（K Desktop Environment， K桌面环境）</li>
+<li>GNOME桌面（the GNU Network Object Model Environment， GNU网络对象模型环境）</li>
+<li>Unity桌面……</li>
+</ul>
+<h3 id="应用软件"><a href="#应用软件" class="headerlink" title="应用软件"></a>应用软件</h3><h2 id="Linux-发行版"><a href="#Linux-发行版" class="headerlink" title="Linux 发行版"></a>Linux 发行版</h2><p>不同的Linux发行版通常归类为3种：</p>
+<h3 id="完整的核心Linux发行版"><a href="#完整的核心Linux发行版" class="headerlink" title="完整的核心Linux发行版"></a>完整的核心Linux发行版</h3><p>核心Linux发行版含有内核、一个或多个图形化桌面环境以及预编译好的几乎所有能见到的Linux应用。它提供了一站式的完整Linux安装。</p>
+<h3 id="特定用途的发行版"><a href="#特定用途的发行版" class="headerlink" title="特定用途的发行版"></a>特定用途的发行版</h3><p>它们通常基于某个主流发行版，但仅包含主流发行版中一小部分用于某种特定用途的应用程序。如许多特定用途的Linux发行版都是基于Debian Linux，但仅打包了完整Debian系统中的一小部分。</p>
+<h3 id="LiveCD测试发行版"><a href="#LiveCD测试发行版" class="headerlink" title="LiveCD测试发行版"></a>LiveCD测试发行版</h3><p>它无需安装就可以看到Linux系统是什么样的。多数现代PC都能从CD启动，而不是必须从标准硬盘启动。基于这点，一些Linux发行版创建了含有Linux样本系统（称为Linux LiveCD）的可引导CD。</p>
+<h2 id="bash-手册"><a href="#bash-手册" class="headerlink" title="bash 手册"></a>bash 手册</h2><p>man命令用来访问存储在Linux系统上的手册页面。在想要查找的工具的名称前面输入man命令，就可以找到那个工具相应的手册条目。<br>手册每个内容区域都分配了一个数字，从1开始，一直到9：<br>1：可执行程序或shell命令<br>2：系统调用<br>3：库调用<br>4：特殊文件<br>5：文件格式与约定<br>6：游戏<br>7：概览、约定及杂项<br>8：超级用户和系统管理员命令<br>9：内核例程</p>
+<h2 id="过滤输出列表"><a href="#过滤输出列表" class="headerlink" title="过滤输出列表"></a>过滤输出列表</h2><p>ls命令能够识别标准通配符，并在过滤器中用它们进行模式匹配：</p>
+<ul>
+<li>问号（?）代表一个字符；</li>
+<li>星号（*）代表零个或多个字符。</li>
+<li><p>在特定位置上可能出现的两种字符，a或i:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l my_scr[ai]pt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定字符范围，例如字母范围[a – i]:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l f[a-i]ll</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用感叹号（!）将不需要的内容排除在外:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l f[!a]ll</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="管理文件目录"><a href="#管理文件目录" class="headerlink" title="管理文件目录"></a>管理文件目录</h2><h3 id="处理文件"><a href="#处理文件" class="headerlink" title="处理文件"></a>处理文件</h3><ul>
+<li>创建文件：touch</li>
+<li>复制文件：cp</li>
+<li>重命名文件：mv</li>
+<li>删除文件：rm</li>
+<li>链接文件：ln<br>在系统上维护同一文件的两份或多份副本，除了保存多份单独的物理文件副本之外，还可以采用保存一份物理文件副本和多个虚拟副本的方法。这种虚拟的副本就称为链接。</li>
+</ul>
+<h3 id="文件链接"><a href="#文件链接" class="headerlink" title="文件链接"></a>文件链接</h3><p>在Linux中有两种不同类型的文件链接：</p>
+<h4 id="符号链接"><a href="#符号链接" class="headerlink" title="符号链接"></a>符号链接</h4><p>符号链接就是一个实实在在的文件，它指向存放在虚拟目录结构中某个地方的另一个文件。这两个通过符号链接在一起的文件，彼此的内容并不相同。<br>使用ln命令以及-s选项来创建符号链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s data_file sl_data_file</span><br></pre></td></tr></table></figure></p>
+<h4 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h4><p>硬链接会创建独立的虚拟文件，其中包含了原始文件的信息及位置。但是它们从根本上而言是同一个文件。引用硬链接文件等同于引用了源文件。<br>使用ln命令时不再需要加入额外的参数创建硬链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln code_file hl_code_file</span><br></pre></td></tr></table></figure></p>
+<h3 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h3><ul>
+<li>显示文本文件中所有数据；cat</li>
+<li>显示文本文件的内容，但会在显示每页数据之后停下来：more</li>
+<li>more命令的升级版：less</li>
+<li>显示文件最后几行的内容：tail</li>
+<li>显示文件开头那些行的内容：head</li>
+</ul>
+<h3 id="处理目录"><a href="#处理目录" class="headerlink" title="处理目录"></a>处理目录</h3><ul>
+<li>创建目录：mkdir New_Dir</li>
+<li>创建多个目录和子目录，需要加入-p参数：mkdir -p New_Dir/Sub_Dir/Under_Dir</li>
+<li>删除目录，只删除空目录：rmdir New_Dir</li>
+<li>删除目录及其所有内容：rm -rf Small_Dir</li>
+<li>查看文件类型：file my_file</li>
+</ul>
+<h2 id="处理数据文件"><a href="#处理数据文件" class="headerlink" title="处理数据文件"></a>处理数据文件</h2><h3 id="排序、搜索"><a href="#排序、搜索" class="headerlink" title="排序、搜索"></a>排序、搜索</h3><ul>
+<li>排序数据：sort [options] [file]</li>
+<li>搜索数据：grep [options] pattern [file]</li>
+</ul>
+<h3 id="压缩数据"><a href="#压缩数据" class="headerlink" title="压缩数据"></a>压缩数据</h3><p>Linux上的文件压缩工具：</p>
+<ul>
+<li>bzip2，采用Burrows-Wheeler块排序文本压缩算法和霍夫曼编码，文件扩展名：.bz2        </li>
+<li>compress，最初的Unix文件压缩工具，已经快没人用了，文件扩展名：.Z  </li>
+<li>gzip，GNU压缩工具，用Lempel-Ziv编码，文件扩展名：.gz </li>
+<li>zip，Windows上PKZIP工具的Unix实现，文件扩展名：.zip</li>
+</ul>
+<p>gzip 软件包是GNU项目的产物，意在编写一个能够替代原先Unix中compress工具的免费版本。这个软件包含有下面的工具：</p>
+<ul>
+<li>gzip：用来压缩文件。</li>
+<li>gzcat：用来查看压缩过的文本文件的内容。</li>
+<li>gunzip：用来解压文件。</li>
+</ul>
+<h3 id="归档数据"><a href="#归档数据" class="headerlink" title="归档数据"></a>归档数据</h3><p>虽然zip命令能够很好地将数据压缩和归档进单个文件，但它不是Unix和Linux中的标准归档工具。目前，Unix和Linux上最广泛使用的归档工具是tar命令。</p>
+<p>tar命令的格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar function [options] object1 object2 ...</span><br></pre></td></tr></table></figure></p>
+<p>function参数定义了tar命令应该做什么：</p>
+<ul>
+<li>-A –concatenate 将一个已有tar归档文件追加到另一个已有tar归档文件</li>
+<li>-c –create 创建一个新的tar归档文件</li>
+<li>-d –diff 检查归档文件和文件系统的不同之处</li>
+<li>–delete 从已有tar归档文件中删除</li>
+<li>-r –append 追加文件到已有tar归档文件末尾</li>
+<li>-t –list 列出已有tar归档文件的内容</li>
+<li>-u –update 将比tar归档文件中已有的同名文件新的文件追加到该tar归档文件中</li>
+<li>-x –extract 从已有tar归档文件中提取文件</li>
+</ul>
+<p>每个功能可用选项来针对tar归档文件定义一个特定行为：</p>
+<ul>
+<li>-C dir 切换到指定目录</li>
+<li>-f file 输出结果到文件或设备file</li>
+<li>-j 将输出重定向给bzip2命令来压缩内容</li>
+<li>-p 保留所有文件权限</li>
+<li>-v 在处理文件时显示文件</li>
+<li>-z 将输出重定向给gzip命令来压缩内容</li>
+</ul>
+<p>列出归档内容：tar -tf test.tar<br>提取归档内容：tar -xvf test.tar<br>创建归档文件：tar -cvf test.tar test/ test2</p>
+<h2 id="管理进程"><a href="#管理进程" class="headerlink" title="管理进程"></a>管理进程</h2><h3 id="探查进程"><a href="#探查进程" class="headerlink" title="探查进程"></a>探查进程</h3><p>当程序运行在系统上时，我们称之为进程（process）。想监测这些进程，需要熟悉ps命令的用法。<br>使用ps命令的关键不在于记住所有可用的参数，而在于记住最有用的那些参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ps -ef</span><br><span class="line">UID        PID  PPID  C STIME TTY          TIME CMD</span><br><span class="line">root         1     0  0 Aug21 ?        00:07:16 /usr/lib/systemd/systemd --system --deserialize 26</span><br><span class="line">root         2     0  0 Aug21 ?        00:00:04 [kthreadd]</span><br><span class="line">root         3     2  0 Aug21 ?        00:00:28 [ksoftirqd/0]</span><br><span class="line">root         7     2  0 Aug21 ?        00:00:00 [migration/0]</span><br></pre></td></tr></table></figure>
+<p>常用参数：</p>
+<ul>
+<li>-e参数指定显示所有运行在系统上的进程；</li>
+<li>-f参数则扩展了输出，这些扩展的列包含了有用的信息。</li>
+<li>-l参数，它会产生一个长格式输出。</li>
+</ul>
+<p>这些扩展的列包含了有用的信息：</p>
+<ul>
+<li>UID：启动这些进程的用户。</li>
+<li>PID：进程的进程ID。</li>
+<li>PPID：父进程的进程号（如果该进程是由另一个进程启动的）。</li>
+<li>C：进程生命周期中的CPU利用率。</li>
+<li>STIME：进程启动时的系统时间。</li>
+<li>TTY：进程启动时的终端设备。</li>
+<li>TIME：运行进程需要的累计CPU时间。</li>
+<li>CMD：启动的程序名称。</li>
+</ul>
+<h3 id="实时监测进程"><a href="#实时监测进程" class="headerlink" title="实时监测进程"></a>实时监测进程</h3><p>想观察那些频繁换进换出的内存的进程趋势，top命令刚好适用这种情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">top - 15:54:00 up 95 days, 10:46,  1 user,  load average: 0.14, 0.07, 0.06</span><br><span class="line">Tasks: 176 total,   1 running, 175 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.3 us,  0.3 sy,  0.0 ni, 99.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :   602816 total,    65452 free,   248696 used,   288668 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.   177264 avail Mem</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND</span><br><span class="line">  170 root      20   0       0      0      0 S  0.3  0.0  20:03.70 xfsaild/sda1</span><br><span class="line">14270 root      20   0  828800  24620   2880 S  0.3  4.1  19:15.48 dockerd</span><br><span class="line">16454 systemd+  20   0  888224  33020      0 S  0.3  5.5   7:18.88 mysqld</span><br><span class="line">31990 veining+  20   0  155620   2216   1500 R  0.3  0.4   0:00.04 top</span><br><span class="line">    1 root      20   0  193496   4944   2392 S  0.0  0.8   7:25.59 systemd</span><br><span class="line">    2 root      20   0       0      0      0 S  0.0  0.0   0:04.07 kthreadd</span><br></pre></td></tr></table></figure>
+<p>输出的第一部分显示的是系统的概况：</p>
+<ul>
+<li>第一行显示了当前时间、系统的运行时间、登录的用户数以及系统的平均负载。</li>
+<li>第二行显示了进程概要信息——top命令的输出中将进程叫作任务（task）：有多少进程处在运行、休眠、停止或是僵化状态（僵化状态是指进程完成了，但父进程没有响应）。</li>
+<li>第三行显示了CPU的概要信息。 top根据进程的属主（用户还是系统）和进程的状态（运行、<br>空闲还是等待）将CPU利用率分成几类输出。</li>
+<li>最后两行说明了系统内存的状态。第一行说的是系统的物理内存：总共有多少内存，当前用了多少，还有多少空闲。<br>后一行说的是同样的信息，不过是针对系统交换空间（如果分配了的话）的状态而言的。</li>
+</ul>
+<p>最后一部分显示了当前运行中的进程的详细列表，有些列跟ps命令的输出类似：</p>
+<ul>
+<li>PID：进程的ID。</li>
+<li>USER：进程属主的名字。</li>
+<li>PR：进程的优先级。</li>
+<li>NI：进程的谦让度值。</li>
+<li>VIRT：进程占用的虚拟内存总量。</li>
+<li>RES：进程占用的物理内存总量。</li>
+<li>SHR：进程和其他进程共享的内存总量。</li>
+<li>S：进程的状态（D代表可中断的休眠状态， R代表在运行状态， S代表休眠状态， T代表跟踪状态或停止状态， Z代表僵化状态）。</li>
+<li>%CPU：进程使用的CPU时间比例。</li>
+<li>%MEM：进程使用的内存占可用内存的比例。</li>
+<li>TIME+：自进程启动到目前为止的CPU时间总量。</li>
+<li>COMMAND：进程所对应的命令行名称，也就是启动的程序名。</li>
+</ul>
+<h3 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h3><p>在Linux中，进程之间通过信号来通信。进程的信号就是预定义好的一个消息，进程能识别它并决定忽略还是作出反应。进程如何处理信号是由开发人员通过编程来决定的。</p>
+<p>在Linux上有两个命令可以向运行中的进程发出进程信号。</p>
+<ol>
+<li>kill命令：kill 3940<br>kill命令可通过进程ID（PID）给进程发信号。默认情况下，kill命令会向命令行中列出的全部PID发送一个TERM信号。遗憾的是，你只能用进程的PID而不能用命令名，所以kill命令有时并不好用。</li>
+<li>killall命令：killall http*<br>killall命令非常强大，它支持通过进程名而不是PID来结束进程。 killall命令也支持通配符，这在系统因负载过大而变得很慢时很有用。</li>
+</ol>
+<h2 id="管理磁盘"><a href="#管理磁盘" class="headerlink" title="管理磁盘"></a>管理磁盘</h2><p>Linux文件系统将所有的磁盘都并入一个虚拟目录下。在使用新的存储媒体之前，需要把它放到虚拟目录下。这项工作称为挂载（mounting）。如果用的Linux发行版不支持自动挂载和卸载可移动存储媒体，就必须手动完成。</p>
+<h3 id="mount命令"><a href="#mount命令" class="headerlink" title="mount命令"></a>mount命令</h3><p>Linux上用来挂载媒体的命令叫作mount。默认情况下， mount命令会输出当前系统上挂载的设备列表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mount</span><br><span class="line">sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime,seclabel)</span><br><span class="line">proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)</span><br><span class="line">devtmpfs on /dev type devtmpfs (rw,nosuid,seclabel,size=294632k,nr_inodes=73658,mode=755)</span><br><span class="line">securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)</span><br></pre></td></tr></table></figure></p>
+<p>mount命令提供如下四部分信息：</p>
+<ul>
+<li>媒体的设备文件名</li>
+<li>媒体挂载到虚拟目录的挂载点</li>
+<li>文件系统类型</li>
+<li>已挂载媒体的访问状态</li>
+</ul>
+<p>手动挂载媒体设备的基本命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t type device directory</span><br></pre></td></tr></table></figure></p>
+<h3 id="umount命令"><a href="#umount命令" class="headerlink" title="umount命令"></a>umount命令</h3><p>从Linux系统上移除一个可移动设备时，不能直接从系统上移除，而应该先卸载。umount命令的格式非常简单：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount [directory | device ]</span><br></pre></td></tr></table></figure></p>
+<h3 id="df-命令"><a href="#df-命令" class="headerlink" title="df 命令"></a>df 命令</h3><p>有时你需要知道在某个设备上还有多少磁盘空间。df命令可以让你很方便地查看所有已挂载磁盘的使用情况<br>常用参数是-h，它会把输出中的磁盘空间按照用户易读的形式显示，通常用M来替代兆字节，用G替代吉字节。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ df</span><br><span class="line">Filesystem     1K-blocks    Used Available Use% Mounted on</span><br><span class="line">/dev/sda1       10474496 8675760   1798736  83% /</span><br><span class="line">devtmpfs          294632       0    294632   0% /dev</span><br><span class="line">tmpfs             301408       0    301408   0% /dev/shm</span><br></pre></td></tr></table></figure></p>
+<p>df命令会显示每个有数据的已挂载文件系统。命令输出如下：</p>
+<ul>
+<li>设备的设备文件位置；</li>
+<li>能容纳多少个1024字节大小的块；</li>
+<li>已用了多少个1024字节大小的块；</li>
+<li>还有多少个1024字节大小的块可用；</li>
+<li>已用空间所占的比例；</li>
+<li>设备挂载到了哪个挂载点上。</li>
+</ul>
+<h3 id="du-命令"><a href="#du-命令" class="headerlink" title="du 命令"></a>du 命令</h3><p>du命令可以显示某个特定目录（默认情况下是当前目录）的磁盘使用情况。这一方法可用来快速判断系统上某个目录下是不是有超大文件。</p>
+<p>能让du命令用起来更方便的几个命令行参数：</p>
+<ul>
+<li>-c：显示所有已列出文件总的大小。</li>
+<li>-h：按用户易读的格式输出大小，即用K替代千字节，用M替代兆字节，用G替代吉字节。</li>
+<li>-s：显示每个输出参数的总计。</li>
+</ul>
+<h2 id="理解Shell"><a href="#理解Shell" class="headerlink" title="理解Shell"></a>理解Shell</h2><h3 id="shell-的类型"><a href="#shell-的类型" class="headerlink" title="shell 的类型"></a>shell 的类型</h3><p>系统启动什么样的shell程序取决于你个人的用户ID配置，在/etc/passwd文件中。<br>默认的交互shell会在用户登录某个虚拟控制台终端或在GUI中运行终端仿真器时启动。不过还有另外一个默认shell是/bin/sh，它作为默认的系统shell，用于那些需要在启动时使用的系统shell脚本。</p>
+<h3 id="shell-的父子关系"><a href="#shell-的父子关系" class="headerlink" title="shell 的父子关系"></a>shell 的父子关系</h3><p>用于登录某个虚拟控制器终端或在GUI中运行终端仿真器时所启动的默认的交互shell，是一个父shell。<br>在CLI提示符后输入/bin/bash命令或其他等效的bash命令时， 会创建一个新的shell程序。这个shell程序被称为子shell（child shell） 。</p>
+<p>bash shell程序可使用命令行参数修改shell启动方式：</p>
+<ul>
+<li>-c string 从string中读取命令并进行处理</li>
+<li>-i 启动一个能够接收用户输入的交互shell</li>
+<li>-l 以登录shell的形式启动</li>
+<li>-r 启动一个受限shell，用户会被限制在默认目录中</li>
+<li><p>-s 从标准输入中读取命令</p>
+</li>
+<li><p>依次运行的一系列命令。这可以通过命令列表来实现，只需要在命令之间加入分号（;）即可：pwd ; ls ; cd /etc ; pwd ;</p>
+</li>
+<li>要想将命令置入后台模式，可以在命令末尾加上字符&amp;：sleep 3000&amp;</li>
+<li>协程可以同时做两件事。它在后台生成一个子shell，并在这个子shell中执行命令。使用coproc命令进行协程处理：coproc sleep 10</li>
+</ul>
+<h3 id="理解-shell-的内建命令"><a href="#理解-shell-的内建命令" class="headerlink" title="理解 shell 的内建命令"></a>理解 shell 的内建命令</h3><h4 id="外部命令"><a href="#外部命令" class="headerlink" title="外部命令"></a>外部命令</h4><p>外部命令，有时候也被称为文件系统命令，是存在于bash shell之外的程序。它们并不是shell程序的一部分。外部命令程序通常位于/bin、 /usr/bin、 /sbin或/usr/sbin中。<br>ps就是一个外部命令。你可以使用which和type命令找到它。<br>当外部命令执行时，会创建出一个子进程。这种操作被称为衍生（forking）。外部命令ps很方便显示出它的父进程以及自己所对应的衍生子进程。</p>
+<h4 id="内建命令"><a href="#内建命令" class="headerlink" title="内建命令"></a>内建命令</h4><p>内建命令和外部命令的区别在于前者不需要使用子进程来执行。它们已经和shell编译成了一体，作为shell工具的组成部分存在。不需要借助外部程序文件来运行。cd和exit命令都内建于bash shell。可以利用type命令来了解某个命令是否是内建的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ type ps</span><br><span class="line">ps is hashed (/usr/bin/ps)</span><br><span class="line">$</span><br><span class="line">$ type -a echo</span><br><span class="line">echo is a shell builtin</span><br><span class="line">echo is /bin/echo</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>查看最近用过的命令列表：history</li>
+<li>为常用的命令（及其参数）创建另一个名称：alias</li>
+<li>要查看当前可用的别名，使用alias命令以及选项-p：alias -p</li>
+</ul>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>Linux环境变量能帮你提升Linux shell体验。很多程序和脚本都通过环境变量来获取系统信息、存储临时数据和配置信息。在Linux系统上有很多地方可以设置环境变量，了解去哪里设置相应的环境变量很重要。<br>在涉及环境变量名时，如果要用到变量，使用$；如果要操作变量，不使用$。</p>
+<p>在bash shell中，环境变量分为两类：</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>全局环境变量对于shell会话和所有生成的子shell都是可见的。局部变量则只对创建它们的<br>shell可见。这让全局环境变量对那些所创建的子shell需要获取父shell信息的程序来说非常有用。<br>要查看全局变量，可以使用 <code>env</code> 或 <code>printenv</code> 命令。</p>
+<p>要显示个别环境变量的值，可以使用 <code>printenv</code> 命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ printenv HOME</span><br><span class="line">/home/veininguo</span><br></pre></td></tr></table></figure></p>
+<p>也可以使用 <code>echo</code> 显示变量的值。在变量前面加上一个美元符（$）:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo $HOME</span><br><span class="line">/home/veininguo</span><br></pre></td></tr></table></figure></p>
+<h3 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h3><p>局部环境变量只能在定义它们的进程中可见。<br>在Linux系统并没有一个只显示局部环境变量的命令。 set命令会显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量以及用户定义变量。</p>
+<h3 id="设置用户定义变量"><a href="#设置用户定义变量" class="headerlink" title="设置用户定义变量"></a>设置用户定义变量</h3><p>可以在bash shell中直接设置自己的变量。</p>
+<h4 id="设置局部用户定义变量"><a href="#设置局部用户定义变量" class="headerlink" title="设置局部用户定义变量"></a>设置局部用户定义变量</h4><p>创建在shell进程内可见的局部变量，但在子shell中无法使用用户定义变量。可以通过等号给环境变量赋值，值可以是数值或字符串。<br>所有的环境变量名均使用大写字母，如果是你自己创建的局部变量或是shell脚本，请使用小写字母。<br>变量名、等号和值之间没有空格，这一点非常重要。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ my_variable=&quot;Veinin Guo&quot;</span><br><span class="line">$ echo $my_variable</span><br><span class="line">Veinin Guo</span><br></pre></td></tr></table></figure></p>
+<h4 id="设置全局环境变量"><a href="#设置全局环境变量" class="headerlink" title="设置全局环境变量"></a>设置全局环境变量</h4><p>在设定全局环境变量的进程所创建的子进程中，该变量都是可见的。<br>创建全局环境变量的方法是先创建一个局部环境变量，然后再把它导出到全局环境中。通过export命令来完成，变量名前面不需要加$。<br>子shell无法使用export命令改变父shell中全局环境变量的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ my_variable=&quot;I am Global now&quot;</span><br><span class="line">$ export my_variable</span><br><span class="line">$</span><br><span class="line">$ echo $my_variable</span><br><span class="line">I am Global now</span><br><span class="line">$</span><br><span class="line">$ bash</span><br><span class="line">$ echo $my_variable</span><br><span class="line">I am Global now</span><br><span class="line">$</span><br><span class="line">$ exit</span><br><span class="line">exit</span><br><span class="line">$ echo $my_variable</span><br><span class="line">I am Global now</span><br></pre></td></tr></table></figure></p>
+<h4 id="删除环境变量"><a href="#删除环境变量" class="headerlink" title="删除环境变量"></a>删除环境变量</h4><p>可以用 <code>unset</code> 命令完成这个操作。在命令中引用环境变量时不要使用$。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ echo $my_variable</span><br><span class="line">I am Global now</span><br><span class="line">$ unset my_variable</span><br><span class="line">$ echo $my_variable</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置-PATH-环境变量"><a href="#设置-PATH-环境变量" class="headerlink" title="设置 PATH 环境变量"></a>设置 PATH 环境变量</h3><p>在 shell 命令行界面中输入一个外部命令时， shell 必须搜索系统来找到对应的程序。PATH 环境变量定义了用于进行命令和程序查找的目录。PATH中的目录使用冒号分隔。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ echo $PATH</span><br><span class="line">/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/veininguo/.local/bin:/home/veininguo/bin</span><br></pre></td></tr></table></figure>
+<p>把新的搜索目录添加到现有的PATH环境变量中，无需从头定义。PATH中各个目录之间是用冒号分隔的。你只需引用原来的PATH值，然后再给这个字符串添加新目录就行了。也将单点符也加入PATH环境变量，单点符代表当前目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ echo $PATH</span><br><span class="line">/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/veininguo/.local/bin:/home/veininguo/bin</span><br><span class="line">$</span><br><span class="line">$ PATH=$PATH:/usr/games:/usr/local/games</span><br><span class="line">$</span><br><span class="line">$ echo $PATH</span><br><span class="line">/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/veininguo/.local/bin:/home/veininguo/bin:/usr/games:/usr/local/games</span><br><span class="line">$</span><br><span class="line">$ PATH=$PATH:.</span><br></pre></td></tr></table></figure>
+<h3 id="定位系统环境变量"><a href="#定位系统环境变量" class="headerlink" title="定位系统环境变量"></a>定位系统环境变量</h3><p>在你登入Linux系统启动一个bash shell时，默认情况下bash会在几个文件中查找命令。这些文件叫作启动文件或环境文件。<br>在大多数发行版中，存储个人用户永久性bash shell变量的地方是$HOME/.bashrc文件。 </p>
+<p>启动bash shell有3种方式：</p>
+<ul>
+<li>登录时作为默认登录shell，登录shell会从5个不同的启动文件里读取命令：</li>
+</ul>
+<ol>
+<li>/etc/profile，是bash shell默认的的主启动文件。只要你登录了Linux系统， bash就会执行/etc/profile启动文件中的命令。</li>
+<li>$HOME目录下的启动文件，剩下的启动文件都起着同一个作用：提供一个用户专属的启动文件来定义该用户所用到的环<br>境变量。大多数Linux发行版只用这四个启动文件中的一到两个：<br>$HOME/.bash_profile<br>$HOME/.bashrc<br>$HOME/.bash_login<br>$HOME/.profile</li>
+</ol>
+<ul>
+<li><p>作为非登录shell的交互式shell<br>如果你的bash shell不是登录系统时启动的（比如是在命令行提示符下敲入bash时启动），那么你启动的shell叫作交互式shell。<br>交互式shell启动时，只会检查用户HOME目录中的.bashrc文件。</p>
+</li>
+<li><p>作为运行脚本的非交互shell<br>系统执行shell脚本时用的就是这种shell。不同的地方在于它没有命令行提示符。<br>但是当你在系统上运行脚本时，也许希望能够运行一些特定启动的命令，为了处理这种情况， bash shell提供了BASH_ENV环境变量。</p>
+</li>
+</ul>
+<h3 id="数组变量"><a href="#数组变量" class="headerlink" title="数组变量"></a>数组变量</h3><p>要给某个环境变量设置多个值，可以把值放在括号里，值与值之间用空格分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mytest=(one two three four five)</span><br></pre></td></tr></table></figure></p>
+<p>引用一个单独的数组元素，就必须用代表它在数组中位置的数值索引值。索引值要用方括号括起来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ echo $&#123;mytest[2]&#125;</span><br><span class="line">three</span><br></pre></td></tr></table></figure></p>
+<h2 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h2><p>缺乏安全性的系统不是完整的系统。系统中必须有一套能够保护文件免遭非授权用户浏览或修改的机制。 Linux沿用了Unix文件权限的办法，即允许用户和组根据每个文件和目录的安全性设置来访问文件。</p>
+<h3 id="Linux-的安全性"><a href="#Linux-的安全性" class="headerlink" title="Linux 的安全性"></a>Linux 的安全性</h3><p>Linux安全系统的核心是用户账户。每个能进入Linux系统的用户都会被分配唯一的用户账户。用户对系统中各种对象的访问权限取决于他们登录系统时用的账户。用户权限是通过创建用户时分配的用户ID（User ID，通常缩写为UID）来跟踪的。UID是数值，每个用户都有唯一的UID，但在登录系统时用的不是UID，而是登录名。</p>
+<h4 id="etc-passwd-文件"><a href="#etc-passwd-文件" class="headerlink" title="/etc/passwd 文件"></a>/etc/passwd 文件</h4><p>这个文件将用户的登录名匹配到对应的UID值，它包含了一些与用户有关的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">...</span><br><span class="line">veininguo:x:1000:1001::/home/veininguo:/bin/bash</span><br><span class="line">dockerroot:x:996:993:Docker User:/var/lib/docker:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>/etc/passwd文件的字段包含了如下信息：</p>
+<ul>
+<li>登录用户名</li>
+<li>用户密码</li>
+<li>用户账户的UID（数字形式）</li>
+<li>用户账户的组ID（GID）（数字形式）</li>
+<li>用户账户的文本描述（称为备注字段）</li>
+<li>用户HOME目录的位置</li>
+<li>用户的默认shell</li>
+</ul>
+<h4 id="etc-shadow-文件"><a href="#etc-shadow-文件" class="headerlink" title="/etc/shadow 文件"></a>/etc/shadow 文件</h4><p>/etc/shadow文件对Linux系统密码管理提供了更多的控制。只有root用户才能访问/etc/shadow文件，这让它比起/etc/passwd安全许多。<br>etc/shadow文件为系统上的每个用户账户都保存了一条记录。记录就像下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">veininguo:*:17399:0:99999:7:::</span><br></pre></td></tr></table></figure></p>
+<p>每条记录中都有9个字段：</p>
+<ul>
+<li>与/etc/passwd文件中的登录名字段对应的登录名</li>
+<li>加密后的密码</li>
+<li>自上次修改密码后过去的天数密码（自1970年1月1日开始计算）</li>
+<li>多少天后才能更改密码</li>
+<li>多少天后必须更改密码</li>
+<li>密码过期前提前多少天提醒用户更改密码</li>
+<li>密码过期后多少天禁用用户账户</li>
+<li>用户账户被禁用的日期（用自1970年1月1日到当天的天数表示）</li>
+<li>预留字段给将来使用</li>
+</ul>
+<h4 id="添加新用户"><a href="#添加新用户" class="headerlink" title="添加新用户"></a>添加新用户</h4><p>用来向Linux系统添加新用户的主要工具是useradd。系统默认值被设置在/etc/default/useradd文件中。</p>
+<p>在创建新用户时，如果你不在命令行中指定具体的值， useradd命令就会使用-D选项所显示的那些默认值。这个例子列出的默认值如下：</p>
+<ul>
+<li>新用户会被添加到GID为100的公共组；</li>
+<li>新用户的HOME目录将会位于/home/loginname；</li>
+<li>新用户账户密码在过期后不会被禁用；</li>
+<li>新用户账户未被设置过期日期；</li>
+<li>新用户账户将bash shell作为默认shell；</li>
+<li>系统会将/etc/skel目录下的内容复制到用户的HOME目录下；</li>
+<li>系统为该用户账户在mail目录下创建一个用于接收邮件的文件。</li>
+</ul>
+<p>默认情况下，useradd命令不会创建HOME目录，但是-m命令行选项会使其创建HOME目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo useradd -m test</span><br><span class="line">$ sudo ls -al /home/test/</span><br><span class="line">total 12</span><br><span class="line">drwx------. 2 test test  62 Nov 26 13:18 .</span><br><span class="line">drwxr-xr-x. 4 root root  35 Nov 26 13:18 ..</span><br><span class="line">-rw-r--r--. 1 test test  18 Sep  6 16:25 .bash_logout</span><br><span class="line">-rw-r--r--. 1 test test 193 Sep  6 16:25 .bash_profile</span><br><span class="line">-rw-r--r--. 1 test test 231 Sep  6 16:25 .bashrc</span><br></pre></td></tr></table></figure>
+<h4 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h4><p>userdel可以从系统中删除用户， 加上-r参数， userdel会删除用户的HOME目录以及邮件目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$sudo userdel -r test</span><br><span class="line">$</span><br><span class="line">$ sudo ls -al /home/test/</span><br><span class="line">ls: cannot access /home/test/: No such file or directory</span><br></pre></td></tr></table></figure>
+<h4 id="修改用户"><a href="#修改用户" class="headerlink" title="修改用户"></a>修改用户</h4><p>Linux提供了一些不同的工具来修改已有用户账户的信息：</p>
+<ol>
+<li><p>usermod，修改用户账户的字段，还可以指定主要组以及附加组的所属关系。常用参数如下：<br>-c修改备注字段。<br>-e修改过期日期。<br>-g修改默认的登录组。<br>-l修改用户账户的登录名。<br>-L锁定账户，使用户无法登录。<br>-p修改账户的密码。<br>-U解除锁定，使用户能够登录。</p>
+</li>
+<li><p>passwd和chpasswd<br>改变用户密码的一个简便方法就是用passwd命令。<br>如果需要为系统中的大量用户修改密码， chpasswd命令可以事半功倍。 </p>
+</li>
+<li><p>chsh、 chfn和chage<br>chsh、 chfn和chage工具专门用来修改特定的账户信息。<br>chsh命令用来快速修改默认的用户登录shell。<br>chfn命令提供了在/etc/passwd文件的备注字段中存储信息的标准方法。<br>chage命令用来帮助管理用户账户的有效期。</p>
+</li>
+</ol>
+<h3 id="Linux-组"><a href="#Linux-组" class="headerlink" title="Linux 组"></a>Linux 组</h3><p>组权限允许多个用户对系统中的对象（比如文件、目录或设备等）共享一组共用的权限。<br>每个组都有唯一的GID——跟UID类似，在系统上这是个唯一的数值。</p>
+<h4 id="etc-group-文件"><a href="#etc-group-文件" class="headerlink" title="/etc/group 文件"></a>/etc/group 文件</h4><p>/etc/group文件包含系统上用到的每个组的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/group</span><br><span class="line">root:x:0:</span><br><span class="line">bin:x:1:</span><br><span class="line">daemon:x:2:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>/etc/group文件有4个字段：</p>
+<ul>
+<li>组名</li>
+<li>组密码</li>
+<li>ID</li>
+<li>属于该组的用户列表</li>
+</ul>
+<h4 id="创建新组"><a href="#创建新组" class="headerlink" title="创建新组"></a>创建新组</h4><p>groupadd命令可在系统上创建新组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd shared</span><br><span class="line">$ tail /etc/group</span><br><span class="line">docker:x:992:</span><br><span class="line">shared:x:1002:</span><br></pre></td></tr></table></figure></p>
+<p>usermod命令将用户被分配到该组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo usermod -G shared test</span><br><span class="line">$</span><br><span class="line">$ tail /etc/group</span><br><span class="line">shared:x:1002:test</span><br><span class="line">test:x:1003:</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改组"><a href="#修改组" class="headerlink" title="修改组"></a>修改组</h4><p>groupmod命令可以修改已有组的GID（加-g选项）或组名（加-n选项）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupmod -n sharering shared</span><br><span class="line">$ tail /etc/group</span><br><span class="line">google-sudoers:x:1000:veininguo</span><br><span class="line">test:x:1003:</span><br><span class="line">sharering:x:1002:test</span><br></pre></td></tr></table></figure></p>
+<h3 id="文件权限-1"><a href="#文件权限-1" class="headerlink" title="文件权限"></a>文件权限</h3><h4 id="文件权限符"><a href="#文件权限符" class="headerlink" title="文件权限符"></a>文件权限符</h4><p>ls命令可以用来查看Linux系统上的文件、目录和设备的权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls -l</span><br><span class="line">total 1693436</span><br><span class="line">drwxrwxr-x. 2 veininguo veininguo         6 Nov 21 16:08 data_file</span><br></pre></td></tr></table></figure></p>
+<p>输出结果的第一个字段就是描述文件和目录权限的编码。<br>第一个字符代表了对象的类型：</p>
+<ul>
+<li>-代表文件</li>
+<li>d代表目录</li>
+<li>l代表链接</li>
+<li>c代表字符型设备</li>
+<li>b代表块设备</li>
+<li>n代表网络设备</li>
+</ul>
+<p>之后有3组三字符的编码。每一组定义了3种访问权限：</p>
+<ul>
+<li>r代表对象是可读的</li>
+<li>w代表对象是可写的</li>
+<li>x代表对象是可执行的</li>
+</ul>
+<p>若没有某种权限，在该权限位会出现单破折线。这3组权限分别对应对象的3个安全级别：</p>
+<ul>
+<li>对象的属主</li>
+<li>对象的属组</li>
+<li>系统其他用户</li>
+</ul>
+<h4 id="改变权限"><a href="#改变权限" class="headerlink" title="改变权限"></a>改变权限</h4><p>chmod命令用来改变文件和目录的安全性设置：<code>chmod options mode file</code></p>
+<p>chmod命令采用了另一种方法。下面是在符号模式下指定权限的格式：<code>[ugoa…][[+-=][rwxXstugo…]</code><br>第一组字符定义了权限作用的对象：</p>
+<ul>
+<li>u代表用户</li>
+<li>g代表组</li>
+<li>o代表其他</li>
+<li>a代表上述所有</li>
+</ul>
+<p>现有权限基础上增加权限（+），还是在现有权限基础上移除权限（-），或是将权限设置成后面的值（=）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ chmod o+r newfile</span><br><span class="line">$ ls -lF newfile</span><br><span class="line">-rwxrw-r-- 1 rich rich 0 Sep 20 19:16 newfile</span><br><span class="line">$</span><br><span class="line">$ chmod u-x newfile</span><br><span class="line">$ ls -lF newfile</span><br><span class="line">-rw-rw-r-- 1 rich rich 0 Sep 20 19:16 newfile</span><br></pre></td></tr></table></figure></p>
+<h4 id="改变所属关系"><a href="#改变所属关系" class="headerlink" title="改变所属关系"></a>改变所属关系</h4><p>chown命令用来改变文件的属主。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ chown dan newfile</span><br><span class="line">$ ls -l newfile</span><br><span class="line">-rw-rw-r-- 1 dan rich 0 Sep 20 19:16 newfile</span><br><span class="line">$</span><br><span class="line">$ chown dan.shared newfile</span><br><span class="line">$ ls -l newfile</span><br><span class="line">-rw-rw-r-- 1 dan shared 0 Sep 20 19:16 newfile</span><br></pre></td></tr></table></figure></p>
+<p>chgrp命令可以更改文件或目录的默认属组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ chgrp shared newfile</span><br><span class="line">$ ls -l newfile</span><br><span class="line">-rw-rw-r-- 1 rich shared 0 Sep 20 19:16 newfile</span><br></pre></td></tr></table></figure></p>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p>使用Linux系统时，需要作出的决策之一就是为存储设备选用什么文件系统。大多数Linux发行版在安装时会非常贴心地提供默认的文件系统，了解一下可用的选择有时也会有所帮助。</p>
+<h3 id="Linux-文件系统"><a href="#Linux-文件系统" class="headerlink" title="Linux 文件系统"></a>Linux 文件系统</h3><ol>
+<li>ext文件系统，最早的文件系统，叫作扩展文件系统 （extended filesystem，简记为ext）。</li>
+<li>ext2文件系统，ext文件系统有不少限制，比如文件大小不得超过2 GB。ext文件系统就升级到了第二代扩展文件系统，叫作ext2。</li>
+</ol>
+<h3 id="日志文件系统"><a href="#日志文件系统" class="headerlink" title="日志文件系统"></a>日志文件系统</h3><p>日志文件系统为Linux系统增加了一层安全性。它不再使用之前先将数据直接写入存储设备再更新索引节点表的做法，而是先将文件的更改写入到临时文件（称作日志， journal）中。在数据成功写到存储设备和索引节点表之后，再删除对应的日志条目。</p>
+<ol>
+<li>ext3文件系统，它采用和ext2文件系统相同的索引节点表结构，但给每个存储设备增加了一个日志文件，以将准备写入存储设备的数据先记入日志。</li>
+<li>ext4文件系统，扩展ext3文件系统功能的结果是ext4文件系统。</li>
+<li>Reiser文件系统。</li>
+<li>JFS文件系统，最老的日志文件系统之一， 是IBM在1990年为其Unix衍生版AIX开发的。</li>
+<li>XFS文件系统，美国硅图公司（SGI）最初在1994年为其商业化的IRIX Unix系统开发的。</li>
+</ol>
+<h3 id="写时复制文件系统"><a href="#写时复制文件系统" class="headerlink" title="写时复制文件系统"></a>写时复制文件系统</h3><p>写时复制（copy-on-write， COW）的技术。COW利用快照兼顾了安全性和性能。如果要修改数据，会使用克隆或可写快照。修改过的数据<br>并不会直接覆盖当前数据，而是被放入文件系统中的另一个位置上。即便是数据修改已经完成，之前的旧数据也不会被重写。</p>
+<ol>
+<li>ZFS文件系统，没有使用GPL许可。OpenZFS项目有可能改变这种局面。</li>
+<li>Btrf文件系统，被称为B树文件系统。它是由Oracle公司于2007年开始研发的。 </li>
+</ol>
+<h3 id="操作文件系统"><a href="#操作文件系统" class="headerlink" title="操作文件系统"></a>操作文件系统</h3><p>创建分区：fdisk工具用来帮助管理安装在系统上的任何存储设备上的分区。<br>创建文件系统：每个文件系统命令都有很多命令行选项，允许你定制如何在分区上创建文件系统。</p>
+<h3 id="逻辑卷管理"><a href="#逻辑卷管理" class="headerlink" title="逻辑卷管理"></a>逻辑卷管理</h3><p>如果硬盘上没有地方了，你就必须弄一个更大的硬盘，然后手动将已有的文件系统移动到新的硬盘上。Linux逻辑卷管理器（logical volume manager， LVM）软件包可以用来做动态地添加存储空间。</p>
+<h2 id="安装软件程序"><a href="#安装软件程序" class="headerlink" title="安装软件程序"></a>安装软件程序</h2><p>Linux开发人员通过把软件打包成更易于安装的预编译包，在Linux上能见到的各种包管理系统（package management system， PMS），以及用来进行软件安装、管理和删除的命令行工具。</p>
+<h3 id="基于-Debian-的系统"><a href="#基于-Debian-的系统" class="headerlink" title="基于 Debian 的系统"></a>基于 Debian 的系统</h3><p>dpkg命令是基于Debian系PMS工具的核心。包含在这个PMS中的其他工具有：</p>
+<ul>
+<li>apt-get</li>
+<li>apt-cache</li>
+<li>aptitude</li>
+</ul>
+<h3 id="基于-Red-Hat-的系统"><a href="#基于-Red-Hat-的系统" class="headerlink" title="基于 Red Hat 的系统"></a>基于 Red Hat 的系统</h3><p>和基于Debian的发行版类似，基于Red Hat的系统也有几种不同的可用前端工具。常见的有以下3种。</p>
+<ul>
+<li>yum：在Red Hat和Fedora中使用。</li>
+<li>urpm：在Mandriva中使用。</li>
+<li>zypper：在openSUSE中使用。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Linux-命令行/" rel="tag"># Linux 命令行</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/12/reading-notes-monotasking/" rel="next" title="《单核工作法》读书笔记">
+                <i class="fa fa-chevron-left"></i> 《单核工作法》读书笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/02/reading-notes-procrastination/" rel="prev" title="《拖延心理学》读书笔记">
+                《拖延心理学》读书笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Linux"><span class="nav-number">1.</span> <span class="nav-text">什么是 Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内核"><span class="nav-number">1.1.</span> <span class="nav-text">Linux内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNU工具"><span class="nav-number">1.2.</span> <span class="nav-text">GNU工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图形化桌面环境"><span class="nav-number">1.3.</span> <span class="nav-text">图形化桌面环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用软件"><span class="nav-number">1.4.</span> <span class="nav-text">应用软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-发行版"><span class="nav-number">2.</span> <span class="nav-text">Linux 发行版</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#完整的核心Linux发行版"><span class="nav-number">2.1.</span> <span class="nav-text">完整的核心Linux发行版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特定用途的发行版"><span class="nav-number">2.2.</span> <span class="nav-text">特定用途的发行版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LiveCD测试发行版"><span class="nav-number">2.3.</span> <span class="nav-text">LiveCD测试发行版</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bash-手册"><span class="nav-number">3.</span> <span class="nav-text">bash 手册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤输出列表"><span class="nav-number">4.</span> <span class="nav-text">过滤输出列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理文件目录"><span class="nav-number">5.</span> <span class="nav-text">管理文件目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#处理文件"><span class="nav-number">5.1.</span> <span class="nav-text">处理文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件链接"><span class="nav-number">5.2.</span> <span class="nav-text">文件链接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#符号链接"><span class="nav-number">5.2.1.</span> <span class="nav-text">符号链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#硬链接"><span class="nav-number">5.2.2.</span> <span class="nav-text">硬链接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看文件"><span class="nav-number">5.3.</span> <span class="nav-text">查看文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理目录"><span class="nav-number">5.4.</span> <span class="nav-text">处理目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理数据文件"><span class="nav-number">6.</span> <span class="nav-text">处理数据文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序、搜索"><span class="nav-number">6.1.</span> <span class="nav-text">排序、搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩数据"><span class="nav-number">6.2.</span> <span class="nav-text">压缩数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归档数据"><span class="nav-number">6.3.</span> <span class="nav-text">归档数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理进程"><span class="nav-number">7.</span> <span class="nav-text">管理进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#探查进程"><span class="nav-number">7.1.</span> <span class="nav-text">探查进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实时监测进程"><span class="nav-number">7.2.</span> <span class="nav-text">实时监测进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束进程"><span class="nav-number">7.3.</span> <span class="nav-text">结束进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理磁盘"><span class="nav-number">8.</span> <span class="nav-text">管理磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mount命令"><span class="nav-number">8.1.</span> <span class="nav-text">mount命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#umount命令"><span class="nav-number">8.2.</span> <span class="nav-text">umount命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#df-命令"><span class="nav-number">8.3.</span> <span class="nav-text">df 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#du-命令"><span class="nav-number">8.4.</span> <span class="nav-text">du 命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解Shell"><span class="nav-number">9.</span> <span class="nav-text">理解Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-的类型"><span class="nav-number">9.1.</span> <span class="nav-text">shell 的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-的父子关系"><span class="nav-number">9.2.</span> <span class="nav-text">shell 的父子关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解-shell-的内建命令"><span class="nav-number">9.3.</span> <span class="nav-text">理解 shell 的内建命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#外部命令"><span class="nav-number">9.3.1.</span> <span class="nav-text">外部命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内建命令"><span class="nav-number">9.3.2.</span> <span class="nav-text">内建命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-number">10.</span> <span class="nav-text">环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局变量"><span class="nav-number">10.1.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部变量"><span class="nav-number">10.2.</span> <span class="nav-text">局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置用户定义变量"><span class="nav-number">10.3.</span> <span class="nav-text">设置用户定义变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置局部用户定义变量"><span class="nav-number">10.3.1.</span> <span class="nav-text">设置局部用户定义变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置全局环境变量"><span class="nav-number">10.3.2.</span> <span class="nav-text">设置全局环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除环境变量"><span class="nav-number">10.3.3.</span> <span class="nav-text">删除环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置-PATH-环境变量"><span class="nav-number">10.4.</span> <span class="nav-text">设置 PATH 环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位系统环境变量"><span class="nav-number">10.5.</span> <span class="nav-text">定位系统环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组变量"><span class="nav-number">10.6.</span> <span class="nav-text">数组变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件权限"><span class="nav-number">11.</span> <span class="nav-text">文件权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-的安全性"><span class="nav-number">11.1.</span> <span class="nav-text">Linux 的安全性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-passwd-文件"><span class="nav-number">11.1.1.</span> <span class="nav-text">/etc/passwd 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-shadow-文件"><span class="nav-number">11.1.2.</span> <span class="nav-text">/etc/shadow 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加新用户"><span class="nav-number">11.1.3.</span> <span class="nav-text">添加新用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除用户"><span class="nav-number">11.1.4.</span> <span class="nav-text">删除用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改用户"><span class="nav-number">11.1.5.</span> <span class="nav-text">修改用户</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-组"><span class="nav-number">11.2.</span> <span class="nav-text">Linux 组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-group-文件"><span class="nav-number">11.2.1.</span> <span class="nav-text">/etc/group 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新组"><span class="nav-number">11.2.2.</span> <span class="nav-text">创建新组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改组"><span class="nav-number">11.2.3.</span> <span class="nav-text">修改组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件权限-1"><span class="nav-number">11.3.</span> <span class="nav-text">文件权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件权限符"><span class="nav-number">11.3.1.</span> <span class="nav-text">文件权限符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改变权限"><span class="nav-number">11.3.2.</span> <span class="nav-text">改变权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改变所属关系"><span class="nav-number">11.3.3.</span> <span class="nav-text">改变所属关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统"><span class="nav-number">12.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-文件系统"><span class="nav-number">12.1.</span> <span class="nav-text">Linux 文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件系统"><span class="nav-number">12.2.</span> <span class="nav-text">日志文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写时复制文件系统"><span class="nav-number">12.3.</span> <span class="nav-text">写时复制文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作文件系统"><span class="nav-number">12.4.</span> <span class="nav-text">操作文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑卷管理"><span class="nav-number">12.5.</span> <span class="nav-text">逻辑卷管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装软件程序"><span class="nav-number">13.</span> <span class="nav-text">安装软件程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-Debian-的系统"><span class="nav-number">13.1.</span> <span class="nav-text">基于 Debian 的系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-Red-Hat-的系统"><span class="nav-number">13.2.</span> <span class="nav-text">基于 Red Hat 的系统</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2017/11/24/reading-notes-linux-command-lime/';
+          this.page.identifier = '2017/11/24/reading-notes-linux-command-lime/';
+          this.page.title = '《Linux 命令行与shell脚本编程大全》读书笔记（命令行部分）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

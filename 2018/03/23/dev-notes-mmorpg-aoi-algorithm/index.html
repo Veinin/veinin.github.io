@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MMORPG,AOI," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="MMO 游戏，需要解决的最重要的问题之一，就是如何把游戏世界中各种状态的改变通知给需要知道这条信息的玩家。为此，需要为每个玩家设定一个AOI（Area Of Interest），当一个对象状态发生改变时，需要将信息广播出去，那些AOI覆盖到这条消息的玩家都会收到这条广播消息。 AOI 主要作用有两：第一，服务器上的玩家或 NPC 状态发生改变时，将消息广播到附近的玩家。第二，当玩家接近NPC时，进">
+<meta name="keywords" content="MMORPG,AOI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开发笔记：MMORPG场景同步AOI解决方案">
+<meta property="og:url" content="http://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="MMO 游戏，需要解决的最重要的问题之一，就是如何把游戏世界中各种状态的改变通知给需要知道这条信息的玩家。为此，需要为每个玩家设定一个AOI（Area Of Interest），当一个对象状态发生改变时，需要将信息广播出去，那些AOI覆盖到这条消息的玩家都会收到这条广播消息。 AOI 主要作用有两：第一，服务器上的玩家或 NPC 状态发生改变时，将消息广播到附近的玩家。第二，当玩家接近NPC时，进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://veinin.com/images/2018-03-24/01.png">
+<meta property="og:image" content="http://veinin.com/images/2018-03-24/02.png">
+<meta property="og:image" content="http://veinin.com/images/2018-03-24/03.png">
+<meta property="og:image" content="http://veinin.com/images/2018-03-24/04.png">
+<meta property="og:updated_time" content="2018-03-24T13:33:33.049Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="开发笔记：MMORPG场景同步AOI解决方案">
+<meta name="twitter:description" content="MMO 游戏，需要解决的最重要的问题之一，就是如何把游戏世界中各种状态的改变通知给需要知道这条信息的玩家。为此，需要为每个玩家设定一个AOI（Area Of Interest），当一个对象状态发生改变时，需要将信息广播出去，那些AOI覆盖到这条消息的玩家都会收到这条广播消息。 AOI 主要作用有两：第一，服务器上的玩家或 NPC 状态发生改变时，将消息广播到附近的玩家。第二，当玩家接近NPC时，进">
+<meta name="twitter:image" content="http://veinin.com/images/2018-03-24/01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/"/>
+
+
+
+
+
+  <title>开发笔记：MMORPG场景同步AOI解决方案 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">开发笔记：MMORPG场景同步AOI解决方案</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T19:20:00+08:00">
+                2018-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开发笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">开发笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/23/dev-notes-mmorpg-aoi-algorithm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/23/dev-notes-mmorpg-aoi-algorithm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MMO 游戏，需要解决的最重要的问题之一，就是如何把游戏世界中各种状态的改变通知给需要知道这条信息的玩家。<br>为此，需要为每个玩家设定一个AOI（Area Of Interest），当一个对象状态发生改变时，需要将信息广播出去，那些AOI覆盖到这条消息的玩家都会收到这条广播消息。</p>
+<p>AOI 主要作用有两：<br>第一，服务器上的玩家或 NPC 状态发生改变时，将消息广播到附近的玩家。<br>第二，当玩家接近NPC时，进入NPC警戒区域，AOI 模块将消息发送给NPC，NPC再做出相应的AI反应。</p>
+<p>目前游戏中 AOI 实现主要有3种：<br>第一种，最容易也是最笨的一种，玩家定期同步自己状态给服务器，服务器定期比较所有对象间的关系，发现可以触发 AOI 事件就发送消息。写法简单，不容易出错，但如果处理不好，效率往往是最低的。</p>
+<a id="more"></a>
+<h2 id="空间切割网格算法"><a href="#空间切割网格算法" class="headerlink" title="空间切割网格算法"></a>空间切割网格算法</h2><p>把整个场景用等分大的格子划分成一个个小区域，对象进入、退出、移动时都需要更新相应的格子对象列表。这种算法插入、删除对象都非常快，时间复杂度为O（1）。缺点是当对象在格子直接移动时，需要消耗大量计算时间。目前《幻想西游》采用的是这种算法。</p>
+<h3 id="场景划分"><a href="#场景划分" class="headerlink" title="场景划分"></a>场景划分</h3><p>场景大小：200 <em> 200<br>格子大小：50 </em> 50<br>场景中需要划分等分大小的格子数： 200 / 50 <em> 200 </em> 50 = 16 个</p>
+<p>效果如下图所示：<br><img src="/images/2018-03-24/01.png" alt=""></p>
+<h3 id="世界坐标与格子坐标"><a href="#世界坐标与格子坐标" class="headerlink" title="世界坐标与格子坐标"></a>世界坐标与格子坐标</h3><p>每个格子有对于的格子坐标，每个世界坐标可以轻易的转换成格子坐标。<br>世界坐标 (x, y) 转换成格子坐标公式为：(math.floor(x/gridWeidth), math.floor(y/gridHeight))<br>如世界坐标为 (80, 50)，转换后对应格子坐标为 (2, 1)。</p>
+<h3 id="划分九宫格"><a href="#划分九宫格" class="headerlink" title="划分九宫格"></a>划分九宫格</h3><p>每个格子都需要维护该格子内的对象信息，同时也需要维护关心该格子的观察者信息。<br>当对象处于场景某个格子时，该对象会有 9 个自己所关心的格子，对象可以观察并收到自己关心区域的 AOI 事件。<br>当然，对象所处的格子也会被其他格子的对象所关心。也就是说一个格子里面的对象可以作为观察者，观察周围格子内对象；同时也是被观察者，被其他格子内的对象所观察。<br><img src="/images/2018-03-24/02.png" alt=""><br>如图所示，当对象所进入格子 (2, 2) 时（红色区域），那么其关心的周围 9 个格子（浅蓝色区域）中任何一个发生 AOI 事件时，它都会收到相应的 AOI 事件消息。</p>
+<h3 id="对象进入场景"><a href="#对象进入场景" class="headerlink" title="对象进入场景"></a>对象进入场景</h3><p>通知对象所处周围9个格子的其他对象 进入 AOI 事件。</p>
+<h3 id="对象离开场景"><a href="#对象离开场景" class="headerlink" title="对象离开场景"></a>对象离开场景</h3><p>与进入相反，通知对象所处九宫格的其他对象 离开 AOI 事件。</p>
+<h3 id="对象移动"><a href="#对象移动" class="headerlink" title="对象移动"></a>对象移动</h3><p>如果对象格子变更时，如图所示，对象纵向移动由(2, 2) 移动到 (3, 2)，45度角移动由 (2, 2) 移动到 (3, 3）：<br><img src="/images/2018-03-24/03.png" alt=""><br>会产生3种格子：</p>
+<ul>
+<li>对象离开视野的格子（灰色格子），通知对象离开 AOI 事件。</li>
+<li>对象进入视野的格子（橙色格子），通知对象进入 AOI 事件。</li>
+<li>取所有需要操作的格子的交集（浅蓝色格子），通知对象移动 AOI 事件。</li>
+</ul>
+<h2 id="十字链表算法"><a href="#十字链表算法" class="headerlink" title="十字链表算法"></a>十字链表算法</h2><p>场景维护着两个双向链表（如果3D空间，则增加第3条），分别对应着 X 轴 和 Y 轴。<br>每个链表对象的坐标按从小到大排列，也就是 X 坐标值越小，排在越前面，Y轴同理。<br>此算法对象短距离移动时，很节省计算量，但涉及长距离移动时，计算量会非常大。</p>
+<h3 id="对象进入场景-1"><a href="#对象进入场景-1" class="headerlink" title="对象进入场景"></a>对象进入场景</h3><p>遍历 X 轴 和 Y 轴两个链表，找出新增对象在两个轴中所处的位置，将新对象加入到指定位置，并根据新对象的通知范围（可动态设定）获得需要通知对象集合，发送 进入 AOI 事件。</p>
+<h3 id="对象离开场景-1"><a href="#对象离开场景-1" class="headerlink" title="对象离开场景"></a>对象离开场景</h3><p>对象进入场景后，在 X 轴 和 Y 轴各保存了两个节点位置，可以通过这个位置，获取指定范围的的对象集合，发送 离开 AOI 事件。</p>
+<p>###对象移动<br>与格字算法类似，对象移动后也会会产生3种对象集合：</p>
+<ul>
+<li>更新位置前的集合，通知 离开 AOI 事件。</li>
+<li>更新位置后的集合，通知 进入 AOI 事件。</li>
+<li>取上面两个集合的交集，通知对象 移动 AOI 事件。</li>
+</ul>
+<p>处理上面产生事件顺序与格字算法相同。</p>
+<h2 id="分层-AOI"><a href="#分层-AOI" class="headerlink" title="分层 AOI"></a>分层 AOI</h2><p>有了AOI算法，并不意味着能有满意的效果，假设场景里面放入10000人，那么按分布情况来说，即使有AOI算法，也会很糟糕，你会看到满屏幕的人，密密麻麻，卡的要死。这种情况下，玩家体验会很糟糕，所以可能需要进一步优化。<br>目前市面上见得比较多的解决方案有几种，一种是对单个场景分线，复制多个相同的场景副本，玩家随机进入某个场景的副本，以此来达到分流的目的。<br>另外一种方案，是从梦幻西游手游服务器AOI设计方案中看到的，设计一个分层AOI概念，也就是单个场景创建多个AOI对象。把玩家分通过某个规则，分在不同的层次。当人数增多时，可以动态进行分层，人数少的时候可以把层数合并回来，然后就是让玩家在人少的时候也能看到几个人，人多的时候还是看到几个人。这种优化放过来后，这是同一台服务器，效果大概是这样的，你在同一层里看到的都是你关心的人。这个感受就很好了。<br><img src="/images/2018-03-24/04.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MMORPG/" rel="tag"># MMORPG</a>
+          
+            <a href="/tags/AOI/" rel="tag"># AOI</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-strings/" rel="next" title="Python 快速上手 - 字符串">
+                <i class="fa fa-chevron-left"></i> Python 快速上手 - 字符串
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/24/dev-notes-designer-formula-processing-solution-in-game/" rel="prev" title="开发笔记：游戏中属性定义、策划公式处理方案">
+                开发笔记：游戏中属性定义、策划公式处理方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#空间切割网格算法"><span class="nav-number">1.</span> <span class="nav-text">空间切割网格算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景划分"><span class="nav-number">1.1.</span> <span class="nav-text">场景划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#世界坐标与格子坐标"><span class="nav-number">1.2.</span> <span class="nav-text">世界坐标与格子坐标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#划分九宫格"><span class="nav-number">1.3.</span> <span class="nav-text">划分九宫格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象进入场景"><span class="nav-number">1.4.</span> <span class="nav-text">对象进入场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象离开场景"><span class="nav-number">1.5.</span> <span class="nav-text">对象离开场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象移动"><span class="nav-number">1.6.</span> <span class="nav-text">对象移动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十字链表算法"><span class="nav-number">2.</span> <span class="nav-text">十字链表算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象进入场景-1"><span class="nav-number">2.1.</span> <span class="nav-text">对象进入场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象离开场景-1"><span class="nav-number">2.2.</span> <span class="nav-text">对象离开场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分层-AOI"><span class="nav-number">3.</span> <span class="nav-text">分层 AOI</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/';
+          this.page.identifier = '2018/03/23/dev-notes-mmorpg-aoi-algorithm/';
+          this.page.title = '开发笔记：MMORPG场景同步AOI解决方案';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

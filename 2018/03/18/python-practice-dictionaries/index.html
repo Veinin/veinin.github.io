@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="字典数据类型提供了一种灵活的访问和组织数据的方式。像列表一样，“字典”是许多值的集合。但不像列表的下标， 字典的索引可以使用许多不同数据类型， 不只是整数。 字典的索引被称为“键”，键及其关联的值称为“键-值”对。字典仍然可以用整数值作为键， 就像列表使用整数值作为下标一样， 但它们不必从 0 开始， 可以是任何数字。 1234567891011&amp;gt;&amp;gt;&amp;gt; myCat = &amp;#123">
+<meta name="keywords" content="Python,编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 快速上手 - 字典">
+<meta property="og:url" content="http://veinin.com/2018/03/18/python-practice-dictionaries/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="字典数据类型提供了一种灵活的访问和组织数据的方式。像列表一样，“字典”是许多值的集合。但不像列表的下标， 字典的索引可以使用许多不同数据类型， 不只是整数。 字典的索引被称为“键”，键及其关联的值称为“键-值”对。字典仍然可以用整数值作为键， 就像列表使用整数值作为下标一样， 但它们不必从 0 开始， 可以是任何数字。 1234567891011&amp;gt;&amp;gt;&amp;gt; myCat = &amp;#123">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-24T14:09:51.148Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 快速上手 - 字典">
+<meta name="twitter:description" content="字典数据类型提供了一种灵活的访问和组织数据的方式。像列表一样，“字典”是许多值的集合。但不像列表的下标， 字典的索引可以使用许多不同数据类型， 不只是整数。 字典的索引被称为“键”，键及其关联的值称为“键-值”对。字典仍然可以用整数值作为键， 就像列表使用整数值作为下标一样， 但它们不必从 0 开始， 可以是任何数字。 1234567891011&amp;gt;&amp;gt;&amp;gt; myCat = &amp;#123">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2018/03/18/python-practice-dictionaries/"/>
+
+
+
+
+
+  <title>Python 快速上手 - 字典 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2018/03/18/python-practice-dictionaries/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 快速上手 - 字典</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T16:10:00+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/18/python-practice-dictionaries/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/18/python-practice-dictionaries/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>字典数据类型提供了一种灵活的访问和组织数据的方式。<br>像列表一样，“字典”是许多值的集合。但不像列表的下标， 字典的索引可以使用许多不同数据类型， 不只是整数。 字典的索引被称为“键”，键及其关联的值称为“键-值”对。<br>字典仍然可以用整数值作为键， 就像列表使用整数值作为下标一样， 但它们不必从 0 开始， 可以是任何数字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>myCat = &#123;<span class="string">'size'</span>: <span class="string">'fat'</span>, <span class="string">'color'</span>: <span class="string">'gray'</span>, <span class="string">'disposition'</span>: <span class="string">'loud'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>myCat[<span class="string">'size'</span>]</span><br><span class="line"><span class="string">'fat'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'My cat has '</span> + myCat[<span class="string">'color'</span>] + <span class="string">' fur.'</span></span><br><span class="line"><span class="string">'My cat has gray fur.'</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ticket = &#123;<span class="number">12306</span>: <span class="string">'websites'</span>, <span class="number">123456</span>: <span class="string">'phone number'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ticket[<span class="number">12306</span>]</span><br><span class="line"><span class="string">'websites'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ticket[<span class="number">123456</span>]</span><br><span class="line"><span class="string">'phone number'</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="字典与列表"><a href="#字典与列表" class="headerlink" title="字典与列表"></a>字典与列表</h2><p>确定两个列表是否相同时， 表项的顺序很重要。<br>字典不像列表，字典中的表项是不排序的，键-值对输入的顺序并不重要。<br>因为字典是不排序的， 所以不能像列表那样切片。<br>尽管字典是不排序的，但可以用任意值作为键，这一点让你能够用强大的方式来组织数据。<br>尝试访问字典中不存在的键， 将导致 KeyError 出错信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="string">'cats'</span>, <span class="string">'dogs'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = [<span class="string">'dogs'</span>, <span class="string">'cats'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a == b</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = &#123;<span class="string">'firstName'</span>: <span class="string">'Veinin'</span>, <span class="string">'age'</span>: <span class="number">25</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">'age'</span>: <span class="number">25</span>, <span class="string">'firstName'</span>: <span class="string">'Veinin'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c == d</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="string">'lastName'</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">KeyError: <span class="string">'lastName'</span></span><br></pre></td></tr></table></figure>
+<h2 id="keys-、-values-和-items-方法"><a href="#keys-、-values-和-items-方法" class="headerlink" title="keys()、 values()和 items()方法"></a>keys()、 values()和 items()方法</h2><p>有 3 个字典方法，它们将返回类似列表的值，分别对应于字典的键、值和键-值对：keys()、 values()和 items()。<br>这些方法返回的值不是真正的列表，它们不能被修改，没有append()方法。但这些数据类型（分别是 dict_keys、 dict_values 和 dict_items）可以用于for 循环。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>person = &#123;<span class="string">'firstName'</span>: <span class="string">'Veinin'</span>, <span class="string">'lastName'</span>: <span class="string">'Guo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> k <span class="keyword">in</span> person.keys():</span><br><span class="line">        print(k)</span><br><span class="line"></span><br><span class="line">firstName</span><br><span class="line">lastName</span><br><span class="line">age</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> v <span class="keyword">in</span> person.values():</span><br><span class="line">        print(v)</span><br><span class="line"></span><br><span class="line">Veinin</span><br><span class="line">Guo</span><br><span class="line"><span class="number">18</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> k, v <span class="keyword">in</span> person.items():</span><br><span class="line">        print(k, v)</span><br><span class="line"></span><br><span class="line">firstName Veinin</span><br><span class="line">lastName Guo</span><br><span class="line">age <span class="number">18</span></span><br></pre></td></tr></table></figure>
+<h2 id="检查字典中是否存在键或值"><a href="#检查字典中是否存在键或值" class="headerlink" title="检查字典中是否存在键或值"></a>检查字典中是否存在键或值</h2><p>in 和 not in 操作符可以检查值是否存在于列表中。也可以利用这些操作符，检查某个键或值是否存在于字典中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>person = &#123;<span class="string">'firstName'</span>: <span class="string">'Veinin'</span>, <span class="string">'lastName'</span>: <span class="string">'Guo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'name'</span> <span class="keyword">in</span> person</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'sex'</span> <span class="keyword">not</span> <span class="keyword">in</span> person</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="get-方法"><a href="#get-方法" class="headerlink" title="get()方法"></a>get()方法</h2><p>在访问一个键的值之前，检查该键是否存在于字典中，这很麻烦。好在，字典有一个 get()方法，它有两个参数：要取得其值的键，以及如果该键不存在时，返回的备用值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>person = &#123;<span class="string">'firstName'</span>: <span class="string">'Veinin'</span>, <span class="string">'lastName'</span>: <span class="string">'Guo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">"I'm "</span> + str(person.get(<span class="string">'age'</span>, <span class="number">0</span>)) + <span class="string">'.'</span></span><br><span class="line"><span class="string">"I'm 18."</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'His height is '</span> + str(person.get(<span class="string">'height'</span>, <span class="number">188</span>)) + <span class="string">'cm.'</span></span><br><span class="line"><span class="string">'His height is 188cm.'</span></span><br></pre></td></tr></table></figure>
+<h2 id="setdefault-方法"><a href="#setdefault-方法" class="headerlink" title="setdefault()方法"></a>setdefault()方法</h2><p>你常常需要为字典中某个键设置一个默认值，当该键没有任何值时使用它。<br>setdefault()方法的第一个参数，是要检查的键。第二个参数，是如果该键不存在时要设置的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>person = &#123;<span class="string">'firstName'</span>: <span class="string">'Veinin'</span>, <span class="string">'lastName'</span>: <span class="string">'Guo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person.setdefault(<span class="string">'height'</span>, <span class="number">180</span>)</span><br><span class="line"><span class="number">180</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'His height is '</span> + str(person.get(<span class="string">'height'</span>, <span class="number">188</span>)) + <span class="string">'cm.'</span>)</span><br><span class="line">His height <span class="keyword">is</span> <span class="number">180</span>cm.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-list/" rel="next" title="Python 快速上手 - 列表">
+                <i class="fa fa-chevron-left"></i> Python 快速上手 - 列表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-strings/" rel="prev" title="Python 快速上手 - 字符串">
+                Python 快速上手 - 字符串 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字典与列表"><span class="nav-number">1.</span> <span class="nav-text">字典与列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keys-、-values-和-items-方法"><span class="nav-number">2.</span> <span class="nav-text">keys()、 values()和 items()方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查字典中是否存在键或值"><span class="nav-number">3.</span> <span class="nav-text">检查字典中是否存在键或值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-方法"><span class="nav-number">4.</span> <span class="nav-text">get()方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setdefault-方法"><span class="nav-number">5.</span> <span class="nav-text">setdefault()方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2018/03/18/python-practice-dictionaries/';
+          this.page.identifier = '2018/03/18/python-practice-dictionaries/';
+          this.page.title = 'Python 快速上手 - 字典';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

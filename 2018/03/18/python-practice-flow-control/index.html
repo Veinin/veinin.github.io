@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="程序就是一系列指令。但编程真正的力量不仅在于运行（或“执行”） 一条接一条的指令， 就像周末的任务清单那样。根据表达式求值的结果，程序可以决定跳过指令， 重复指令， 或从几条指令中选择一条运行。实际上， 你几乎永远不希望程序从第一行代码开始， 简单地执行每行代码， 直到最后一行。“控制流语句” 可以决定在什么条件下执行哪些 Python 语句。 布尔值“布尔” 数据类型只有两种值： True 和">
+<meta name="keywords" content="Python,编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 快速上手 - 控制流">
+<meta property="og:url" content="http://veinin.com/2018/03/18/python-practice-flow-control/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="程序就是一系列指令。但编程真正的力量不仅在于运行（或“执行”） 一条接一条的指令， 就像周末的任务清单那样。根据表达式求值的结果，程序可以决定跳过指令， 重复指令， 或从几条指令中选择一条运行。实际上， 你几乎永远不希望程序从第一行代码开始， 简单地执行每行代码， 直到最后一行。“控制流语句” 可以决定在什么条件下执行哪些 Python 语句。 布尔值“布尔” 数据类型只有两种值： True 和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-24T14:09:55.493Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 快速上手 - 控制流">
+<meta name="twitter:description" content="程序就是一系列指令。但编程真正的力量不仅在于运行（或“执行”） 一条接一条的指令， 就像周末的任务清单那样。根据表达式求值的结果，程序可以决定跳过指令， 重复指令， 或从几条指令中选择一条运行。实际上， 你几乎永远不希望程序从第一行代码开始， 简单地执行每行代码， 直到最后一行。“控制流语句” 可以决定在什么条件下执行哪些 Python 语句。 布尔值“布尔” 数据类型只有两种值： True 和">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2018/03/18/python-practice-flow-control/"/>
+
+
+
+
+
+  <title>Python 快速上手 - 控制流 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2018/03/18/python-practice-flow-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 快速上手 - 控制流</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T15:22:00+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/18/python-practice-flow-control/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/18/python-practice-flow-control/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>程序就是一系列指令。但编程真正的力量不仅在于运行（或“执行”） 一条接一条的指令， 就像周末的任务清单那样。根据表达式求值的结果，程序可以决定跳过指令， 重复指令， 或从几条指令中选择一条运行。实际上， 你几乎永远不希望程序从第一行代码开始， 简单地执行每行代码， 直到最后一行。“控制流语句” 可以决定在什么条件下执行哪些 Python 语句。</p>
+<h2 id="布尔值"><a href="#布尔值" class="headerlink" title="布尔值"></a>布尔值</h2><p>“布尔” 数据类型只有两种值： True 和 False。 Boolean（布尔） 的首字母大写， 因为这个数据类型是根据数学家 George Boole 命名的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>spam = <span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>spam</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>true</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File <span class="string">"&lt;pyshell#2&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">true</span><br><span class="line">NameError: name <span class="string">'true'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">True</span> = <span class="number">2</span> + <span class="number">2</span></span><br><span class="line">SyntaxError: assignment to keyword</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a>比较操作符</h2><p>“比较操作符” 比较两个值，求值为一个布尔值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">42</span> == <span class="number">42</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">42</span> == <span class="number">99</span></span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span> != <span class="number">3</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span> != <span class="number">2</span></span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="布尔操作符"><a href="#布尔操作符" class="headerlink" title="布尔操作符"></a>布尔操作符</h2><p>3 个布尔操作符（and、 or 和 not） 用于比较布尔值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">True</span> <span class="keyword">and</span> <span class="keyword">True</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="keyword">False</span> <span class="keyword">or</span> <span class="keyword">True</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">not</span> <span class="keyword">True</span></span><br><span class="line"><span class="keyword">False</span></span><br><span class="line">(<span class="number">4</span> &lt; <span class="number">5</span>) <span class="keyword">and</span> (<span class="number">5</span> &lt; <span class="number">6</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="控制流语句"><a href="#控制流语句" class="headerlink" title="控制流语句"></a>控制流语句</h2><h3 id="if-语句"><a href="#if-语句" class="headerlink" title="if 语句"></a>if 语句</h3><p>if 语句的子句（也就是紧跟 if 语句的语句块），将在语句的条件为 True 时执行。如果条件为 False，子句将跳过。<br>if 语句包含以下部分：</p>
+<ul>
+<li>if 关键字；</li>
+<li>条件（即求值为 True 或 False 的表达式）；</li>
+<li>冒号；</li>
+<li>在下一行开始，缩进的代码块（称为 if 子句）。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> name == <span class="string">'Alice'</span>:</span><br><span class="line">    print(<span class="string">'Hi, Alice.'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="else-语句"><a href="#else-语句" class="headerlink" title="else 语句"></a>else 语句</h3><p>if 子句后面有时候也可以跟着 else 语句。只有 if 语句的条件为 False 时， else子句才会执行。<br>lse 语句中包<br>含下面部分：</p>
+<ul>
+<li>else 关键字；</li>
+<li>冒号；</li>
+<li>在下一行开始，缩进的代码块（称为 else 子句）。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> name == <span class="string">'Alice'</span>:</span><br><span class="line">    print(<span class="string">'Hi, Alice.'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Hello, stranger.'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="elif-语句"><a href="#elif-语句" class="headerlink" title="elif 语句"></a>elif 语句</h3><p>有时候可能你希望，“许多” 可能的子句中有一个被执行。 elif 语句是“否则如果”，总是跟在 if 或另一条 elif 语句后面。<br>在代码中， elif 语句<br>总是包含以下部分：</p>
+<ul>
+<li>elif 关键字；</li>
+<li>条件（即求值为 True 或 False 的表达式）；</li>
+<li>冒号；</li>
+<li>在下一行开始，缩进的代码块（称为 elif 子句）。</li>
+</ul>
+<h3 id="while-循环语句"><a href="#while-循环语句" class="headerlink" title="while 循环语句"></a>while 循环语句</h3><p>while 语句总是包含下面几<br>部分：</p>
+<ul>
+<li>关键字；</li>
+<li>条件（求值为 True 或 False 的表达式）；</li>
+<li>冒号；</li>
+<li>从新行开始，缩进的代码块（称为 while 子句）。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spam = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> spam &lt; <span class="number">5</span>:</span><br><span class="line">    print(<span class="string">'Hello, world.'</span>)</span><br><span class="line">    spam = spam + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="break-语句"><a href="#break-语句" class="headerlink" title="break 语句"></a>break 语句</h3><p>如果执行遇到 break 语句，就会马上退出 while 循环子句。在代码中， break 语句仅包含 break 关键字。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    print(<span class="string">'Please type your name.'</span>)</span><br><span class="line">    name = input()</span><br><span class="line">    <span class="keyword">if</span> name == <span class="string">'Veinin'</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'Thank you!'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="continue-语句"><a href="#continue-语句" class="headerlink" title="continue 语句"></a>continue 语句</h3><p>像 break 语句一样， continue 语句用于循环内部。如果程序执行遇到 continue语句，就会马上跳回到循环开始处，重新对循环条件求值<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    print(<span class="string">'Who are your?'</span>)</span><br><span class="line">    name = input()</span><br><span class="line">    <span class="keyword">if</span> name != <span class="string">'Veinin'</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    print(<span class="string">'Hello, Veinin. What is the password?'</span>)</span><br><span class="line">    password = input()</span><br><span class="line">    <span class="keyword">if</span> password == <span class="string">'123'</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'Access granted.'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="for-循环和-range-函数"><a href="#for-循环和-range-函数" class="headerlink" title="for 循环和 range()函数"></a>for 循环和 range()函数</h3><p>通过 for 循环语句和 range()函数来实现一个代码块执行固定次数。<br>for 语句看起来像 for i in range(5):这样， 总是包含以下部分：</p>
+<ul>
+<li>for 关键字；</li>
+<li>一个变量名；</li>
+<li>in 关键字；</li>
+<li>调用 range()方法，最多传入 3 个参数；</li>
+<li>冒号；</li>
+<li>从下一行开始，缩退的代码块（称为 for 子句）。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'My name is'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">    print(<span class="string">'Jimmy Five Time ('</span> + str(i) + <span class="string">')'</span>)</span><br><span class="line">    </span><br><span class="line">total = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    total = total + num</span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="range-的开始、-停止和步长参数"><a href="#range-的开始、-停止和步长参数" class="headerlink" title="range()的开始、 停止和步长参数"></a>range()的开始、 停止和步长参数</h3><p>下列代码 <code>range</code> 函数中，第一个参数是 for 循环变量开始的值， 第二个参数是上限， 但不包含它， 也就是循环停止的数字。第三个参数是“步长”。 步长是每次迭代后循环变量增加的值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):</span><br><span class="line">    print(i)</span><br></pre></td></tr></table></figure></p>
+<h3 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h3><p>Python 程序可以调用一组基本的函数， 这称为“内建函数”， 包括你见到过的print()、 input()和 len()函数。 Python 也包括一组模块，称为“标准库”。每个模块都是一个 Python 程序， 包含一组相关的函数， 可以嵌入你的程序之中。例如， math模块有数学运算相关的函数， random 模块有随机数相关的函数， 等等。<br>在代码中，</p>
+<p>import 语句包含以下部分：</p>
+<ul>
+<li>import 关键字；</li>
+<li>模块的名称；</li>
+<li>可选的更多模块名称，之间用逗号隔开。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">    print(random.randint(<span class="number">1</span>, <span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="使用逗号分隔符来导入多个模块"><a href="#使用逗号分隔符来导入多个模块" class="headerlink" title="使用逗号分隔符来导入多个模块"></a>使用逗号分隔符来导入多个模块</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random, sys, os, math</span><br></pre></td></tr></table></figure>
+<h4 id="from-import-语句"><a href="#from-import-语句" class="headerlink" title="from import 语句"></a>from import 语句</h4><p>import 语句的另一种形式包括 from 关键字，之后是模块名称， import 关键字和<br>一个星号， 例如 <code>from random import *</code> 。<br>使用这种形式的 import 语句，调用 random模块中的函数时不需要 random.前缀。<br>但是， 使用完整的名称会让代码更可读， 所以最好是使用普通形式的 import 语句。</p>
+<h3 id="用-sys-exit-提前结束程序"><a href="#用-sys-exit-提前结束程序" class="headerlink" title="用 sys.exit()提前结束程序"></a>用 sys.exit()提前结束程序</h3><p>通过调用 sys.exit()函数， 可以让程序终止或退出。因为这个函数在 sys 模块中，所以必须先导入 sys， 才能使用它。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    print(<span class="string">'Type exit to exit.'</span>)</span><br><span class="line">    response = input()</span><br><span class="line">    <span class="keyword">if</span> response == <span class="string">'exit'</span>:</span><br><span class="line">        sys.exit()</span><br><span class="line">    print(<span class="string">'You typed '</span> + response + <span class="string">'.'</span>)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/reading-notes-money-oder-das/" rel="next" title="《小狗钱钱》读书笔记">
+                <i class="fa fa-chevron-left"></i> 《小狗钱钱》读书笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-functions/" rel="prev" title="Python 快速上手 - 函数">
+                Python 快速上手 - 函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#布尔值"><span class="nav-number">1.</span> <span class="nav-text">布尔值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较操作符"><span class="nav-number">2.</span> <span class="nav-text">比较操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布尔操作符"><span class="nav-number">3.</span> <span class="nav-text">布尔操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制流语句"><span class="nav-number">4.</span> <span class="nav-text">控制流语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if-语句"><span class="nav-number">4.1.</span> <span class="nav-text">if 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#else-语句"><span class="nav-number">4.2.</span> <span class="nav-text">else 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#elif-语句"><span class="nav-number">4.3.</span> <span class="nav-text">elif 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while-循环语句"><span class="nav-number">4.4.</span> <span class="nav-text">while 循环语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#break-语句"><span class="nav-number">4.5.</span> <span class="nav-text">break 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#continue-语句"><span class="nav-number">4.6.</span> <span class="nav-text">continue 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-循环和-range-函数"><span class="nav-number">4.7.</span> <span class="nav-text">for 循环和 range()函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-的开始、-停止和步长参数"><span class="nav-number">4.8.</span> <span class="nav-text">range()的开始、 停止和步长参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入模块"><span class="nav-number">4.9.</span> <span class="nav-text">导入模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用逗号分隔符来导入多个模块"><span class="nav-number">4.9.1.</span> <span class="nav-text">使用逗号分隔符来导入多个模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#from-import-语句"><span class="nav-number">4.9.2.</span> <span class="nav-text">from import 语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-sys-exit-提前结束程序"><span class="nav-number">4.10.</span> <span class="nav-text">用 sys.exit()提前结束程序</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2018/03/18/python-practice-flow-control/';
+          this.page.identifier = '2018/03/18/python-practice-flow-control/';
+          this.page.title = 'Python 快速上手 - 控制流';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

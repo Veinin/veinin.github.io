@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="列表和元组可以包含多个值，这样编写程序来处理大量数据就变得更容易。而且，由于列表本身又可以包含其他列表，所以可以用它们将数据安排成层次结构。 列表数据类型“列表” 是一个值， 它包含多个字构成的序列。列表用左方括号开始， 右方括号结束，即[]。12colors = [&apos;red&apos;, &apos;green&apos;, &apos;blue&apos;]nums = [1, 2, 3]">
+<meta name="keywords" content="Python,编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 快速上手 - 列表">
+<meta property="og:url" content="http://veinin.com/2018/03/18/python-practice-list/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="列表和元组可以包含多个值，这样编写程序来处理大量数据就变得更容易。而且，由于列表本身又可以包含其他列表，所以可以用它们将数据安排成层次结构。 列表数据类型“列表” 是一个值， 它包含多个字构成的序列。列表用左方括号开始， 右方括号结束，即[]。12colors = [&apos;red&apos;, &apos;green&apos;, &apos;blue&apos;]nums = [1, 2, 3]">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-24T14:10:00.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 快速上手 - 列表">
+<meta name="twitter:description" content="列表和元组可以包含多个值，这样编写程序来处理大量数据就变得更容易。而且，由于列表本身又可以包含其他列表，所以可以用它们将数据安排成层次结构。 列表数据类型“列表” 是一个值， 它包含多个字构成的序列。列表用左方括号开始， 右方括号结束，即[]。12colors = [&apos;red&apos;, &apos;green&apos;, &apos;blue&apos;]nums = [1, 2, 3]">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2018/03/18/python-practice-list/"/>
+
+
+
+
+
+  <title>Python 快速上手 - 列表 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2018/03/18/python-practice-list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 快速上手 - 列表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T15:50:00+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/18/python-practice-list/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/18/python-practice-list/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>列表和元组可以包含多个值，这样编写程序来处理大量数据就变得更容易。而且，由于列表本身又可以包含其他列表，所以可以用它们将数据安排成层次结构。</p>
+<h2 id="列表数据类型"><a href="#列表数据类型" class="headerlink" title="列表数据类型"></a>列表数据类型</h2><p>“列表” 是一个值， 它包含多个字构成的序列。列表用左方括号开始， 右方括号结束，即[]。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line">nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="用下标取得列表中的单个值"><a href="#用下标取得列表中的单个值" class="headerlink" title="用下标取得列表中的单个值"></a>用下标取得列表中的单个值</h2><p>列表后面方括号内的整数被称为“下标”。列表中第一个值的下标是 0，第二个值的下标是 1，第三个值的下标是 2，依此类推。<br>如果使用的下标超出了列表中值的个数， Python 将给出 IndexError 出错信息。<br>列表也可以包含其他列表值。这些列表的列表中的值， 可以通过多重下标来访问。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, [<span class="string">'red and blue'</span>, <span class="string">'red and green'</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">0</span>]</span><br><span class="line">red</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">1</span>]</span><br><span class="line">green</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">2</span>]</span><br><span class="line">blue</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">1</span>] + colors[<span class="number">2</span>]</span><br><span class="line">greenblue</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pcolors[<span class="number">4</span>][<span class="number">1</span>]</span><br><span class="line">red <span class="keyword">and</span> green</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">5</span>]</span><br><span class="line">IndexError: list index out of range</span><br></pre></td></tr></table></figure></p>
+<h2 id="负数下标"><a href="#负数下标" class="headerlink" title="负数下标"></a>负数下标</h2><p>虽然下标从 0 开始并向上增长，但也可以用负整数作为下标。整数值−1 指的是列表中的最后一个下标， −2 指的是列表中倒数第二个下标，以此类推。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">-1</span>]</span><br><span class="line">blue</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">-3</span>]</span><br><span class="line">red</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">-1</span>] + colors[<span class="number">-3</span>]</span><br><span class="line">bluered</span><br></pre></td></tr></table></figure></p>
+<h2 id="用-len-取得列表的长度"><a href="#用-len-取得列表的长度" class="headerlink" title="用 len()取得列表的长度"></a>用 len()取得列表的长度</h2><p>len()函数将返回传递给它的列表中值的个数， 就像它能计算字符串中字符的个数一样。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(colors)</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="用下标改变列表中的值"><a href="#用下标改变列表中的值" class="headerlink" title="用下标改变列表中的值"></a>用下标改变列表中的值</h2><p>可以使用列表的下标来改变下标处的值。例如， <code>spam[1] = &#39;aardvark&#39;</code> 意味着“将列表 spam 下标 1 处的值赋值为字符串’aardvark’。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">1</span>] = <span class="string">'red and blue'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">1</span>]</span><br><span class="line"><span class="string">'red and blue'</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">-1</span>] = <span class="string">'blue and red'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(colors[<span class="number">-1</span>])</span><br><span class="line">blue <span class="keyword">and</span> red</span><br></pre></td></tr></table></figure></p>
+<h2 id="列表连接和列表复制"><a href="#列表连接和列表复制" class="headerlink" title="列表连接和列表复制"></a>列表连接和列表复制</h2><p>操作符可以连接两个列表， 得到一个新列表， 就像它将两个字符串合并成一个新字符串一样。 *操作符可以用于一个列表和一个整数，实现列表的复制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] + [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = a * <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="用-del-语句从列表中删除值"><a href="#用-del-语句从列表中删除值" class="headerlink" title="用 del 语句从列表中删除值"></a>用 del 语句从列表中删除值</h2><p>del 语句将删除列表中下标处的值， 表中被删除值后面的所有值， 都将向前移动一个下标。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> colors[<span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'red'</span>, <span class="string">'green'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> colors[<span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'red'</span>]</span><br></pre></td></tr></table></figure></p>
+<h2 id="列表用于循环"><a href="#列表用于循环" class="headerlink" title="列表用于循环"></a>列表用于循环</h2><p>在 for 循环中可以使用 range(len(someList))， 来迭代列表的每一个下标。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> range(len(colors)):</span><br><span class="line">        print(<span class="string">'Index : '</span> + str(i) + <span class="string">" in color is: "</span> + colors[i])</span><br><span class="line"></span><br><span class="line">Index : <span class="number">0</span> <span class="keyword">in</span> color <span class="keyword">is</span>: red</span><br><span class="line">Index : <span class="number">1</span> <span class="keyword">in</span> color <span class="keyword">is</span>: green</span><br><span class="line">Index : <span class="number">2</span> <span class="keyword">in</span> color <span class="keyword">is</span>: blue</span><br></pre></td></tr></table></figure></p>
+<h2 id="in-和-not-in-操作符"><a href="#in-和-not-in-操作符" class="headerlink" title="in 和 not in 操作符"></a>in 和 not in 操作符</h2><p>利用 in 和 not in 操作符， 可以确定一个值否在列表中。 像其他操作符一样， in和 not in 用在表达式中， 连接两个值： 一个要在列表中查找的值， 以及待查找的列表。这些表达式将求值为布尔值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'red'</span> <span class="keyword">in</span> colors</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'black'</span> <span class="keyword">not</span> <span class="keyword">in</span> colors</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="多重赋值技巧"><a href="#多重赋值技巧" class="headerlink" title="多重赋值技巧"></a>多重赋值技巧</h2><p>多重赋值技巧是一种快捷方式， 让你在一行代码中， 用列表中的值为多个变量赋值。<br>所以不必像这样：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line">red = colors[<span class="number">0</span>]</span><br><span class="line">green = colors[<span class="number">1</span>]</span><br><span class="line">blue = colors[<span class="number">2</span>]</span><br></pre></td></tr></table></figure></p>
+<p>可有使用如下技巧：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line">red, green, blue = colors</span><br></pre></td></tr></table></figure></p>
+<p>最后要注意变量的数目和列表的长度必须严格相等， 否则 Python 将给出 ValueError。</p>
+<h2 id="增强赋值"><a href="#增强赋值" class="headerlink" title="增强赋值"></a>增强赋值</h2><p>针对+、 -、 *、 /和%操作符， 都有增强的赋值操作符。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">a += <span class="number">1</span></span><br><span class="line">a -= <span class="number">2</span></span><br><span class="line">a *= <span class="number">2</span></span><br><span class="line">a /= <span class="number">2</span></span><br><span class="line">a %= <span class="number">5</span></span><br><span class="line"></span><br><span class="line">print(a) <span class="comment"># 9.0</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>方法和函数是一回事，只是它是调用在一个值上。方法部分跟在这个值后面，以一个句点分隔。<br>每种数据类型都有它自己的一组方法。例如， 列表数据类型有一些有用的方法，用来查找、 添加、 删除或操作列表中的值。</p>
+<h3 id="用-index-方法在列表中查找值"><a href="#用-index-方法在列表中查找值" class="headerlink" title="用 index()方法在列表中查找值"></a>用 index()方法在列表中查找值</h3><p>列表值有一个 index()方法， 可以传入一个值， 如果该值存在于列表中， 就返回它的下标。如果该值不在列表中， Python 就报 ValueError。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.index(<span class="string">'red'</span>)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.index(<span class="string">'black'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">ValueError: <span class="string">'black'</span> <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">in</span> list</span><br></pre></td></tr></table></figure></p>
+<h3 id="用-append-和-insert-方法在列表中添加值"><a href="#用-append-和-insert-方法在列表中添加值" class="headerlink" title="用 append()和 insert()方法在列表中添加值"></a>用 append()和 insert()方法在列表中添加值</h3><p>使用append()方法调用， 可以将参数添加到列表末尾。<br>insert()方法可以在列表任意下标处插入一个值。 insert()方法的第一个参数是新值的下标， 第二个参数是要插入的新值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.append(<span class="string">'black'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'black'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.insert(<span class="number">1</span>, <span class="string">'orange'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'red'</span>, <span class="string">'orange'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'black'</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="用-remove-方法从列表中删除值"><a href="#用-remove-方法从列表中删除值" class="headerlink" title="用 remove()方法从列表中删除值"></a>用 remove()方法从列表中删除值</h3><p>给 remove()方法传入一个值，它将从被调用的列表中删除。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'orange'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'black'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.remove(<span class="string">'black'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.remove(<span class="string">'orange'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="用-sort-方法将列表中的值排序"><a href="#用-sort-方法将列表中的值排序" class="headerlink" title="用 sort()方法将列表中的值排序"></a>用 sort()方法将列表中的值排序</h3><p>数值的列表或字符串的列表， 能用 sort()方法排序。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors.sort()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors</span><br><span class="line">[<span class="string">'blue'</span>, <span class="string">'green'</span>, <span class="string">'red'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure></p>
+<p>也可以指定 reverse 关键字参数为 True， 让 sort()按逆序排序。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort(reverse=<span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure></p>
+<p>排序注意事项：</p>
+<ul>
+<li>首先， sort()方法当场对列表排序。不要写出 colors = colors.sort()这样的代码。</li>
+<li>其次， 不能对既有数字又有字符串值的列表排序，因为 Python 不知道如何比较它们。</li>
+<li>第三， sort()方法对字符串排序时， 使用“ASCII 字符顺序”， 而不是实际的字典顺序。这意味着大写字母排在小写字母之前。因此在排序时， 小写的 a 在大写的 Z 之后。</li>
+</ul>
+<h2 id="类似列表的类型：字符串和元组"><a href="#类似列表的类型：字符串和元组" class="headerlink" title="类似列表的类型：字符串和元组"></a>类似列表的类型：字符串和元组</h2><p>列表并不是唯一表示序列值的数据类型。例如， 字符串和列表实际上很相似，只要你认为字符串是单个文本字符的列表。对列表的许多操作， 也可以作用于字符串：按下标取值、 切片、 用于 for 循环、 用于 len()， 以及用于 in 和 not in 操作符。<br>需要注意的是：字符串是“不可变的”， 它不能被更改。尝试对字符串中的一个字符重新赋值， 将导致 TypeError 错误。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>name = <span class="string">'Veinin'</span>                                    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name[<span class="number">0</span>]                                        </span><br><span class="line"><span class="string">'V'</span>                                             </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name[<span class="number">-1</span>]                                       </span><br><span class="line"><span class="string">'n'</span>                                             </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'in'</span> <span class="keyword">in</span> name                                           </span><br><span class="line"><span class="keyword">True</span>                                         </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'p'</span> <span class="keyword">not</span> <span class="keyword">in</span> name                      </span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name[<span class="number">0</span>] = <span class="string">'A'</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'str'</span> object does <span class="keyword">not</span> support item assignment</span><br></pre></td></tr></table></figure></p>
+<p>字符串是“不可变的”， 它不能被更改。<br>“改变” 一个字符串的正确方式， 是使用切片和连接。构造一个“新的” 字符串， 从老的字符串那里复制一些部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>name = <span class="string">'Veinin'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>newName = <span class="string">'Jali'</span> + name[<span class="number">4</span>:<span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name</span><br><span class="line"><span class="string">'Veinin'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>newName</span><br><span class="line"><span class="string">'Jaliin'</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="元组数据类型"><a href="#元组数据类型" class="headerlink" title="元组数据类型"></a>元组数据类型</h2><p>除了两个方面，“元组” 数据类型几乎与列表数据类型一样。<br>首先， 元组输入时用圆括号()， 而不是用方括号[]。<br>其次，元组像字符串一样， 是不可变的。 元组不能让它们的值被修改、 添加或删除。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors = (<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">0</span>]</span><br><span class="line"><span class="string">'red'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">-2</span>]</span><br><span class="line"><span class="string">'green'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line">(<span class="string">'green'</span>, <span class="string">'blue'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>colors[<span class="number">2</span>] = <span class="string">'black'</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</span><br></pre></td></tr></table></figure></p>
+<p>如果需要元组值的一个可变版本， 使用函数函数 list() 将元组转换成列表就很方便。 相反也可以使用 tuple() 函数将列表转换成元组。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>对于字符串和整数值赋值操作，将执行拷贝操作，赋值后二者是不同的变量，保存了不同的值。<br>但列表不是这样的。 当你将列表赋给一个变量时，实际上是将列表的“引用”赋给了该变量。引用是一个值，指向某些数据。列表引用是指向一个列表的值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">40</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">50</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line"><span class="number">50</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line"><span class="number">40</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar = foo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo[<span class="number">0</span>] = <span class="number">120</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo</span><br><span class="line">[<span class="number">120</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar</span><br><span class="line">[<span class="number">120</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="传递引用"><a href="#传递引用" class="headerlink" title="传递引用"></a>传递引用</h2><p>当函数被调用时， 参数的值被复制给变元。对于列表以及字典， 这意味着变元得到的是引用的拷贝。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">something</span><span class="params">(arr)</span>:</span></span><br><span class="line"><span class="meta">... </span>    arr.append(<span class="number">4</span>)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>something(arr)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>arr</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure></p>
+<h2 id="copy-和-deepcopy-函数"><a href="#copy-和-deepcopy-函数" class="headerlink" title="copy()和 deepcopy() 函数"></a>copy()和 deepcopy() 函数</h2><p>在处理列表和字典时，尽管传递引用常常是最方便的方法， 但如果函数修改了传入的列表或字典， 你可能不希望这些变动影响原来的列表或字典。要做到这一点，Python 提供了名为 copy 的模块， 其中包含 copy()和 deepcopy()函数。<br>第一个函数copy.copy()， 可以用来复制列表或字典这样的可变值， 而不只是复制引用。<br>如果要复制的列表中包含了列表， 那就使用 copy.deepcopy()函数来代替。deepcopy()函数将同时复制它们内部的列表。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]</span><br><span class="line">b = copy.copy(a)</span><br><span class="line"></span><br><span class="line">a[<span class="number">0</span>] = <span class="number">110</span></span><br><span class="line">a[<span class="number">3</span>][<span class="number">0</span>] = <span class="number">120</span></span><br><span class="line">print(a) <span class="comment"># [110, 2, 3, [120, 5, 6]]</span></span><br><span class="line">print(b) <span class="comment"># [1, 2, 3, [120, 5, 6]]</span></span><br><span class="line"></span><br><span class="line">c = copy.deepcopy(a)</span><br><span class="line">c[<span class="number">3</span>][<span class="number">0</span>] = <span class="number">4</span></span><br><span class="line">print(a) <span class="comment"># [110, 2, 3, [120, 5, 6]]</span></span><br><span class="line">print(c) <span class="comment"># [110, 2, 3, [4, 5, 6]]</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-functions/" rel="next" title="Python 快速上手 - 函数">
+                <i class="fa fa-chevron-left"></i> Python 快速上手 - 函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-dictionaries/" rel="prev" title="Python 快速上手 - 字典">
+                Python 快速上手 - 字典 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#列表数据类型"><span class="nav-number">1.</span> <span class="nav-text">列表数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用下标取得列表中的单个值"><span class="nav-number">2.</span> <span class="nav-text">用下标取得列表中的单个值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#负数下标"><span class="nav-number">3.</span> <span class="nav-text">负数下标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用-len-取得列表的长度"><span class="nav-number">4.</span> <span class="nav-text">用 len()取得列表的长度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用下标改变列表中的值"><span class="nav-number">5.</span> <span class="nav-text">用下标改变列表中的值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表连接和列表复制"><span class="nav-number">6.</span> <span class="nav-text">列表连接和列表复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用-del-语句从列表中删除值"><span class="nav-number">7.</span> <span class="nav-text">用 del 语句从列表中删除值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表用于循环"><span class="nav-number">8.</span> <span class="nav-text">列表用于循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#in-和-not-in-操作符"><span class="nav-number">9.</span> <span class="nav-text">in 和 not in 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重赋值技巧"><span class="nav-number">10.</span> <span class="nav-text">多重赋值技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增强赋值"><span class="nav-number">11.</span> <span class="nav-text">增强赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">12.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用-index-方法在列表中查找值"><span class="nav-number">12.1.</span> <span class="nav-text">用 index()方法在列表中查找值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-append-和-insert-方法在列表中添加值"><span class="nav-number">12.2.</span> <span class="nav-text">用 append()和 insert()方法在列表中添加值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-remove-方法从列表中删除值"><span class="nav-number">12.3.</span> <span class="nav-text">用 remove()方法从列表中删除值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-sort-方法将列表中的值排序"><span class="nav-number">12.4.</span> <span class="nav-text">用 sort()方法将列表中的值排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类似列表的类型：字符串和元组"><span class="nav-number">13.</span> <span class="nav-text">类似列表的类型：字符串和元组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#元组数据类型"><span class="nav-number">14.</span> <span class="nav-text">元组数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">15.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传递引用"><span class="nav-number">16.</span> <span class="nav-text">传递引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy-和-deepcopy-函数"><span class="nav-number">17.</span> <span class="nav-text">copy()和 deepcopy() 函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2018/03/18/python-practice-list/';
+          this.page.identifier = '2018/03/18/python-practice-list/';
+          this.page.title = 'Python 快速上手 - 列表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

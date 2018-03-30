@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="文本是程序需要处理的最常见的数据形式。涉及字符串的操作不仅仅是使用+操作符连接两个字符串，你还可以从字符串中提取部分字符串， 添加或删除空白字符， 将字母转换成小写或大写， 检查字符串的格式是否正确。你甚至可以编写 Python 代码访问剪贴板， 复制或粘贴文本。 处理字符串双引号在Python中构建一个字符串相当简单：以单引号开始和结束。如果字符串里面也使用单引号的话，则需要使用双引号开始和结束">
+<meta name="keywords" content="Python,编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 快速上手 - 字符串">
+<meta property="og:url" content="http://veinin.com/2018/03/18/python-practice-strings/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="文本是程序需要处理的最常见的数据形式。涉及字符串的操作不仅仅是使用+操作符连接两个字符串，你还可以从字符串中提取部分字符串， 添加或删除空白字符， 将字母转换成小写或大写， 检查字符串的格式是否正确。你甚至可以编写 Python 代码访问剪贴板， 复制或粘贴文本。 处理字符串双引号在Python中构建一个字符串相当简单：以单引号开始和结束。如果字符串里面也使用单引号的话，则需要使用双引号开始和结束">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-24T15:00:56.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 快速上手 - 字符串">
+<meta name="twitter:description" content="文本是程序需要处理的最常见的数据形式。涉及字符串的操作不仅仅是使用+操作符连接两个字符串，你还可以从字符串中提取部分字符串， 添加或删除空白字符， 将字母转换成小写或大写， 检查字符串的格式是否正确。你甚至可以编写 Python 代码访问剪贴板， 复制或粘贴文本。 处理字符串双引号在Python中构建一个字符串相当简单：以单引号开始和结束。如果字符串里面也使用单引号的话，则需要使用双引号开始和结束">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2018/03/18/python-practice-strings/"/>
+
+
+
+
+
+  <title>Python 快速上手 - 字符串 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2018/03/18/python-practice-strings/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 快速上手 - 字符串</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T16:46:00+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/18/python-practice-strings/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/18/python-practice-strings/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>文本是程序需要处理的最常见的数据形式。涉及字符串的操作不仅仅是使用+操作符连接两个字符串，你还可以从字符串中提取部分字符串， 添加或删除空白字符， 将字母转换成小写或大写， 检查字符串的格式是否正确。你甚至可以编写 Python 代码访问剪贴板， 复制或粘贴文本。</p>
+<h2 id="处理字符串"><a href="#处理字符串" class="headerlink" title="处理字符串"></a>处理字符串</h2><h3 id="双引号"><a href="#双引号" class="headerlink" title="双引号"></a>双引号</h3><p>在Python中构建一个字符串相当简单：以单引号开始和结束。<br>如果字符串里面也使用单引号的话，则需要使用双引号开始和结束来表示一个字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">"I found hi's very selfish."</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h3><p>“转义字符” 让你输入一些字符，它们用其他方式是不可能放在字符串里的。转义字符包含一个倒斜杠（\）， 紧跟着是想要添加到字符串中的字符。<br>常用的转移字符包括:\’(单引号)、 \”(双引号)、 \t(制表符)、 \(倒斜杠)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">'I found hi\'s very selfish.'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s</span><br><span class="line"><span class="string">"I found hi's very selfish."</span></span><br></pre></td></tr></table></figure>
+<h3 id="原始字符串"><a href="#原始字符串" class="headerlink" title="原始字符串"></a>原始字符串</h3><p>在字符串开始的引号之前加上 r， 那么它就成为了一个原始字符串。“原始字符串” 会完全忽略所有的转义字符， 打印出字符串中所有的倒斜杠。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">r'That is Carol\'s cat.'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="用三重引号的多行字符串"><a href="#用三重引号的多行字符串" class="headerlink" title="用三重引号的多行字符串"></a>用三重引号的多行字符串</h3><p>虽然可以用\n转义字符将换行放入一个字符串，但使用多行字符串通常更容易。<br>在 Python 中，多行字符串的起止是 3 个单引号或 3 个双引号。“三重引号” 之间的所有引号、 制表符或换行， 都被认为是字符串的一部分。 Python 的代码块缩进规则不适用于多行字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'''Dear Alice,</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Eve's cat has been arrested for catnapping.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Sincerely,</span></span><br><span class="line"><span class="string">Bob'''</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h3><p>虽然井号字符（#） 表示这一行是注释， 但多行字符串常常用作多行注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""This is a test Python program.</span></span><br><span class="line"><span class="string">Written by Al Sweigart al@inventwithpython.com</span></span><br><span class="line"><span class="string">This program was designed for Python 3, not Python 2.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">spam</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""This is a multiline comment to help</span></span><br><span class="line"><span class="string">    explain what the spam() function does."""</span></span><br><span class="line">    print(<span class="string">'Hello!'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="字符串下标和切片"><a href="#字符串下标和切片" class="headerlink" title="字符串下标和切片"></a>字符串下标和切片</h3><p>字符串像列表一样，可以使用下标和切片。<br>字符串切片并不能修改原来的字符串。但可以从一个变量中获取切片，记录在另一个变量中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>text = <span class="string">'Hello world!'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text[<span class="number">1</span>]</span><br><span class="line"><span class="string">'e'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text[<span class="number">-2</span>]</span><br><span class="line"><span class="string">'d'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text[<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line"><span class="string">'Hell'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text[:<span class="number">5</span>]</span><br><span class="line"><span class="string">'Hello'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text[<span class="number">4</span>:]</span><br><span class="line"><span class="string">'o world!'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text2 = text[<span class="number">0</span>:<span class="number">5</span>]</span><br><span class="line"><span class="string">'Hello'</span></span><br></pre></td></tr></table></figure>
+<h3 id="字符串使用-in-和-not-in-操作符"><a href="#字符串使用-in-和-not-in-操作符" class="headerlink" title="字符串使用 in 和 not in 操作符"></a>字符串使用 in 和 not in 操作符</h3><p>像列表一样， in 和 not in 操作符也可以用于字符串。用 in 或 not in 连接两个字符串得到的表达式， 将求值为布尔值 True 或 False。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span> <span class="keyword">in</span> <span class="string">'Veinin Guo'</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span> <span class="keyword">not</span> <span class="keyword">in</span> <span class="string">'Veinin Guo'</span></span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">''</span> <span class="keyword">in</span> <span class="string">'Veinin Guo'</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="字符串操作方法"><a href="#字符串操作方法" class="headerlink" title="字符串操作方法"></a>字符串操作方法</h2><p>某些字符串需要转换、分析然后产生新的字符串，字符串内置了一些常用的方法。<br><strong>注意</strong>：Python 中所有字符串操作方法并不会改变字符串本身的属性，而是返回一个操作后的新字符串。</p>
+<h3 id="upper-、-lower-、-isupper-和-islower"><a href="#upper-、-lower-、-isupper-和-islower" class="headerlink" title="upper()、 lower()、 isupper()和 islower()"></a>upper()、 lower()、 isupper()和 islower()</h3><p>upper()和 lower() 方法会返回一个新字符串，所有字母都被相应地转换为大写或小写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; text = &apos;Hello World!&apos;</span><br><span class="line">&gt;&gt;&gt; print(text.upper())</span><br><span class="line">HELLO WORLD!</span><br><span class="line">&gt;&gt;&gt; print(text.lower())</span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>isupper()和islower()方法用来判断字符串是否至少有要给字母，并且所有字母都是大写或小写，相应地如果成立就会返回布尔值 True，否则返回 False。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Hello world'</span>.isupper()</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'HELLO WORLD'</span>.isupper()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Hello'</span>.islower()</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'hello'</span>.islower()</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="isX-方法"><a href="#isX-方法" class="headerlink" title="isX 方法"></a>isX 方法</h3><p>为了能判断字符串的特点，提供了一些常用的以 <code>is</code> 开头的方法。</p>
+<ul>
+<li>isalpha() 如果字符串非空，且只包含字母，则返回 True</li>
+<li>isalnum() 如果字符串非空，且只包含字母和数字，则返回 True</li>
+<li>isdecimal() 如果字符串非空，且只包含数字，则返回 True</li>
+<li>isspace() 如果字符串非空，且只包含空格、换行和制表符，则返回 True</li>
+<li>istitle() 如果字符串包含以大写字母开头且后面字母都是小写字母的单词，则返回 True</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc'</span>.isalpha()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc123'</span>.isalpha()</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc123'</span>.isalnum()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc123'</span>.isdecimal()</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'10088'</span>.isdecimal()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'  '</span>.isspace()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'I Am From China'</span>.istitle()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'I am from China'</span>.istitle()</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="startswith-和-endswith"><a href="#startswith-和-endswith" class="headerlink" title="startswith() 和 endswith()"></a>startswith() 和 endswith()</h3><p>startswith() 和 endswith() 用来判断某个字符串以某个字符串开始或结束，成立则返回 True。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Hello World'</span>.startswith(<span class="string">'Hello'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Hello World'</span>.startswith(<span class="string">'nihao'</span>)</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Hello World'</span>.endswith(<span class="string">'World'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="join-和-split"><a href="#join-和-split" class="headerlink" title="join() 和 split()"></a>join() 和 split()</h3><p>join() 方法用来将一个字符串列表中的每个字符串连接成一个新的字符串。<br>而 split() 方法与 join() 方法刚好相反，它会将一个字符串按制定分隔符进行分割，返回一个分割后的列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">', '</span>.join([<span class="string">'java'</span>, <span class="string">'python'</span>, <span class="string">'golang'</span>])</span><br><span class="line"><span class="string">'java, python, golang'</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'I am from China'</span>.split()</span><br><span class="line">[<span class="string">'I'</span>, <span class="string">'am'</span>, <span class="string">'from'</span>, <span class="string">'China'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'ABCDEFGEFGEFG'</span>.split(<span class="string">'E'</span>)</span><br><span class="line">[<span class="string">'ABCD'</span>, <span class="string">'FG'</span>, <span class="string">'FG'</span>, <span class="string">'FG'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="使用-rjust-、-ljust-和-center-方法对齐文本"><a href="#使用-rjust-、-ljust-和-center-方法对齐文本" class="headerlink" title="使用 rjust()、 ljust() 和 center() 方法对齐文本"></a>使用 rjust()、 ljust() 和 center() 方法对齐文本</h3><p>rjust() 和 ljust() 方法使用向左或向右插入空格的方式返回一个字符串的填充版本。而 center() 方法则是让字符串文本居中。<br>上面三个方法都接受两个参数，第一个参数指定填充数量。第二个参数，指定填充的字符，默认是填充空格。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span>.ljust(<span class="number">20</span>, <span class="string">'-'</span>)</span><br><span class="line"><span class="string">'Veinin--------------'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span>.rjust(<span class="number">20</span>, <span class="string">'-'</span>)</span><br><span class="line"><span class="string">'--------------Veinin'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span>.center(<span class="number">20</span>)</span><br><span class="line"><span class="string">'       Veinin       '</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'Veinin'</span>.center(<span class="number">20</span>, <span class="string">'#'</span>)</span><br><span class="line"><span class="string">'#######Veinin#######'</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-strip-、-rstrip-和-lstrip-方法删除空白字符"><a href="#使用-strip-、-rstrip-和-lstrip-方法删除空白字符" class="headerlink" title="使用 strip()、 rstrip() 和 lstrip() 方法删除空白字符"></a>使用 strip()、 rstrip() 和 lstrip() 方法删除空白字符</h3><p>strip()、 rstrip() 和 lstrip() 三个方法分别对一个字符串的两边、右边和左边的空白字符进行删除操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>name = <span class="string">'   Veinin Guo   '</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name.strip()</span><br><span class="line"><span class="string">'Veinin Guo'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name.rstrip()</span><br><span class="line"><span class="string">'   Veinin Guo'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name.lstrip()</span><br><span class="line"><span class="string">'Veinin Guo   '</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/python-practice-dictionaries/" rel="next" title="Python 快速上手 - 字典">
+                <i class="fa fa-chevron-left"></i> Python 快速上手 - 字典
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/23/dev-notes-mmorpg-aoi-algorithm/" rel="prev" title="开发笔记：MMORPG场景同步AOI解决方案">
+                开发笔记：MMORPG场景同步AOI解决方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理字符串"><span class="nav-number">1.</span> <span class="nav-text">处理字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双引号"><span class="nav-number">1.1.</span> <span class="nav-text">双引号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转义字符"><span class="nav-number">1.2.</span> <span class="nav-text">转义字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始字符串"><span class="nav-number">1.3.</span> <span class="nav-text">原始字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用三重引号的多行字符串"><span class="nav-number">1.4.</span> <span class="nav-text">用三重引号的多行字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多行注释"><span class="nav-number">1.5.</span> <span class="nav-text">多行注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串下标和切片"><span class="nav-number">1.6.</span> <span class="nav-text">字符串下标和切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串使用-in-和-not-in-操作符"><span class="nav-number">1.7.</span> <span class="nav-text">字符串使用 in 和 not in 操作符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串操作方法"><span class="nav-number">2.</span> <span class="nav-text">字符串操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#upper-、-lower-、-isupper-和-islower"><span class="nav-number">2.1.</span> <span class="nav-text">upper()、 lower()、 isupper()和 islower()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isX-方法"><span class="nav-number">2.2.</span> <span class="nav-text">isX 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#startswith-和-endswith"><span class="nav-number">2.3.</span> <span class="nav-text">startswith() 和 endswith()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join-和-split"><span class="nav-number">2.4.</span> <span class="nav-text">join() 和 split()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-rjust-、-ljust-和-center-方法对齐文本"><span class="nav-number">2.5.</span> <span class="nav-text">使用 rjust()、 ljust() 和 center() 方法对齐文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-strip-、-rstrip-和-lstrip-方法删除空白字符"><span class="nav-number">2.6.</span> <span class="nav-text">使用 strip()、 rstrip() 和 lstrip() 方法删除空白字符</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2018/03/18/python-practice-strings/';
+          this.page.identifier = '2018/03/18/python-practice-strings/';
+          this.page.title = 'Python 快速上手 - 字符串';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

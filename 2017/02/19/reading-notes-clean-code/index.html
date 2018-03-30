@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程,代码整洁," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="什么是代码整洁？有多少程序员，可能就会就有多少定义。本书以详细到吓死人的程序告诉你对代码整洁的看法。它会告诉你关于整洁变量名的想法，关于整洁函数的想法，如此等等。它是一本教你如何编出写好程序的书籍。读完后，我们能知道许多关于代码的事，而且，我们还能说出好代码和糟糕代码之间的差异。我们将了解如何写出好代码。我们也会知道，如何将糟糕的代码改写成好代码。">
+<meta name="keywords" content="编程,代码整洁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《代码整洁之道》读书笔记">
+<meta property="og:url" content="http://veinin.com/2017/02/19/reading-notes-clean-code/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="什么是代码整洁？有多少程序员，可能就会就有多少定义。本书以详细到吓死人的程序告诉你对代码整洁的看法。它会告诉你关于整洁变量名的想法，关于整洁函数的想法，如此等等。它是一本教你如何编出写好程序的书籍。读完后，我们能知道许多关于代码的事，而且，我们还能说出好代码和糟糕代码之间的差异。我们将了解如何写出好代码。我们也会知道，如何将糟糕的代码改写成好代码。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-24T16:32:22.255Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《代码整洁之道》读书笔记">
+<meta name="twitter:description" content="什么是代码整洁？有多少程序员，可能就会就有多少定义。本书以详细到吓死人的程序告诉你对代码整洁的看法。它会告诉你关于整洁变量名的想法，关于整洁函数的想法，如此等等。它是一本教你如何编出写好程序的书籍。读完后，我们能知道许多关于代码的事，而且，我们还能说出好代码和糟糕代码之间的差异。我们将了解如何写出好代码。我们也会知道，如何将糟糕的代码改写成好代码。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2017/02/19/reading-notes-clean-code/"/>
+
+
+
+
+
+  <title>《代码整洁之道》读书笔记 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2017/02/19/reading-notes-clean-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《代码整洁之道》读书笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-19T11:29:48+08:00">
+                2017-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/19/reading-notes-clean-code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/02/19/reading-notes-clean-code/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>什么是代码整洁？有多少程序员，可能就会就有多少定义。<br>本书以详细到吓死人的程序告诉你对代码整洁的看法。它会告诉你关于整洁变量名的想法，关于整洁函数的想法，如此等等。<br>它是一本教你如何编出写好程序的书籍。读完后，我们能知道许多关于代码的事，而且，我们还能说出好代码和糟糕代码之间的差异。我们将了解如何写出好代码。我们也会知道，如何将糟糕的代码改写成好代码。  </p>
+<a id="more"></a>
+<h2 id="有意义的命名"><a href="#有意义的命名" class="headerlink" title="有意义的命名"></a>有意义的命名</h2><p>取名字最难的地方在于需要良好的描述技巧和共有的文化背景，与其说这是一种技术、商业或管理问题，倒不如说这是一种教学问题。好名字可以提升你的代码可读性，可以让你代码更易维护和重构。</p>
+<h3 id="名副其实"><a href="#名副其实" class="headerlink" title="名副其实"></a>名副其实</h3><p>选好名字要花时间，但省下来的时间比花掉的时间多。注意命名，一旦发现更好的名称，就换掉旧的。这样做，读你代码的人（包括你自己）都会开心。</p>
+<p>变量、函数或类名应该能答复所有大问题，它该告诉你，它为什么存在，它做什么事，应该怎么用。如果名称需要用注释来补充，那就不算名副其实。如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> d; <span class="comment">//消失的时间，以日记</span></span><br></pre></td></tr></table></figure>
+<p>名称d什么都没说嘛，我们应该指明对象和计量单位的名称：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> elspedTimeInDays;</span><br><span class="line"><span class="keyword">int</span> daysSinceCreation;</span><br><span class="line"><span class="keyword">int</span> fileAgeInDays;</span><br></pre></td></tr></table></figure>
+<p>选择体现本意的名称能让人更容易理解和修改。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;<span class="keyword">int</span>[]&gt; getThem() &#123;</span><br><span class="line">	List&lt;<span class="keyword">int</span>[]&gt; list1 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span>[] x : theList)</span><br><span class="line">		<span class="keyword">if</span> (x[<span class="number">0</span>] == <span class="number">4</span>)</span><br><span class="line">			list1.add(x);</span><br><span class="line">	<span class="keyword">return</span> list1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看完上面代码，我们可以产生以下问题：</p>
+<ul>
+<li>它是什么东西？</li>
+<li>它有什么意义？</li>
+<li>值4是什么东西？</li>
+<li>它返回列表用来干嘛？</li>
+</ul>
+<p>问问开发它得程序员，程序员可能会说：我们正在开发扫雷游戏，theList是单元格列表，4是一种状态，我们需要从这里获取到关于这种状态的所有值。</p>
+<p>当然，我们可以通过询问来读懂代码，但这不值得提倡，我们可以做的更好，只需要简单改下名字，就能轻易知道发生了什么。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;<span class="keyword">int</span>[]&gt; getFlaggedCells() &#123;</span><br><span class="line">	List&lt;<span class="keyword">int</span>[]&gt; flaggedCells = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span>[] cell : gameBoard)</span><br><span class="line">		<span class="keyword">if</span> (cell[STATUS_VALUE] == FLAGGED)</span><br><span class="line">			flaggedCells.add(x);</span><br><span class="line">	<span class="keyword">return</span> flaggedCells;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="做有意义的区分"><a href="#做有意义的区分" class="headerlink" title="做有意义的区分"></a>做有意义的区分</h3><p>如果程序员只是为了满足编译器或解释器两样不同的东西，从而写代码，那就会制造麻烦。<br>以数字系列命名（a1、a2，…aN），这样纯属误导，完全可以提供更加正确信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copyChars(<span class="keyword">char</span> a1[], <span class="keyword">char</span> a2[])</span><br></pre></td></tr></table></figure>
+<p>上面函数的参数名称，如果改名为source和distination，这个函数会像样很多。</p>
+<h3 id="使用可搜索的名称"><a href="#使用可搜索的名称" class="headerlink" title="使用可搜索的名称"></a>使用可搜索的名称</h3><p>单字母名称和数字常量有个问题，就是很难在一大片文字中找出来。<br>找MAX_LASSES_PER_STUDEN很容易，但找数字7很难。<br>同样“e”也不是一个便于搜索的好变量名，它是英文中最常用的字母，每个程序、每段代码都可能出现。由此可见，<strong>长名称胜于短名称。搜索可得到的名称胜于胡编乱造的名称。</strong></p>
+<h3 id="类名和方法名"><a href="#类名和方法名" class="headerlink" title="类名和方法名"></a>类名和方法名</h3><p>类名和对象一个是<strong>名词或短语</strong>，如Customer、WikiPage。类名不应该是动词。<br>方法名应当是<strong>动词或动词短语</strong>，如postPayment、deletePage。属性访问、修改和断言都应根据其值命名，如前缀加上get、set或is。</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="短小"><a href="#短小" class="headerlink" title="短小"></a>短小</h3><p>函数的第一规则是<strong>短小</strong>，第二条规则是还要更<strong>短小</strong>。应该有多短小？它看起来应该是这样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">renderPageWithSetupsAndTeardowns</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	PageData pageData, <span class="keyword">boolean</span> isSuite)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (isTestPage(pageData))</span><br><span class="line">		includeSeteupAndTeardownPage(pageData, isSuite);</span><br><span class="line">	<span class="keyword">return</span> pageData.getHtml();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="只做一件事"><a href="#只做一件事" class="headerlink" title="只做一件事"></a>只做一件事</h3><p>一个函数应该<strong>做一件事，做好这件事，只做一件事。</strong>函数遵循单一权责原则、开放闭合原则。<br>如果函数只做该函数名下的同一抽象层上的步骤，则函数就是只做了一件事。</p>
+<h3 id="每个函数一个抽象层级"><a href="#每个函数一个抽象层级" class="headerlink" title="每个函数一个抽象层级"></a>每个函数一个抽象层级</h3><p>要确保函数只做一件事，那么函数语句都必须在同一抽象层级上。<br>让代码拥有自顶向下的阅读顺序，每个函数后面都跟着下一抽象层级的函数。把函数分为：</p>
+<ul>
+<li><strong>高级抽象层</strong></li>
+<li><strong>中级抽象层</strong></li>
+<li><strong>还有低等抽象层</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getHtml() <span class="comment">// 高</span></span><br><span class="line">String pageName = PathParser.render(pagePath)。 <span class="comment">// 中</span></span><br><span class="line">.append(<span class="string">"\n"</span>) <span class="comment">// 低</span></span><br></pre></td></tr></table></figure>
+<p>函数中的语句都要在同一抽象层级上。</p>
+<h3 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h3><p>函数参数最理想的数量是零，其次是一，再次是二，应尽量避免三，有足够的特殊理由才能用三个以上参数（所以无论如何都不要这么做）。</p>
+<h4 id="一元函数普遍形式"><a href="#一元函数普遍形式" class="headerlink" title="一元函数普遍形式"></a>一元函数普遍形式</h4><p>单个参数有两种普遍理由，你也许会为关于那个参数的问题，就像：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">fileExists</span><span class="params">(<span class="string">"MyFile"</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>也可能是操作该参数，将其转换成其他什么东西，再输出之，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">InputStream <span class="title">fileOpen</span><span class="params">(<span class="string">"MyFile"</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="标识参数"><a href="#标识参数" class="headerlink" title="标识参数"></a>标识参数</h4><p>标识参数丑陋不堪，向函数传入布尔值简直骇人听闻的做法。比如: <code>render(true)</code><br>对于可怜的读者来说仍然摸不着头脑，看到 render(Boolean isSuite) 也许稍有帮助，但仍不够，应该一分为二：<code>reanderForSuite()</code> 和 <code>renderForSingleTest()</code></p>
+<h4 id="二元函数"><a href="#二元函数" class="headerlink" title="二元函数"></a>二元函数</h4><p>两个参数的函数比一元函数难懂。例如<code>writeField(name</code>比<code>writeField(outputStream, name</code>好懂。尽管两种意义都很清楚，但扫一眼就明白还是第一种。<br>应尽量利用一些机制将二元函数转成一元函数，例如 <code>writeField</code> 方法写成 <code>outputStream</code> 的成员之一，比如这样： <code>outputStream.writeField(name</code>。<br>当然，有些时候两个参数刚好。如 <code>Point(0, 0)</code> 笛卡尔点天生就拥有两个参数。</p>
+<h4 id="三元函数"><a href="#三元函数" class="headerlink" title="三元函数"></a>三元函数</h4><p>比二元函数难懂的多，写三元函数前一定要想清楚。<br>设想 <code>assertEquals(message, expected, actual)</code> 有多少次你读到message时错以为expected呢？</p>
+<h4 id="参数对象"><a href="#参数对象" class="headerlink" title="参数对象"></a>参数对象</h4><p>如果函数看来需要两个、三个或三个以上的参数，就说明其中一些参数应该封装成类了。如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Circle <span class="title">makeCircle</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">double</span> y, <span class="keyword">double</span> radius)</span></span>;</span><br><span class="line"><span class="function">Circle <span class="title">makeCircle</span><span class="params">(Point center, <span class="keyword">double</span> radius)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="分隔指令与询问"><a href="#分隔指令与询问" class="headerlink" title="分隔指令与询问"></a>分隔指令与询问</h3><p>函数<strong>要么做什么事，要么回答什么事，但二者不可兼得。</strong>下面是设置某个属性，返回是否成功的代码语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">set</span><span class="params">(String attribute, String value)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (set(<span class="string">"username"</span>, <span class="string">"unclebob"</span>))...</span><br></pre></td></tr></table></figure>
+<p>从读者的角度来说，并不一定能明白<strong>set</strong>的含义，你可以改名命名为 <code>setAndCheckIfExists</code>，但对if帮助也不大。解决方案是把指令与询问分隔开来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (attributeExists(<span class="string">"username"</span>)) &#123;</span><br><span class="line">	setAttribute(<span class="string">"username"</span>, <span class="string">"unclebob"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="抽离try-cache代码块"><a href="#抽离try-cache代码块" class="headerlink" title="抽离try/cache代码块"></a>抽离try/cache代码块</h3><p>try/cache代码块丑陋不堪，它搞乱了代码结构，把错误处理与正常的流程混为一谈。最好把try和cache代码块的主题部分抽离出来。 <strong>函数只做一件事，而错误处理就是一件事。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Page page)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		deletePageAndAllRefreces(page)</span><br><span class="line">	&#125; cache (Exception e) &#123;</span><br><span class="line">		logError(e);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">deletePageAndRefrences</span><span class="params">(Page page)</span> <span class="keyword">throws</span> Exceptio </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Don’t-repeat-yourself"><a href="#Don’t-repeat-yourself" class="headerlink" title="Don’t repeat yourself"></a>Don’t repeat yourself</h3><p>一次且仅一次（once and only once，简称OAOO）又称为Don’t repeat yourself（不要重复你自己，简称DRY）或一个规则，实现一次（one rule, one place）是面向对象编程中的基本原则，程序员的行事准则。旨在软件开发中，减少重复的信息。<br>DRY的原则是──系统中的每一部分，都必须有一个单一的、明确的、权威的代表──指的是（由人编写而非机器生成的）代码和测试所构成的系统，必须能够表达所应表达的内容，但是不能含有任何重复代码。当DRY原则被成功应用时，一个系统中任何单个元素的修改都不需要与其逻辑无关的其他元素发生改变。此外，与之逻辑上相关的其他元素的变化均爲可预见的、均匀的，并如此保持同步。 – 摘录维基百科</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>请记住，唯一真正好的注释就是<strong>你想办法不去写注释。</strong><br>注释的恰当用法是弥补我们用代码表达意图时遭遇的失败。注意，用了“失败”一词。<br>注释总是一种失败。我们总无法找到不用注释就能表达自我的方法。所以要有注释，这并不值得庆贺。</p>
+<h3 id="注释不能美化糟糕的代码"><a href="#注释不能美化糟糕的代码" class="headerlink" title="注释不能美化糟糕的代码"></a>注释不能美化糟糕的代码</h3><p>写注释的动机之一是糟糕的代码存在。我们编写一个模块，发现它令人困扰、乱起八糟，它烂透了！我们告诉自己：“喔，最好写点注释”。与其花时间编写解释你搞出来的糟糕代码的注释，还不如花时间清洁那堆糟糕的代码。</p>
+<h3 id="用代码来阐述"><a href="#用代码来阐述" class="headerlink" title="用代码来阐述"></a>用代码来阐述</h3><p><strong>能用函数或变量时，就别用注释。</strong><br>你愿意看到：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Check to see if the employee is eligible for full benifits</span></span><br><span class="line"><span class="keyword">if</span> (employee.flags &amp; HOURLY_FLAG &amp;&amp;employee.age &gt; <span class="number">65</span>)</span><br></pre></td></tr></table></figure>
+<p>还是这个？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (employee.isEligibleForFullBenefits())</span><br></pre></td></tr></table></figure>
+<p>只要你想上几秒钟，就能用代码解释你大部分的意图。很多时候，简单到需要创建一个描述与注释所言同一事物的函数即可。</p>
+<h3 id="好注释"><a href="#好注释" class="headerlink" title="好注释"></a>好注释</h3><ul>
+<li><strong>法律信息</strong>，例如版权及著作权。</li>
+<li><strong>提供信息的注释</strong>，例如描述抽象方法的返回值。</li>
+<li><strong>警告</strong>，警告其他情况会出现某种后果的注释。</li>
+<li><strong>// TODO 注释</strong>，解释为什么该函数现在无所作为，将来会怎么用。</li>
+<li><strong>公共AIP注释</strong>，标准Java库中的javadoc就是一例。</li>
+</ul>
+<h3 id="坏注释"><a href="#坏注释" class="headerlink" title="坏注释"></a>坏注释</h3><ul>
+<li><strong>多余的注释</strong>，如读注释的时间比读代码花的时间还长的注释。</li>
+<li><strong>循环式注释</strong>，所谓每个函数、每个变量都要有个注释是愚蠢可笑的。这类注释徒然让代码变得散乱，满口胡言，让人迷糊不接。</li>
+<li><strong>注释掉的注释</strong>，其他人不敢删除注释掉的代码，他们会想，代码依然放在那儿，一定有其原因，而且这段代码很重要，不能删除。注释掉的对堆积在一起，就像破酒瓶底的残渣一样。</li>
+<li><strong>日志式注释</strong>，冗长的日志式记录只会让模块变得凌乱不堪，版本管理软件完全可以解决。</li>
+<li><strong>废话注释</strong>，这类注释废话连篇，当代码修改后，这类注释边做了谎言一堆。如果你在写（或粘贴）注释时都没心思，怎么指望读者从中受益。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The name. */</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** The version. */</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** The name. */</span> </span><br><span class="line"><span class="keyword">private</span> String info;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* Returns the day of the month</span></span><br><span class="line"><span class="comment">* @return the day of the month</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDayOfMonth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> dayOfMonth;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>代码格式很重要，代码格式不可忽略，必须严肃对待。代码格式关乎沟通，而沟通是专业开发者的头等大事。原始代码修改很久之后，其代码风格和可读性仍会影响到可维护性和拓展性。</p>
+<h3 id="垂直格式"><a href="#垂直格式" class="headerlink" title="垂直格式"></a>垂直格式</h3><p>源代码当个文件应该有多大？例举了市面上常见的8个开源项目，其中大多数文件为200行，最长的500行单个文件组合起来就构建了出色的系统。</p>
+<h4 id="垂直方向区隔"><a href="#垂直方向区隔" class="headerlink" title="垂直方向区隔"></a>垂直方向区隔</h4><p>几乎所有代码都是从<strong>上往下读，从左往右读</strong>。每行展示一个表达式或一个子句，每组代码行展示一条完整的思路。这些思路用个空白行区间隔开。<br>在封包声明、导入声明和每个函数直接用空白行隔开，没一个空白行都是一条线索，标识出新的独立概念。</p>
+<h4 id="垂直距离"><a href="#垂直距离" class="headerlink" title="垂直距离"></a>垂直距离</h4><p>变量声明应该尽可能的靠近其使用位置。实体变量应该房子类的顶部或底部声明。<br>若一个函数调用了另外一个函数，就应该把他们放在一起，而且调用者应该尽可能的放在被调用者上面。这样，程序就自然有序了。<br>你是否曾经在某个类中摸索，从一个函数跳到另外一个函数，上下求索，想要搞清楚他们的关系，最后却被搞糊涂了？  </p>
+<ul>
+<li>关系密切的概念应该相互靠近。</li>
+<li>变量声明应该尽可能的靠近其使用位置。本地变量应该在函数顶部出现，实体变量一个在类顶部声明。</li>
+</ul>
+<h3 id="横向格式"><a href="#横向格式" class="headerlink" title="横向格式"></a>横向格式</h3><p>遵循<strong>无需拖动滚动条到右边</strong>原则。虽然近年来显示器屏幕越来越宽，但并不是所以人的显示器都和你一样，普遍来说推荐屏幕单行代码长度为80上限，当然也不用死守这个数值，推荐上限不超过120个字符。</p>
+<h4 id="水平方向空格使用"><a href="#水平方向空格使用" class="headerlink" title="水平方向空格使用"></a>水平方向空格使用</h4><p>使用空格字符将彼此紧密相关的事物联系到一起，也用空格字符把相关性较弱的事物分割开。</p>
+<ul>
+<li>赋值操作符左右边、每一个函数参数右边加上空格</li>
+<li>不在函数名与左圆括号之间加空格，因为函数与其参数密切相关</li>
+<li>算数运算符优先级高的不用空格，优先级低的加空格</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">determinant</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b*b - <span class="number">4</span>*a*c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="水平对其"><a href="#水平对其" class="headerlink" title="水平对其"></a>水平对其</h4><p>应该对其一组声明中的变量名，或一组复制语句中的右值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Socket 			 socket;</span><br><span class="line"><span class="keyword">private</span> InputStream		 output;</span><br><span class="line"><span class="keyword">private</span> FileNesseContext context;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> 		 hasError;</span><br></pre></td></tr></table></figure>
+<h3 id="团队规则"><a href="#团队规则" class="headerlink" title="团队规则"></a>团队规则</h3><p>每个程序员都有自己喜欢的规则，但如果在一个团队中的工作，就是团队说了算。<br>一组开发者应当认同一种格式风格，每个成员都应该采用那种风格。我们想要软件拥有一以贯之的风格。我们不想让它显得是由一大票意见相左的个人所写成。<br>好的软件系统是由一些列读起来不错的代码文件组成的。它们拥有一致和顺畅的风格。读者要能确信它们在一个源文件中看到的风格在其他文件中也是同样的用法。绝对不要用各种不同的风格来编写源代码，这样会增加其复杂度。</p>
+<h2 id="对象和数据结构"><a href="#对象和数据结构" class="headerlink" title="对象和数据结构"></a>对象和数据结构</h2><p>将变量设置为私有（private）有一个理由：我们不想其他人依赖这些变量。我们还想在心血来潮时能自由修改其类型或实现。</p>
+<h3 id="数据抽象"><a href="#数据抽象" class="headerlink" title="数据抽象"></a>数据抽象</h3><p>隐藏实现并不只是在变量之间放上一个函数层那么简单。<strong>隐藏实现关乎抽象！</strong> 类并不简单的用取值器将其变量推向外间，而是暴露抽象接口，以便用户无需了解数据结构的实现就可以操作数据<strong>本地</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具体点</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> x;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抽象点</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">getX</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">getY</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后者代码更佳，抽象的数据存取策略让你不知道该实现是在矩形坐标系中还是在极坐标系中。我们不愿意暴露数据细节，更愿意以抽象形态表述数据。</p>
+<h3 id="数据、对象的反对称性"><a href="#数据、对象的反对称性" class="headerlink" title="数据、对象的反对称性"></a>数据、对象的反对称性</h3><p>过程式代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> Point topLeft;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> side;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> Point topLeft;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> height;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> width;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">area</span><span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (object <span class="keyword">instanceof</span> Square) &#123;</span><br><span class="line">		Square S = (Square) object;</span><br><span class="line">		<span class="keyword">return</span> s.side * s.side;</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (shape instanceOf Rectangle) &#123;</span><br><span class="line">		Rectangle r = (Rectangle) object;</span><br><span class="line">		<span class="keyword">return</span> r.height * r.width;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在面向对象方案中我们只需要一个area()多态方法，如果添加新形状只需要重新实现指定接口的一个类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">area</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>过程式代码难以添加新数据结构，因为必须修改所有函数。<br>面向对象代码难以添加新函数，因为必须修改所有类。<br>在任何一个复杂的系统中，有需要<strong>添加新数据类型而不是新函数</strong>的时候，这时对象和面向对象就比较合适。<br>另一方面，当想<strong>添加新函数而不是新数据类型</strong>的时候，过程式代码更合适。</p>
+<h3 id="数据传送对象"><a href="#数据传送对象" class="headerlink" title="数据传送对象"></a>数据传送对象</h3><p>最为精炼的数据结构，是一个只有公共变量，没有函数的类。这种数据结构对于数据通信传送、解析是非常有用的。在应用程序代码中“豆”（bean）结构对半封装可能会对某些OO纯化论者感觉舒服些，不过通常没有其他好处。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String street;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Address</span><span class="params">(String street)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.street = street;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getStreet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> street;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>往往我们会看到开发者往这类数据结构中塞进业务规则方法，把这类数据结构当做对象来用。这不是理智的行为，业务它导致了数据结构和对象的混杂体。</p>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><h3 id="别返回null值"><a href="#别返回null值" class="headerlink" title="别返回null值"></a>别返回null值</h3><p>你是否见过几乎每行代码都在检查null值得应用程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerItem</span><span class="params">(Item item)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">		ItemRgister registry = peristentStore.getItemRegistry();</span><br><span class="line">		<span class="keyword">if</span> (registry != <span class="keyword">null</span>) &#123;</span><br><span class="line">			Item existing = registry.getItem(item.getId);</span><br><span class="line">			<span class="comment">// ...</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种代码看似不坏，其实糟糕透了！返回null值基本在给自己增加工作量，也是在给调用者添乱。只要有一处没有检查null值，应用程序就会失控。<br>例如对于空指针异常，我们可能在运行时的得到异常，也许有人在代码顶端捕获异常，也可能没有捕获。<br><strong>如果你打算在代码中返回null值，不如抛出异常，或返回特定对象，如Java 8 引入的Optional对象。</strong></p>
+<h3 id="别传递null值"><a href="#别传递null值" class="headerlink" title="别传递null值"></a>别传递null值</h3><p>返回null值是很糟糕的做法，但将null值传递给其他方法就更糟糕。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">xProjection</span><span class="params">(Point p1, Point p2)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (p2.x - p1.x) * <span class="number">1.5</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码如果我们传入null值，将得到一个空指针异常。当然我们也可以在函数里面进行错误处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">xProjection</span><span class="params">(Point p1, Point p2)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">assert</span> p1 != <span class="keyword">null</span> : <span class="string">"p1 should not be null"</span>;</span><br><span class="line">	<span class="keyword">assert</span> p2 != <span class="keyword">null</span> : <span class="string">"p2 should not be null"</span>;</span><br><span class="line">	<span class="keyword">return</span> (p2.x - p1.x) * <span class="number">1.5</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看上去很美，但认为解决问题，因为还是会得到运行时异常。最恰当的做法就是禁止传入null值。</p>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><h3 id="TDD"><a href="#TDD" class="headerlink" title="TDD"></a>TDD</h3><p>关于TDD相关可以参考文章<a href="http://coolshell.cn/articles/3649.html" target="_blank" rel="noopener">《TDD并不是看上去的那么美》</a>以及文章中的相关讨论。</p>
+<h3 id="整洁的测试"><a href="#整洁的测试" class="headerlink" title="整洁的测试"></a>整洁的测试</h3><p>有三个要素：可读性、可读性、可读性。单元测试应该和其他代码中一样：明确、简介，还有足够的表达力。测试代码应该竟可能时候的位子表达大量内容。</p>
+<ul>
+<li>每一个测试一个断言，或者是单个测试中断言的数量应该最小化。</li>
+<li>每个测试一个概念，好测试应该每个测试一个概念，而不是把所有事情都混在一起。</li>
+</ul>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><h3 id="类的组织"><a href="#类的组织" class="headerlink" title="类的组织"></a>类的组织</h3><p>类应该从一组变量列表开始，如果有静态变量，一个先出现。然后是私有静态变量，以及私有实体变量。很少会有公共变量。<br>函数紧跟变量列表之后。公共函数调用的私有工具函数紧随该调用函数后面（自顶向下原则）。</p>
+<h3 id="类应该短小"><a href="#类应该短小" class="headerlink" title="类应该短小"></a>类应该短小</h3><p>与函数一样，类的第一原则是应该短小。第二条原则是还要更短小。<br>多小合适呢？对于类来说，采用不同的衡量方法，计算<strong>权责</strong>。<br>类名应该描述其权责。命名可以用来帮助判断类的长度。类名越含混，该类拥有的权责就越多。</p>
+<h4 id="单一权责原则"><a href="#单一权责原则" class="headerlink" title="单一权责原则"></a>单一权责原则</h4><p>参考<a href="https://zh.wikipedia.org/wiki/%E5%8D%95%E4%B8%80%E5%8A%9F%E8%83%BD%E5%8E%9F%E5%88%99" target="_blank" rel="noopener">维基百科</a></p>
+<h4 id="内聚"><a href="#内聚" class="headerlink" title="内聚"></a>内聚</h4><p>参考<a href="https://zh.wikipedia.org/zh-cn/%E5%85%A7%E8%81%9A%E6%80%A7_(%E8%A8%88%E7%AE%97%E6%A9%9F%E7%A7%91%E5%AD%B8" target="_blank" rel="noopener">维基百科</a></p>
+<h2 id="Kent-Beck关于简单设计的四条原则"><a href="#Kent-Beck关于简单设计的四条原则" class="headerlink" title="Kent Beck关于简单设计的四条原则"></a>Kent Beck关于<strong>简单设计</strong>的四条原则</h2><ul>
+<li>运行所有测试</li>
+<li>不可重复</li>
+<li>表达了程序员的意图</li>
+<li>尽可能减少类和方法的数量</li>
+<li>以上规则按其重要程度排列</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>习艺只要有二：知和行。你一个学习得到有关原则、模式和实践的知识，穷尽应知之事，并且要对其了如指掌，通过刻苦实践掌握它。<br>学写整洁代码很难。它可不止要求掌握原则和模式。你得在这上面花功夫。你须自行实践，且体验自己的失败。你须观察他人的实践与失败。你须看看别人是怎样蹒跚学步，再转头研究他们的路数。你须看看别人是如何绞尽脑汁做出决策，又是如何为错误决策付出代码。<br>如果你是一个程序员，或你想成为更好的程序员，都推荐你阅读这本书。<br>能编写整洁代码的程序员就像艺术家，他能用一系列变换把一块白板变作由优雅代码构成的系统。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+            <a href="/tags/代码整洁/" rel="tag"># 代码整洁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/17/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/20/java-8-lambda/" rel="prev" title="Java 8编程：Lambda表达式">
+                Java 8编程：Lambda表达式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#有意义的命名"><span class="nav-number">1.</span> <span class="nav-text">有意义的命名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#名副其实"><span class="nav-number">1.1.</span> <span class="nav-text">名副其实</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#做有意义的区分"><span class="nav-number">1.2.</span> <span class="nav-text">做有意义的区分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用可搜索的名称"><span class="nav-number">1.3.</span> <span class="nav-text">使用可搜索的名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类名和方法名"><span class="nav-number">1.4.</span> <span class="nav-text">类名和方法名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#短小"><span class="nav-number">2.1.</span> <span class="nav-text">短小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只做一件事"><span class="nav-number">2.2.</span> <span class="nav-text">只做一件事</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#每个函数一个抽象层级"><span class="nav-number">2.3.</span> <span class="nav-text">每个函数一个抽象层级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数参数"><span class="nav-number">2.4.</span> <span class="nav-text">函数参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一元函数普遍形式"><span class="nav-number">2.4.1.</span> <span class="nav-text">一元函数普遍形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标识参数"><span class="nav-number">2.4.2.</span> <span class="nav-text">标识参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二元函数"><span class="nav-number">2.4.3.</span> <span class="nav-text">二元函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三元函数"><span class="nav-number">2.4.4.</span> <span class="nav-text">三元函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数对象"><span class="nav-number">2.4.5.</span> <span class="nav-text">参数对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分隔指令与询问"><span class="nav-number">2.5.</span> <span class="nav-text">分隔指令与询问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽离try-cache代码块"><span class="nav-number">2.6.</span> <span class="nav-text">抽离try/cache代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Don’t-repeat-yourself"><span class="nav-number">2.7.</span> <span class="nav-text">Don’t repeat yourself</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">3.</span> <span class="nav-text">注释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注释不能美化糟糕的代码"><span class="nav-number">3.1.</span> <span class="nav-text">注释不能美化糟糕的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用代码来阐述"><span class="nav-number">3.2.</span> <span class="nav-text">用代码来阐述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#好注释"><span class="nav-number">3.3.</span> <span class="nav-text">好注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坏注释"><span class="nav-number">3.4.</span> <span class="nav-text">坏注释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式"><span class="nav-number">4.</span> <span class="nav-text">格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直格式"><span class="nav-number">4.1.</span> <span class="nav-text">垂直格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#垂直方向区隔"><span class="nav-number">4.1.1.</span> <span class="nav-text">垂直方向区隔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#垂直距离"><span class="nav-number">4.1.2.</span> <span class="nav-text">垂直距离</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#横向格式"><span class="nav-number">4.2.</span> <span class="nav-text">横向格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#水平方向空格使用"><span class="nav-number">4.2.1.</span> <span class="nav-text">水平方向空格使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#水平对其"><span class="nav-number">4.2.2.</span> <span class="nav-text">水平对其</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#团队规则"><span class="nav-number">4.3.</span> <span class="nav-text">团队规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象和数据结构"><span class="nav-number">5.</span> <span class="nav-text">对象和数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据抽象"><span class="nav-number">5.1.</span> <span class="nav-text">数据抽象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据、对象的反对称性"><span class="nav-number">5.2.</span> <span class="nav-text">数据、对象的反对称性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据传送对象"><span class="nav-number">5.3.</span> <span class="nav-text">数据传送对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">6.</span> <span class="nav-text">错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#别返回null值"><span class="nav-number">6.1.</span> <span class="nav-text">别返回null值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#别传递null值"><span class="nav-number">6.2.</span> <span class="nav-text">别传递null值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试"><span class="nav-number">7.</span> <span class="nav-text">单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TDD"><span class="nav-number">7.1.</span> <span class="nav-text">TDD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整洁的测试"><span class="nav-number">7.2.</span> <span class="nav-text">整洁的测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类"><span class="nav-number">8.</span> <span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的组织"><span class="nav-number">8.1.</span> <span class="nav-text">类的组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类应该短小"><span class="nav-number">8.2.</span> <span class="nav-text">类应该短小</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一权责原则"><span class="nav-number">8.2.1.</span> <span class="nav-text">单一权责原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内聚"><span class="nav-number">8.2.2.</span> <span class="nav-text">内聚</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kent-Beck关于简单设计的四条原则"><span class="nav-number">9.</span> <span class="nav-text">Kent Beck关于简单设计的四条原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2017/02/19/reading-notes-clean-code/';
+          this.page.identifier = '2017/02/19/reading-notes-clean-code/';
+          this.page.title = '《代码整洁之道》读书笔记';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

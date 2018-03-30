@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Streams API," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在Java日常编程中，我们使用的最多的API可能是集合了，集合几乎在所有的单元模块中都会出现。而如果使用集合就必须对集合进行处理，往往开发人员可能需要使用循环去进行重复检查处理。为了简化流程，我们使用SQL查询语句进行数据分组来的更加简单。例如：   1SELECT name FROM person WHERE age &amp;gt; 20; 上诉表达式可以快速的帮你找出年龄大于20的人，但当数据量大的">
+<meta name="keywords" content="Java,Streams API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8编程：Streams API">
+<meta property="og:url" content="http://veinin.com/2017/05/26/java-8-streams-api/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="在Java日常编程中，我们使用的最多的API可能是集合了，集合几乎在所有的单元模块中都会出现。而如果使用集合就必须对集合进行处理，往往开发人员可能需要使用循环去进行重复检查处理。为了简化流程，我们使用SQL查询语句进行数据分组来的更加简单。例如：   1SELECT name FROM person WHERE age &amp;gt; 20; 上诉表达式可以快速的帮你找出年龄大于20的人，但当数据量大的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-24T16:33:32.406Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8编程：Streams API">
+<meta name="twitter:description" content="在Java日常编程中，我们使用的最多的API可能是集合了，集合几乎在所有的单元模块中都会出现。而如果使用集合就必须对集合进行处理，往往开发人员可能需要使用循环去进行重复检查处理。为了简化流程，我们使用SQL查询语句进行数据分组来的更加简单。例如：   1SELECT name FROM person WHERE age &amp;gt; 20; 上诉表达式可以快速的帮你找出年龄大于20的人，但当数据量大的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veinin.com/2017/05/26/java-8-streams-api/"/>
+
+
+
+
+
+  <title>Java8编程：Streams API | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://veinin.com/2017/05/26/java-8-streams-api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java8编程：Streams API</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-26T00:32:05+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/26/java-8-streams-api/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/05/26/java-8-streams-api/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Java日常编程中，我们使用的最多的API可能是集合了，集合几乎在所有的单元模块中都会出现。而如果使用集合就必须对集合进行处理，往往开发人员可能需要使用循环去进行重复检查处理。为了简化流程，我们使用SQL查询语句进行数据分组来的更加简单。例如：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name FROM person WHERE age &gt; 20;</span><br></pre></td></tr></table></figure>
+<p>上诉表达式可以快速的帮你找出年龄大于20的人，但当数据量大的时候，类似的处理效率又成了问题，有些开发人员会想到使用多核进行数据处理，缺乏相关经验的Java开发人员却是非常容易编写出错百出的并行处理代码的。<br>流是Java 8引入的一组新API，我们可以使用流像使用SQL语句一样声明性的方式的进行数据处理。此外，使用流还可以在无须编写额外多线程代码的情况下透明的并行处理。</p>
+<a id="more"></a>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>什么是流？流不是数据结构，也不保存数据，流只是一些了的算法和计算的操作序列。其定义包含以下几种元素：</p>
+<ul>
+<li><strong>元素序列</strong>，以顺序方式提供给流的一组数据，流通过这组数据进行处理计算。</li>
+<li><strong>源</strong>，提供给流的一个数据源，如集合、数组或I/O资源。</li>
+<li><strong>聚合操作</strong>，流支持使用顺序或并行进行一系列诸如筛选、查找、匹配、分组、截取的聚合元素操作。</li>
+<li><strong>流水线</strong>，很多流操作会返回另外一个流，这些操作组合起来形成一个流水线。</li>
+<li><strong>自动迭代</strong>，流在元素上面的迭代操作是<em>内部迭代</em>进行的，<em>流只能被遍历一次</em>。与其相反，我们常用的如<code>for-each</code>操作被称为外部迭代。</li>
+</ul>
+<p>本文大部分例子都是一系列的Person类集合操作，代码清单如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line">	private final String name;</span><br><span class="line">	private final boolean married;</span><br><span class="line">	private final int age;</span><br><span class="line">	private final Sex sex;</span><br><span class="line"></span><br><span class="line">	public Person(String name, boolean married, int age, Sex sex) &#123;</span><br><span class="line">		this.name = name;</span><br><span class="line">		this.married = married;</span><br><span class="line">		this.age = age;</span><br><span class="line">		this.sex = sex;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public String getName() &#123;</span><br><span class="line">		return name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public boolean isMarried() &#123;</span><br><span class="line">		return married;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public int getAge() &#123;</span><br><span class="line">		return age;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public Sex getSex() &#123;</span><br><span class="line">		return sex;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public enum Sex &#123;MALE, FEMALE&#125;</span><br><span class="line">	public enum AgeDistribution &#123;YOUTH, MIDDLE, ELDERLY&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">List&lt;Person&gt; persons = Arrays.asList(</span><br><span class="line">	new Person(&quot;Mathews&quot;, false, 10, Sex.Male),</span><br><span class="line">	new Person(&quot;Silvia&quot;, true, 30, Sex.FEMALE),</span><br><span class="line">	new Person(&quot;Veinin&quot;, false, 25, Sex.Male),</span><br><span class="line">	new Person(&quot;Bales&quot;, true, 60, Sex.FEMALE),</span><br><span class="line">	new Person(&quot;Baldry&quot;, true, 40, Sex.FEMALE),</span><br><span class="line">	new Person(&quot;Sims&quot;, true, 55, Sex.Male),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="流操作"><a href="#流操作" class="headerlink" title="流操作"></a>流操作</h2><p>java.util.stream.Stream接口定义了许多流操作方法，我们把他们分为两大类：</p>
+<ul>
+<li><strong>中间操作流</strong>，操作完后会返回另一个流<code>Stream&lt;T&gt;</code>，可以跟其他流处理操作连接起来。连接起来的中间操作不会立即执行。<br>| 操作     | 操作参数       | 函数描述符   |<br>| :–: | :: | :–: |<br>| filter   | Predicate<t>   | T -&gt; boolean |<br>| distinct | | |<br>| limit    | | |<br>| skip     | | |<br>| map      | Function&lt;T, R&gt; | T -&gt; R       |<br>| sorted   | Comparator<t>  | (T, T) -&gt; int|</t></t></li>
+<li><strong>终端操作流</strong>，执行所有流水线操作，并关闭流操作生成结果，其结果不是任何流的值，比如Integer、List、Map、Void等。<br>| 操作    | 目的                                           |<br>| :-: | :: |<br>| forEach | 消费流中的元素，应用于制定Lambda操作，返回void |<br>| count   | 返回流操作结果的个数                           |<br>| collect | 把流操作结果归纳成一个集合                     |</li>
+</ul>
+<p><strong>中间操作</strong>与<strong>终端操作</strong>结合后，看起来会是这样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> count = persons.stream()</span><br><span class="line">    .filter(Person::isMarried)  <span class="comment">// 中间操作</span></span><br><span class="line">    .limit(<span class="number">3</span>)                   <span class="comment">// 中间操作</span></span><br><span class="line">    .count();                   <span class="comment">// 终端操作</span></span><br></pre></td></tr></table></figure>
+<p>上面的流操作包含以下元素：</p>
+<ul>
+<li><strong>数据源</strong>，persons集合</li>
+<li><strong>中间操作链</strong>，filter与limit构成一条流水线</li>
+<li><strong>终端操作</strong>, 执行流水线，并调用count生成结果。</li>
+</ul>
+<h2 id="构建流"><a href="#构建流" class="headerlink" title="构建流"></a>构建流</h2><p>创建一个流有许多种方式，大部分需要流操作的对象都有提供构建流的API。但总体来说可以归纳成以下几种：</p>
+<ul>
+<li><strong>通过集合生成流</strong>，Collection接口提供了一个默认方法 <code>stream()</code> 用来返回一个流对象 <code>Stream&lt;T&gt;</code> ,如果需要并行处理数据，可以通过 <code>paralleStream()</code> 返回一个并行流。</li>
+<li><strong>通过值创建流</strong>，<code>Stream</code> 接口中提供了 <code>Stream.of(T)</code> 静态方法，也可以通过 <code>Stream.empty()</code> 返回一个空的流对象。</li>
+<li><strong>通过数组创建流</strong>，静态方法 <code>java.util.Arrays.stream()</code> 可以从数组中创建一个流。如 <code>IntStream stream = Arrays.stream(new int[]{1, 2, 3})</code> 。</li>
+<li><strong>通过文件生成流</strong>， <code>java.nio.file.Files</code> 中提供了多个静态方法可以从文件中生成一个流。</li>
+<li><strong>创建无限流</strong>，所谓无限流，是指不像上面的流创建方法从指定大小的数据源中得到一个流，它通过给定函数创建一个值，并可以永久的执行下去不断产生新值，一般来说我们通过 <code>limit(n)</code> 来限制这种流。<code>Stream</code> 提供了两个静态方法： <code>Stream.iterate</code> 和 <code>Stream.generate</code> 来产生一个无限流。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 迭代，从0开始，对每次生产的整数n做加1运算，生产10个数后输出。</span><br><span class="line">Stream.iterate(0, n -&gt; n + 1)</span><br><span class="line">    .limit(10)</span><br><span class="line">    .forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">// 生成，接受一个Supplier&lt;T&gt;类型的Lambda表达式来提供新值，生产5个值后打印输出</span><br><span class="line">Stream.generate(Math::random)</span><br><span class="line">    .limit(5)</span><br><span class="line">    .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h2 id="使用流"><a href="#使用流" class="headerlink" title="使用流"></a>使用流</h2><h3 id="筛选"><a href="#筛选" class="headerlink" title="筛选"></a>筛选</h3><p><code>Stream</code> 接口提供了 <code>filter()</code> 方法接受一个谓词参数 <code>Predicate&lt;T&gt;</code>  ，返回一个包含所有符合谓词筛选条件的元素的流。例如，我们需要筛选所有已婚人士：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Person&gt; marriedPersons = persons.stream()</span><br><span class="line">    .filter(Person::isMarried)</span><br><span class="line">    .collect(toList());</span><br></pre></td></tr></table></figure>
+<h3 id="筛选各异元素"><a href="#筛选各异元素" class="headerlink" title="筛选各异元素"></a>筛选各异元素</h3><p><code>Stream</code> 还提供了一个 <code>distinct()</code> 的方法，通过调用元素的 <code>hashCode()</code> 和 <code>equals()</code> 方法来实现元素各异的对比，产生一个没有重复值的流。例如，筛选列表中不重复的值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 1, 2, 3);</span><br><span class="line">numbers.stream()</span><br><span class="line">    .distinct()</span><br><span class="line">    .forEach(System.out::println);  // 输出 1, 2, 3</span><br></pre></td></tr></table></figure>
+<h3 id="截短流"><a href="#截短流" class="headerlink" title="截短流"></a>截短流</h3><p><code>Stream.limit(n)</code>、 <code>Stream.skip(n)</code> 可以对筛选过的流元素进行截短， <code>limit</code> 和 <code>skip</code> 是互补的， <code>limit</code> 截取前n个元素，而skip则是跳过前n个元素，如果元素不足，会返回一个空流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">numbers.stream()</span><br><span class="line">    .limit(2)</span><br><span class="line">    .forEach(System.out::println);  // 输出 1, 2</span><br><span class="line">    </span><br><span class="line">numbers.stream()</span><br><span class="line">    .skip(2)</span><br><span class="line">    .forEach(System.out::println);  // 输出 3, 4, 5</span><br></pre></td></tr></table></figure>
+<h3 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h3><p>有时候我们可能需要从某组元素中提取一组特定对象，比如上Person列表中提取每个人的名字。  <code>Stream.map()</code> 方法能满足我们的需求。 <code>map</code> 方法接受一个 <code>Function&lt;T, R&gt;</code> Lambda表达式作为参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; personNames = persons.stream()</span><br><span class="line">    .map(Person::getName)</span><br><span class="line">    .collect(toList());</span><br></pre></td></tr></table></figure>
+<h3 id="扁平化流"><a href="#扁平化流" class="headerlink" title="扁平化流"></a>扁平化流</h3><p>流的扁平化与映射采用一对一映射关系不同，使用 <code>flatMap</code> 会将map映射时生成的单个流都合并起来。假如给你一个 <code>Stream&lt;List&lt;String&gt;&gt;</code> 流，需要生成一个 <code>Stream&lt;String&gt;</code> 流，并且去除重复的 <code>String</code> 元素时， <code>flatMap</code> 就能派上用场。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;List&lt;String&gt;&gt; integerListStream = Stream.of(</span><br><span class="line">  Arrays.asList(&quot;Mathews&quot;, &quot;Veinin&quot;), </span><br><span class="line">  Arrays.asList(&quot;Veinin&quot;, &quot;Baldry&quot;), </span><br><span class="line">  Arrays.asList(&quot;Sims&quot;)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">Stream&lt;Integer&gt; stringStream = integerListStream .flatMap(Collection::stream).distinct();</span><br><span class="line">stringStream.forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mathews  </span><br><span class="line">Veinin  </span><br><span class="line">Baldry  </span><br><span class="line">Sims</span><br></pre></td></tr></table></figure>
+<h3 id="流的查找与匹配"><a href="#流的查找与匹配" class="headerlink" title="流的查找与匹配"></a>流的查找与匹配</h3><p>对数据处理的常用功能离不开查找与匹配，Stream API提供了对流的查找匹配相关函数：</p>
+<ul>
+<li><strong>anyMatch</strong>，流中是否有一个元素匹配，返回一个boolean值</li>
+<li><strong>allMatch</strong>，流中的所有元素是否都匹配，返回一个boolean值</li>
+<li><strong>noneMatch</strong>， 流中没有任何一个匹配的元素，返回一个boolean值</li>
+<li><strong>findAny</strong>，返回流中的任一一个元素，返回一个Optional<t>对象。</t></li>
+<li><strong>findFirst</strong>，返回流中的第一个出现的元素，返回一个Optional<t>对象。</t></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">persons.stream().anyMatch(Person::isMarried);       // 是否有已婚人士</span><br><span class="line">persons.stream().allMatch(p -&gt; p.getAge() &lt; 20);    // 是否所有人都小于20岁</span><br><span class="line">persons.stream().noneMatch(p -&gt; p.getAge() &gt; 30);   // 是否没有一个大于30岁的人</span><br><span class="line"></span><br><span class="line">// 找出任一一个已婚人士，如果有则输出</span><br><span class="line">persons.stream()</span><br><span class="line">    .filter(Person::isMarried)</span><br><span class="line">    .findAny()</span><br><span class="line">    .ifPresent(System.out::println);</span><br><span class="line">    </span><br><span class="line">// 找出元素序列中的第一个人，如果找到则输出</span><br><span class="line">persons.stream()</span><br><span class="line">    .findFirst()</span><br><span class="line">    .ifPresent(System.out::println);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于<code>Optional</code>类<br><code>Optional</code> 是Java8新引入的一个类，它是一个可以为null值的容器对象。如果值存在， <code>isPresent()</code> 将会返回 <code>true</code>，并可以通过 <code>get()</code> 方法获取到这个值。<br>关于 <code>Optional</code>的设计思想在 <a href="https://github.com/google/guava/blob/d9f088a61c80fa47d09ccf05a8c3608a47c5e4c0/guava/src/com/google/common/base/Optional.java" target="_blank" rel="noopener">Google Guava</a> 代码库中其实早就已经存在了。当我们在调用函数后，其返回值我们无法判断是否为null时，就可以返回一个 <code>Optional&lt;T&gt;</code> 对象，来代替你的返回值，提示调用者，此返回值可能为空。其使用语法大致为这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; name = person.getName();</span><br><span class="line">if (name.isPresent()) &#123;</span><br><span class="line">    System.out.println(name.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="归纳"><a href="#归纳" class="headerlink" title="归纳"></a>归纳</h3><p><code>map</code> 操作是将一组元素映射成一组新的值，而 <code>reduce</code> 操作则是把这些映射过的元素进行组合操作，通过指定运算规则产生另一个结果。如计算一组数值的平均值、最大、最小值，这些操作都可以归类的<code>归纳</code>操作。常用的 <code>归纳</code> 操作包括：sum、min、max、average、count。<br>比如，我们需要对所有人计算年龄和、最大年龄、最小年龄：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int totolAge = persons.stream()</span><br><span class="line">    .map(Person::getAge)</span><br><span class="line">    .reduce(0, Integer::sum);</span><br><span class="line">    </span><br><span class="line">Optional&lt;Integer&gt; maxAge = persons.stream()</span><br><span class="line">    .map(Person::getAge)</span><br><span class="line">    .reduce(Integer::max);</span><br><span class="line"></span><br><span class="line">Optional&lt;Integer&gt; minAge = persons.stream()</span><br><span class="line">    .map(Person::getAge)</span><br><span class="line">    .reduce(Integer::min);</span><br></pre></td></tr></table></figure>
+<p><code>reduce</code> 接受两个参数：</p>
+<ul>
+<li>初始值</li>
+<li>计算用的lambda表达式，类型为BinaryOperator<t>，讲两个元素结合起来，产生一个新值。</t></li>
+</ul>
+<h3 id="数值流"><a href="#数值流" class="headerlink" title="数值流"></a>数值流</h3><h4 id="基本数据类型操作流"><a href="#基本数据类型操作流" class="headerlink" title="基本数据类型操作流"></a>基本数据类型操作流</h4><p>对基本数据类型的装箱、拆箱操作是非常耗时的操作。Stream API提供了3种流接口来解决这个问题：<code>IntStream</code>、<code>LongStream</code>、<code>DoubleStream</code>。<br>上面的<code>归纳</code>操作我们可以使用原始数据类型流来优化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int totalAge = persons.stream()</span><br><span class="line">    .mapToInt(Person::getAge)     // 返回一个 IntStream</span><br><span class="line">    .sum();</span><br><span class="line"></span><br><span class="line">OptionalInt maxAge = persons.stream()</span><br><span class="line">    .mapToInt(Person::getAge)</span><br><span class="line">    .max();</span><br></pre></td></tr></table></figure>
+<h4 id="数值范围生成流"><a href="#数值范围生成流" class="headerlink" title="数值范围生成流"></a>数值范围生成流</h4><p>有时我们需要生成一窜制定范围内的数值，并进行相关操作，比如对1-100范围内的数求和，对于这种操作我们可以使用 <code>range</code> 和 <code>rangeClosed</code>， <code>range</code> 对于 <code>rangeClosed</code> 来说， 前者的结束值将不被包含。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int total = IntStream.range(1, 100).sum();          // 1-99  数值求和</span><br><span class="line">int total = IntStream.rangeClosed(1, 100).sum();    // 1-100 数值求和</span><br></pre></td></tr></table></figure>
+<h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><p>分组是一个常见的数据库操作，在Java 8之前，我们用代码对数据分组很麻烦，并且容易出错。但如果使用Java 8提供的函数式接口 <code>Collectors.groupingBy</code> 这将变得很简单。如我们将人的性别进行分组，传统的Java操作看起来是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Sex, List&lt;Person&gt;&gt; personBySex = new HashMap&lt;&gt;();</span><br><span class="line">for (Person person : persons) &#123;</span><br><span class="line">    List&lt;Person&gt; personByList = personBySex.get(person.getSex());</span><br><span class="line">    if (personByList == null) &#123;</span><br><span class="line">        personByList = new ArrayList&lt;&gt;();</span><br><span class="line">        personBySex.put(person.getSex(), personByList);</span><br><span class="line">    &#125;</span><br><span class="line">    personByList.add(person);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>Collectors.groupingBy</code> 后，我们的代码将大大简化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Sex, List&lt;Person&gt;&gt; personBySex = persons.stream().collect(groupingBy(Person::getSex));</span><br></pre></td></tr></table></figure>
+<p>有时候，还需要进一步进行多级分组，如除了性别外，我们还需要对年龄分布进行分组，把人分为年轻组、中年组和老年组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Sex, Map&lt;AgeDistribution, List&lt;Person&gt;&gt; personBySex = persons.stream().collect(</span><br><span class="line">    groupingBy(Person::getSex),</span><br><span class="line">        groupingBy(person -&gt; &#123;</span><br><span class="line">            if (person.getAge &lt;= 30) &#123;</span><br><span class="line">                return AgeDistribution.YOUTH;</span><br><span class="line">            &#125; else if (person.getAge &lt;= 50) &#123;</span><br><span class="line">                return AgeDistribution.MIDDLE;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                return AgeDistribution.ELDERLY;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+<h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><p>分区是分组的一种特殊处理方式，分区函数讲返回一个boolean值，并把元素分为两类（true or false），存储于 <code>Map&lt;Boolean, T&gt;</code> 当中。<code>Collectors.partitioningBy</code> 提供了这种分区功能，如我们需要对已婚、未婚人士分区时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Boolean, List&lt;Person&gt;&gt; partitionedPerson = persons.stream()</span><br><span class="line">    .collect(partitioningBy(Person::isMarried));</span><br><span class="line">    </span><br><span class="line">List&lt;Person&gt; marriedPersons = partitionedPerson.get(true);      // 获得已婚组</span><br></pre></td></tr></table></figure>
+<h3 id="并行流"><a href="#并行流" class="headerlink" title="并行流"></a>并行流</h3><p>并行流是把一个问题分解成多个子问题，通过多个线程分别处理每个子问题的流。在处理问题的时候，使用并行流，可以充分利用多核CPU的优势，让任务分摊到每个CPU，让所有CPU都忙起来。</p>
+<p>求和运算就是个很好的利用并行处理的例子，传统的Java代码看起来是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static long sum(long n) &#123;</span><br><span class="line">    long result = 0;</span><br><span class="line">    for (int i = 1; i &lt;= n; i++) &#123;</span><br><span class="line">        result += i;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过流，我们可以简化其操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static long sequentialSum(long n) &#123;</span><br><span class="line">    return LongStream.rangeClose(1L, n)</span><br><span class="line">        .reduce(0L, Long::sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用parallel()方法，我们可以把上面的顺序计算的流转换成并行计算的流：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static long parallelSum(long n) &#123;</span><br><span class="line">    return LongStream.rangeClose(1L, n)</span><br><span class="line">        .parallel()</span><br><span class="line">        .reduce(0L, Long::sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="高效的使用并行流"><a href="#高效的使用并行流" class="headerlink" title="高效的使用并行流"></a>高效的使用并行流</h3><p>并不是说任何流操作，当使用并行的时候都会提升性能的，相反，如果使用不当，并行流效率将会大打折扣，甚至效率也会更加底下。例如如果我们使用 <code>Stream.iterator</code> 进行累计并行计算：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static long parallelSum(long n) &#123;</span><br><span class="line">    return Stream.iterate(1L, i -&gt; i + 1)</span><br><span class="line">        .limit(n)</span><br><span class="line">        .parallel()</span><br><span class="line">        .reduce(0L, Long::sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码运行效率和传统的for循环对比，运行时间可能要慢上几倍，究其原因是因为 <code>iterate</code> 生成的是进行过<strong>装箱操作</strong>的对象，<code>iterate</code> 操作原理也很难使其分成多个子任务来单独运行。</p>
+<p>对于是否并行流操作，可以先考虑一下几个问题：</p>
+<ul>
+<li>留意装箱操作，自动装箱、拆箱操作性能将大大降低。  </li>
+<li>有些操作顺序流天生就比并行流要快，如limit和findFirst操作都依赖于元素顺序。  </li>
+<li>对于较小的数据量，并行流不是一个好的方式。  </li>
+<li>考虑流背后的数据结构是否利于分解，如ArrayList拆分效率比LinkedList要高很多。 </li>
+<li>考虑流水线的中间操作改变分解、合并过程后是否会降低性能。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>一个流操作包含数据源、中间操作链和终端操作。</li>
+<li>我们可以通过值、集合、数组、文件以及 <code>iterate</code> 和 <code>generate</code> 生成一个流。</li>
+<li>使用 <code>filter</code> 、 <code>distinct</code> 、 <code>limit</code> 、 <code>skip</code> 对流进行筛选和切片。</li>
+<li>使用 <code>map</code> 和 <code>reduce</code> 进行映射和归纳操作。</li>
+<li>使用 <code>anyMatch</code> 、 <code>allMatch</code> 、 <code>noneMatch</code> 进行流匹配操作，使用 <code>findAny</code> 和 <code>findFirst</code> 进行流查找操作。</li>
+<li>对于需要装箱、拆箱的流操作，我们可以使用 <code>IntStream</code> 、 <code>DoubleStream</code> 、 <code>LongStream</code> 。</li>
+<li>可以用 <code>groupingBy</code> 对流元素进行分组、用 <code>partitioningBy</code> 进行分区。</li>
+<li>通过 <code>parallel</code> 我们可以很容易让一个流操作并行化，但是否选择并行流，我们需要考虑很多因素。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://book.douban.com/subject/25912747/" target="_blank" rel="noopener">Java 8 in Action</a></li>
+<li><a href="http://www.java2s.com/Tutorials/Java/Stream_How_to/index.htm" target="_blank" rel="noopener">java2s</a></li>
+<li><a href="http://stackoverflow.com/questions/22382453/java-8-streams-flatmap-method-example/26106616" target="_blank" rel="noopener">stackoverflow</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Streams-API/" rel="tag"># Streams API</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/java-8-lambda/" rel="next" title="Java 8编程：Lambda表达式">
+                <i class="fa fa-chevron-left"></i> Java 8编程：Lambda表达式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/05/lua-c-api-01/" rel="prev" title="Lua C API简介(上篇)">
+                Lua C API简介(上篇) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流操作"><span class="nav-number">2.</span> <span class="nav-text">流操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建流"><span class="nav-number">3.</span> <span class="nav-text">构建流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用流"><span class="nav-number">4.</span> <span class="nav-text">使用流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#筛选"><span class="nav-number">4.1.</span> <span class="nav-text">筛选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#筛选各异元素"><span class="nav-number">4.2.</span> <span class="nav-text">筛选各异元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#截短流"><span class="nav-number">4.3.</span> <span class="nav-text">截短流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#映射"><span class="nav-number">4.4.</span> <span class="nav-text">映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扁平化流"><span class="nav-number">4.5.</span> <span class="nav-text">扁平化流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流的查找与匹配"><span class="nav-number">4.6.</span> <span class="nav-text">流的查找与匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归纳"><span class="nav-number">4.7.</span> <span class="nav-text">归纳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值流"><span class="nav-number">4.8.</span> <span class="nav-text">数值流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本数据类型操作流"><span class="nav-number">4.8.1.</span> <span class="nav-text">基本数据类型操作流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数值范围生成流"><span class="nav-number">4.8.2.</span> <span class="nav-text">数值范围生成流</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组"><span class="nav-number">4.9.</span> <span class="nav-text">分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">4.10.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行流"><span class="nav-number">4.11.</span> <span class="nav-text">并行流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高效的使用并行流"><span class="nav-number">4.12.</span> <span class="nav-text">高效的使用并行流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://veinin.com/2017/05/26/java-8-streams-api/';
+          this.page.identifier = '2017/05/26/java-8-streams-api/';
+          this.page.title = 'Java8编程：Streams API';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
