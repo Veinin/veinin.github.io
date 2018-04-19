@@ -4,6 +4,52 @@
 
     
   <url>
+    <loc>https://veinin.com/2018/04/19/python-practice-files/</loc>
+    <lastmod>2018-04-19T14:03:33.042Z</lastmod>
+    <data>
+        <display>
+        <title>Python 快速上手 - 文件</title>
+        <pubTime>2018-04-19T13:35:00.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>编程</tag>
+         
+        <tag>Python 文件</tag>
+         
+         
+           
+             
+              <breadCrumb title="Python" url="https://veinin.com/categories/Python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://veinin.com/2018/03/18/python-practice-flow-control/</loc>
+    <lastmod>2018-04-19T13:36:01.225Z</lastmod>
+    <data>
+        <display>
+        <title>Python 快速上手 - 控制流</title>
+        <pubTime>2018-03-18T07:22:00.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>编程</tag>
+         
+         
+           
+             
+              <breadCrumb title="Python" url="https://veinin.com/categories/Python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://veinin.com/2018/04/01/git-tutorial-basics/</loc>
     <lastmod>2018-04-02T16:45:24.344Z</lastmod>
     <data>
@@ -236,28 +282,6 @@
         <display>
         <title>Python 快速上手 - 函数</title>
         <pubTime>2018-03-18T07:29:00.000Z</pubTime>
-        
-        <tag>Python</tag>
-         
-        <tag>编程</tag>
-         
-         
-           
-             
-              <breadCrumb title="Python" url="https://veinin.com/categories/Python/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://veinin.com/2018/03/18/python-practice-flow-control/</loc>
-    <lastmod>2018-03-24T14:09:55.493Z</lastmod>
-    <data>
-        <display>
-        <title>Python 快速上手 - 控制流</title>
-        <pubTime>2018-03-18T07:22:00.000Z</pubTime>
         
         <tag>Python</tag>
          

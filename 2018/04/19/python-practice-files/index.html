@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,编程,Python 文件," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="os.path 模块os.path 模块包含了许多与文件名和文件路径相关的有用函数。例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。 1import os 文件与文件路径在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux">
+<meta name="keywords" content="Python,编程,Python 文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 快速上手 - 文件">
+<meta property="og:url" content="https://veinin.com/2018/04/19/python-practice-files/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="os.path 模块os.path 模块包含了许多与文件名和文件路径相关的有用函数。例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。 1import os 文件与文件路径在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T14:03:33.042Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 快速上手 - 文件">
+<meta name="twitter:description" content="os.path 模块os.path 模块包含了许多与文件名和文件路径相关的有用函数。例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。 1import os 文件与文件路径在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/04/19/python-practice-files/"/>
+
+
+
+
+
+  <title>Python 快速上手 - 文件 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/04/19/python-practice-files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 快速上手 - 文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T21:35:00+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/19/python-practice-files/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/19/python-practice-files/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="os-path-模块"><a href="#os-path-模块" class="headerlink" title="os.path 模块"></a>os.path 模块</h2><p>os.path 模块包含了许多与文件名和文件路径相关的有用函数。<br>例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。<br>因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br></pre></td></tr></table></figure>
+<h2 id="文件与文件路径"><a href="#文件与文件路径" class="headerlink" title="文件与文件路径"></a>文件与文件路径</h2><p>在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux 上， 使用正斜杠作为它们的路径分隔符。<br>如果想要程序运行在所有操作系统上，在编写 Python 脚本时， 就必须处理这两种情况。<br>Python 使用 <code>os.path.join()</code> 函数来做这件事很简单。<br>如果将单个文件和路径上的文件夹名称的字符串传递给它， <code>os.path.join()</code> 就会返回一个文件路径的字符串</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import os</span><br><span class="line">&gt;&gt;&gt; os.path.join(&apos;usr&apos;, &apos;bin&apos;, &apos;spam&apos;)</span><br><span class="line">&apos;usr\\bin\\spam&apos;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; myFiles = [&apos;a.txt&apos;, &apos;b.txt&apos;, &apos;c.txt&apos;]</span><br><span class="line">&gt;&gt;&gt; for fileName in myFiles:</span><br><span class="line">        print(os.path.join(&apos;C:\\Users\\App&apos;, fileName))</span><br><span class="line"></span><br><span class="line">C:\Users\App\a.txt</span><br><span class="line">C:\Users\App\b.txt</span><br><span class="line">C:\Users\App\c.txt</span><br></pre></td></tr></table></figure>
+<h2 id="当前工作目录"><a href="#当前工作目录" class="headerlink" title="当前工作目录"></a>当前工作目录</h2><p>每个运行在计算机上的程序， 都有一个“ 当前工作目录”， 或 cwd。<br>利用 <code>os.getcwd()</code> 函数，可以取得当前工作路径的字符串， 并可以利用 <code>os.chdir()</code> 改变它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; os.getcwd()</span><br><span class="line">&apos;C:\\Users\\Ansh&apos;</span><br><span class="line">&gt;&gt;&gt; os.chdir(&apos;C:\\App&apos;)</span><br><span class="line">&gt;&gt;&gt; os.getcwd()</span><br><span class="line">&apos;C:\\App&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="创建新文件夹"><a href="#创建新文件夹" class="headerlink" title="创建新文件夹"></a>创建新文件夹</h2><p>可以用 <code>os.makedirs()</code> 函数创建新文件夹（ 目录）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.makedirs(&apos;C:\\Users\\Ansh\\Desktop\\Test&apos;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="处理绝对路径和相对路径"><a href="#处理绝对路径和相对路径" class="headerlink" title="处理绝对路径和相对路径"></a>处理绝对路径和相对路径</h2><p>有两种方法指定一个文件路径。</p>
+<ul>
+<li>“绝对路径”， 总是从根文件夹开始。</li>
+<li>“相对路径”，它相对于程序的当前工作目录。<br>还有点（ .）和点点（ ..）文件夹。它们不是真正的文件夹，而是可以在路径中使用的特殊名称。</li>
+</ul>
+<p>os.path 模块提供了一些函数， 返回一个相对路径的绝对路径， 以及检查给定的路径是否为绝对路径。</p>
+<ul>
+<li>调用 <code>os.path.abspath(path)</code> 将返回参数的绝对路径的字符串。</li>
+<li>调用 <code>os.path.isabs(path)</code> ，如果参数是一个绝对路径，就返回 True，如果参数是一个相对路径，就返回 False。</li>
+<li>调用 <code>os.path.relpath(path, start)</code> 将返回从 start 路径到 path 的相对路径的字符串。如果没有提供 start，就使用当前工作目录作为开始路径。</li>
+<li>调用 <code>os.path.dirname(path)</code> 将返回一个字符串，它包含 path 参数中最后一个斜杠之前的所有内容。</li>
+<li>调用 <code>os.path.basename(path)</code> 将返回一个字符串，它包含 path 参数中最后一个斜杠之后的所有内容。</li>
+<li>调用 <code>os.path.split()</code> 获得一个路径的目录名称和基本名称， 会返回两个字符串的元组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; os.path.abspath(&apos;.&apos;)</span><br><span class="line">&apos;C:\\App&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.abspath(&apos;.\\Scripts&apos;)</span><br><span class="line">&apos;C:\\App\\Scripts&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.isabs(&apos;.&apos;)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; os.path.isabs(os.path.abspath(&apos;.&apos;))</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; os.path.relpath(&apos;C:\\Windows&apos;, &apos;C:\\&apos;)</span><br><span class="line">&apos;Windows&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.relpath(&apos;C:\\Windows&apos;, &apos;C:\\spam\\eggs&apos;)</span><br><span class="line">&apos;..\\..\\Windows&apos;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; path = &apos;C:\\Windows\\System32\\calc.exe&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.basename(path)</span><br><span class="line">&apos;calc.exe&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.dirname(path)</span><br><span class="line">&apos;C:\\Windows\\System32&apos;</span><br><span class="line">&gt;&gt;&gt; os.path.split(path)</span><br><span class="line">(&apos;C:\\Windows\\System32&apos;, &apos;calc.exe&apos;)</span><br><span class="line">&gt;&gt;&gt; path.split(os.path.sep)</span><br><span class="line">[&apos;C:&apos;, &apos;Windows&apos;, &apos;System32&apos;, &apos;calc.exe&apos;]</span><br></pre></td></tr></table></figure>
+<h2 id="文件大小和文件夹内容"><a href="#文件大小和文件夹内容" class="headerlink" title="文件大小和文件夹内容"></a>文件大小和文件夹内容</h2><p>一旦有办法处理文件路径， 就可以开始搜集特定文件和文件夹的信息。</p>
+<ul>
+<li>调用 <code>os.path.getsize(path)</code> 将返回 path 参数中文件的字节数。</li>
+<li>调用 <code>os.listdir(path)</code> 将返回文件名字符串的列表，包含 path 参数中的每个文件。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; os.path.getsize(&apos;C:\\Windows\\System32\\calc.exe&apos;)</span><br><span class="line">26112L</span><br><span class="line">&gt;&gt;&gt; os.listdir(&apos;C:\\App\\Python27&apos;)</span><br><span class="line">[&apos;DLLs&apos;, &apos;Doc&apos;, &apos;include&apos;, &apos;Lib&apos;, &apos;libs&apos;, &apos;LICENSE.txt&apos;, &apos;NEWS.txt&apos;, &apos;python.exe&apos;, &apos;pythonw.exe&apos;, &apos;README.txt&apos;, &apos;Scripts&apos;, &apos;tcl&apos;, &apos;Tools&apos;, &apos;w9xpopen.exe&apos;]</span><br></pre></td></tr></table></figure>
+<h2 id="检查路径有效性"><a href="#检查路径有效性" class="headerlink" title="检查路径有效性"></a>检查路径有效性</h2><p>如果你提供的路径不存在， 许多 Python 函数就会崩溃并报错。 <code>os.path</code> 模块提供了一些函数，用于检测给定的路径是否存在，以及它是文件还是文件夹。</p>
+<ul>
+<li>调用 <code>os.path.exists(path)</code> ，返回所指的文件或文件夹是否存在。</li>
+<li>调用 <code>os.path.isfile(path)</code> ，返回目标是否一个文件。</li>
+<li>调用 <code>os.path.isdir(path)</code> ，返回目标是否一个文件夹。</li>
+</ul>
+<h2 id="打开并读写文件"><a href="#打开并读写文件" class="headerlink" title="打开并读写文件"></a>打开并读写文件</h2><p>在 Python 中， 读写文件有 3 个步骤：</p>
+<ul>
+<li>调用 <code>open()</code> 函数， 返回一个 File 对象。</li>
+<li>调用 File 对象的 <code>read()</code> 或 <code>write()</code> 方法。</li>
+<li>调用 File 对象的 <code>close()</code> 方法，关闭该文件。</li>
+</ul>
+<p>打开文件 <code>open()</code> 方法，“读模式”、“ 写模式” 和 “添加模式”。如果打开文件时用读模式，就不能写入文件。而写模式将覆写原有的文件。添加模式将在已有文件的末尾添加文本。<br><code>open</code> 方法有第二个可选参数，如果不传则是读模式打开， 参数 ‘w’ 将使用写模式打开，而参数 ‘a’ 将以添加模式打开。</p>
+<p>对于读取文件，还可以使用 <code>readlines()</code> 方法， 从该文件取得一个字符串的列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; helloFile = open(&apos;C:\\Users\\Ansh\\Desktop\\hello.txt&apos;)</span><br><span class="line">&gt;&gt;&gt; helloContent = helloFile.read()</span><br><span class="line">&gt;&gt;&gt; helloContent</span><br><span class="line">&apos;Hello, World!&apos;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; textFile = open(&apos;C:\\Users\\Ansh\\Desktop\\text.txt&apos;)</span><br><span class="line">&gt;&gt;&gt; for line in textFile.readlines():</span><br><span class="line">        print(line.strip())</span><br><span class="line"></span><br><span class="line">When, in disgrace with fortune and men&apos;s eyes,</span><br><span class="line">I all alone beweep my outcast state,</span><br><span class="line">And trouble deaf heaven with my bootless cries,</span><br><span class="line">And look upon myself and curse my fate,</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; baconFile = open(&apos;bacon.txt&apos;, &apos;w&apos;)</span><br><span class="line">&gt;&gt;&gt; baconFile.write(&apos;Hello world!\n&apos;)</span><br><span class="line">&gt;&gt;&gt; baconFile.close()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; baconFile = open(&apos;bacon.txt&apos;, &apos;a&apos;)</span><br><span class="line">&gt;&gt;&gt; baconFile.write(&apos;Bacon is not a vegetable.&apos;)</span><br><span class="line">&gt;&gt;&gt; baconFile.close()</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; baconFile = open(&apos;bacon.txt&apos;)</span><br><span class="line">&gt;&gt;&gt; print(baconFile.read())</span><br><span class="line">Hello world!</span><br><span class="line">Bacon is not a vegetable.</span><br><span class="line">&gt;&gt;&gt; baconFile.close()</span><br></pre></td></tr></table></figure>
+<h2 id="使用-shelve-模块保存变量"><a href="#使用-shelve-模块保存变量" class="headerlink" title="使用 shelve 模块保存变量"></a>使用 shelve 模块保存变量</h2><p>你可以将 Python 程序中的变量保存到二进制的 shelf 文件中。这样， 程序就可以从硬盘中恢复变量的数据。 shelve 模块让你在程序中添加“ 保存”和“ 打开” 功能。</p>
+<p>要利用 shelve 模块读写数据，首先要导入它。<br>调用函数 <code>shelve.open()</code> 并传入一个文件名，然后将返回的值保存在一个变量中。可以对这个变量的 shelf 值进行修改，就像它是一个字典一样。<br>当你完成时，在这个值上调用 close()。最后，在当前的工作目录下会生成一个对应的二进制文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shelfFile = shelve.open(&apos;mydata&apos;)</span><br><span class="line">cats = [&apos;Zophie&apos;, &apos;Pooka&apos;, &apos;Simon&apos;]</span><br><span class="line">shelfFile[&apos;cats&apos;] = cats</span><br><span class="line">shelfFile.close()</span><br></pre></td></tr></table></figure>
+<p>然后，可以使用 shelve 模块， 重新打开这些文件并取出数据。<br>shelf 值不必用读模式或写模式打开，因为它们在打开后，既能读又能写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shelfFile = shelve.open(&apos;mydata&apos;)</span><br><span class="line">print(shelfFile[&apos;cats&apos;])    # [&apos;Zophie&apos;, &apos;Pooka&apos;, &apos;Simon&apos;]</span><br><span class="line">shelfFile.close()</span><br></pre></td></tr></table></figure>
+<h2 id="shutil-模块"><a href="#shutil-模块" class="headerlink" title="shutil 模块"></a>shutil 模块</h2><p>shutil（或称为 shell 工具）模块中包含一些函数，让你在 Python 程序中复制、移动、改名和删除文件。<br>要使用 shutil 的函数，首先需要 <code>import shutil</code>。</p>
+<h3 id="复制文件和文件夹"><a href="#复制文件和文件夹" class="headerlink" title="复制文件和文件夹"></a>复制文件和文件夹</h3><p>调用 <code>shutil.copy(source, destination)</code>，将路径 source 处的文件复制到路径 destination处的文件夹。<br>如果 destination 是一个文件名，它将作为被复制文件的新名字。该函数返回一个字符串，表示被复制文件的路径。<br>另外，可以使用 <code>shutil.copytree()</code> 复制整个文件夹里面包含的文件夹和文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import shutil, os</span><br><span class="line"></span><br><span class="line">os.chdir(&apos;C:\\&apos;)</span><br><span class="line">shutil.copy(&apos;C:\\Users\\Ansh\\Desktop\\hello.txt&apos;, &apos;C:\\temp&apos;)</span><br><span class="line">shutil.copy(&apos;C:\\temp\\hello.txt&apos;, &apos;C:\\temp\\hello2.txt&apos;)</span><br><span class="line"></span><br><span class="line">shutil.copytree(&apos;C:\\temp&apos;, &apos;C:\\Users\\Ansh\\Desktop\\temp_backup&apos;)</span><br></pre></td></tr></table></figure>
+<h3 id="移动或改名文件和文件夹"><a href="#移动或改名文件和文件夹" class="headerlink" title="移动或改名文件和文件夹"></a>移动或改名文件和文件夹</h3><p>调用 <code>shutil.move(source, destination)</code>， 将路径 source 处的文件夹移动到路径 destination。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shutil.move(&apos;C:\\temp&apos;, &apos;C:\\Users\\Ansh\\Desktop&apos;)</span><br><span class="line">shutil.move(&apos;C:\\text.txt&apos;, &apos;C:\\Users\\Ansh\\Desktop\\temp&apos;)</span><br></pre></td></tr></table></figure>
+<h3 id="永久删除文件和文件夹"><a href="#永久删除文件和文件夹" class="headerlink" title="永久删除文件和文件夹"></a>永久删除文件和文件夹</h3><p>利用 os 模块中的函数，可以删除一个文件或一个空文件夹。但利用 shutil 模块，可以删除一个文件夹及其所有的内容。</p>
+<ul>
+<li>调用 <code>os.unlink(path)</code> 将删除 path 处的文件。</li>
+<li>调用 <code>os.rmdir(path)</code> 将删除 path 处的文件夹。</li>
+<li>调用 <code>shutil.rmtree(path)</code> 将删除 path 处的文件夹，它包含的所有文件和文件夹都会被删除。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for filename in os.listdir(&apos;C:\\Users\\Ansh\\Desktop&apos;):</span><br><span class="line">    if filename.endswith(&apos;.txt&apos;):</span><br><span class="line">        os.unlink(filename)</span><br><span class="line"></span><br><span class="line">os.makedirs(&apos;Test&apos;)</span><br><span class="line">os.rmdir(&apos;Test&apos;)</span><br><span class="line"></span><br><span class="line">shutil.rmtree(&apos;temp_back&apos;)</span><br></pre></td></tr></table></figure>
+<h2 id="遍历目录树"><a href="#遍历目录树" class="headerlink" title="遍历目录树"></a>遍历目录树</h2><p>如果你需要对某个文件夹中的所有文件改名， 包括该文件夹中所有子文件夹中的所有文件。也就是说， 你希望遍历目录树， 处理遇到的每个文件。<br>写程序完成这件事，可能需要一些技巧。 好在， Python 提供了一个 <code>os.walk()</code> 函数， 替你处理这个过程。<br><code>os.walk()</code> 函数被传入一个字符串值，即一个文件夹的路径。你可以在一个 for循环语句中使用 os.walk()函数，遍历目录树。</p>
+<p><code>os.walk()</code> 在循环的每次迭代中，返回 3 个值：</p>
+<ul>
+<li>当前文件夹名称的字符串。</li>
+<li>当前文件夹中子文件夹的字符串的列表。</li>
+<li>当前文件夹中文件的字符串的列表。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line"></span><br><span class="line">path = &apos;C:\\Users\\Ansh\\Desktop\\Source\\lua-5.3.4&apos;</span><br><span class="line"></span><br><span class="line">for folderName, subFolders, fileNames in os.walk(path):</span><br><span class="line">    print(&apos;The current folder is &apos; + folderName)</span><br><span class="line"></span><br><span class="line">    for subFolder in subFolders:</span><br><span class="line">        print(&apos;Sub folder of &apos; + folderName + &apos; : &apos; + subFolder)</span><br><span class="line"></span><br><span class="line">    for fileName in fileNames:</span><br><span class="line">        print(&apos;File inside &apos; + folderName + &quot; : &quot; + fileName)</span><br></pre></td></tr></table></figure>
+<h2 id="使用-zipfile-模块压缩文件"><a href="#使用-zipfile-模块压缩文件" class="headerlink" title="使用 zipfile 模块压缩文件"></a>使用 zipfile 模块压缩文件</h2><p>我们经常需要对一组文件进行压缩，减少它的大小，然后在网络上进行传输。ZIP 文件（ 带有.zip 文件扩展名）， 它可以包含许多其他文件的压缩内容。<br>在 Python 程序可以利用 <code>zipfile</code> 模块中的函数创建和打开（或解压） ZIP 文件。</p>
+<h3 id="创建和添加到-ZIP-文件"><a href="#创建和添加到-ZIP-文件" class="headerlink" title="创建和添加到 ZIP 文件"></a>创建和添加到 ZIP 文件</h3><p>要创建你自己的压缩 ZIP 文件， 必须以“写模式”打开 ZipFile 对象，即传入’w’作为第二个参数。<br>如果向 ZipFile 对象的 <code>write()</code> 方法传入一个路径， Python 就会压缩该路径所指的文件， 将它加到 ZIP 文件中。<br><code>write()</code> 方法的第一个参数是一个字符串， 代表要添加的文件名。第二个参数是“压缩类型”参数，它告诉计算机使用怎样的算法来压缩文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">newZip = zipfile.ZipFile(&apos;new.zip&apos;, &quot;w&quot;)</span><br><span class="line">newZip.write(&apos;myCats.py&apos;, compress_type=zipfile.ZIP_DEFLATED)</span><br><span class="line">newZip.close()</span><br></pre></td></tr></table></figure>
+<h3 id="读取-ZIP-文件"><a href="#读取-ZIP-文件" class="headerlink" title="读取 ZIP 文件"></a>读取 ZIP 文件</h3><p>可以使用 <code>zipfile.ZipFile()</code> 函数读取要给 ZIP 文件， 向它传入一个字符串， 表示.zip 文件的文件名。<br>ZipFile 对象有一个 <code>namelist()</code> 方法，返回 ZIP 文件中包含的所有文件和文件夹的字符串的列表。<br>可以把文件或文件夹名称传递给 ZipFile 对象的 <code>getinfo()</code> 方法来返回一个关于特定文件的 ZipInfo 对象。<br>通过 ZipInfo 对象可以读取到保存的归档文件的有用信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">readZip = zipfile.ZipFile(&apos;new.zip&apos;)</span><br><span class="line">print(readZip.namelist())</span><br><span class="line"></span><br><span class="line">catsFileInfo = readZip.getinfo(&apos;myCats.py&apos;)</span><br><span class="line">print(catsFileInfo.file_size)</span><br><span class="line">print(catsFileInfo.compress_size)</span><br><span class="line"></span><br><span class="line">readZip.close()</span><br></pre></td></tr></table></figure>
+<h3 id="加压缩-ZIP-文件"><a href="#加压缩-ZIP-文件" class="headerlink" title="加压缩 ZIP 文件"></a>加压缩 ZIP 文件</h3><p>ZipFile 对象的 <code>extractall()</code> 方法从 ZIP 文件中解压缩所有文件和文件夹， 放到当前工作目录中。<br>可以使用 <code>extractall()</code> 方法从 ZIP 文件中解压缩所有文件。<br>也可以使用 <code>extract()</code> 方法从 ZIP 文件中解压缩单个文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">extractZip = zipfile.ZipFile(&apos;new.zip&apos;)</span><br><span class="line">extractZip.extractall()</span><br><span class="line">extractZip.extract(&apos;myCats.py&apos;, &apos;.\\temp&apos;)</span><br><span class="line">extractZip.close()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+            <a href="/tags/Python-文件/" rel="tag"># Python 文件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/01/git-tutorial-branching/" rel="next" title="Git 教程 - 分支">
+                <i class="fa fa-chevron-left"></i> Git 教程 - 分支
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#os-path-模块"><span class="nav-number">1.</span> <span class="nav-text">os.path 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与文件路径"><span class="nav-number">2.</span> <span class="nav-text">文件与文件路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#当前工作目录"><span class="nav-number">3.</span> <span class="nav-text">当前工作目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新文件夹"><span class="nav-number">4.</span> <span class="nav-text">创建新文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理绝对路径和相对路径"><span class="nav-number">5.</span> <span class="nav-text">处理绝对路径和相对路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件大小和文件夹内容"><span class="nav-number">6.</span> <span class="nav-text">文件大小和文件夹内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查路径有效性"><span class="nav-number">7.</span> <span class="nav-text">检查路径有效性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开并读写文件"><span class="nav-number">8.</span> <span class="nav-text">打开并读写文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-shelve-模块保存变量"><span class="nav-number">9.</span> <span class="nav-text">使用 shelve 模块保存变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shutil-模块"><span class="nav-number">10.</span> <span class="nav-text">shutil 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件和文件夹"><span class="nav-number">10.1.</span> <span class="nav-text">复制文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动或改名文件和文件夹"><span class="nav-number">10.2.</span> <span class="nav-text">移动或改名文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#永久删除文件和文件夹"><span class="nav-number">10.3.</span> <span class="nav-text">永久删除文件和文件夹</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历目录树"><span class="nav-number">11.</span> <span class="nav-text">遍历目录树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-zipfile-模块压缩文件"><span class="nav-number">12.</span> <span class="nav-text">使用 zipfile 模块压缩文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建和添加到-ZIP-文件"><span class="nav-number">12.1.</span> <span class="nav-text">创建和添加到 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取-ZIP-文件"><span class="nav-number">12.2.</span> <span class="nav-text">读取 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加压缩-ZIP-文件"><span class="nav-number">12.3.</span> <span class="nav-text">加压缩 ZIP 文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/04/19/python-practice-files/';
+          this.page.identifier = '2018/04/19/python-practice-files/';
+          this.page.title = 'Python 快速上手 - 文件';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

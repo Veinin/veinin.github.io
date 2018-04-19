@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://veinin.com/2018/04/19/python-practice-files/</loc>
+    
+    <lastmod>2018-04-19T14:03:33.042Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/03/18/python-practice-flow-control/</loc>
+    
+    <lastmod>2018-04-19T13:36:01.225Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://veinin.com/2018/04/01/git-tutorial-basics/</loc>
     
     <lastmod>2018-04-02T16:45:24.344Z</lastmod>
@@ -75,13 +89,6 @@
     <loc>https://veinin.com/2018/03/18/python-practice-functions/</loc>
     
     <lastmod>2018-03-24T14:09:57.972Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2018/03/18/python-practice-flow-control/</loc>
-    
-    <lastmod>2018-03-24T14:09:55.493Z</lastmod>
     
   </url>
   
