@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="在获得 Git 后你需要学会使用 Git 完成各种工作中将要使用的各种基本命令。例如配置并初始化一个仓库（repository）、开始或停止跟踪（track）文件、暂存（stage）或提交（commit)更改。更进一步，你应该学会如何配置 Git 来忽略指定的文件和文件模式、如何迅速而简单地撤销错误操作、如何浏览你的项目的历史版本以及不同提交（commits）间的差异、如何向你的远程仓库推送（pu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-01T02:13:47.556Z">
+<meta property="og:updated_time" content="2018-04-02T16:45:24.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 教程 - 基础操作">
 <meta name="twitter:description" content="在获得 Git 后你需要学会使用 Git 完成各种工作中将要使用的各种基本命令。例如配置并初始化一个仓库（repository）、开始或停止跟踪（track）文件、暂存（stage）或提交（commit)更改。更进一步，你应该学会如何配置 Git 来忽略指定的文件和文件模式、如何迅速而简单地撤销错误操作、如何浏览你的项目的历史版本以及不同提交（commits）间的差异、如何向你的远程仓库推送（pu">
@@ -493,7 +493,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git rm PROJECTS.md</span><br><span class="line">rm &apos;PROJECTS.md&apos;</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line"></span><br><span class="line">    deleted:    PROJECTS.md</span><br></pre></td></tr></table></figure>
 <p>另外一种情况是，我们想把文件从 Git 仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。为达到这一目的，使用 –cached 选项：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rm --cached README</span><br></pre></td></tr></table></figure>
-<p>git rm` 命令后面可以列出文件或者目录的名字，也可以使用 glob 模式。 比方说：</p>
+<p><code>git rm</code> 命令后面可以列出文件或者目录的名字，也可以使用 glob 模式。 比方说：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rm log/\*.log</span><br></pre></td></tr></table></figure>
 <h3 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h3><p>Git 并不显式跟踪文件移动操作。 如果在 Git 中重命名了某个文件，仓库中存储的元数据并不会体现出这是一次改名操作。Git 并不显式跟踪文件移动操作。 如果在 Git 中重命名了某个文件，仓库中存储的元数据并不会体现出这是一次改名操作。不过 Git 非常聪明，它会推断出究竟发生了什么。</p>
 <p>要在 Git 中对文件改名，可以使用 <code>git mv</code> 命令：</p>
@@ -615,6 +615,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/04/01/git-tutorial-branching/" rel="prev" title="Git 教程 - 分支">
+                Git 教程 - 分支 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -697,7 +701,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -719,7 +723,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

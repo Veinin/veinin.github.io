@@ -613,7 +613,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2017/08/06/lua-c-aip-02/">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2017/08/06/lua-c-api-03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Veinin Guo">
@@ -632,7 +632,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/06/lua-c-aip-02/" itemprop="url">Lua C API简介(中篇)</a></h1>
+                <a class="post-title-link" href="/2017/08/06/lua-c-api-03/" itemprop="url">Lua C API 教程 - 从 Lua 调用 C 函数</a></h1>
         
 
         <div class="post-meta">
@@ -685,9 +685,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/06/lua-c-aip-02/#comments" itemprop="discussionUrl">
+                <a href="/2017/08/06/lua-c-api-03/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/06/lua-c-aip-02/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/08/06/lua-c-api-03/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -716,10 +716,184 @@
 
       
         
-          <p>在运行C程序时，可以调用Lua脚本。C程序可以向Lua传入参数，然后通过Lua返回结果。<br>使用C API调用Lua函数方法很简单，我们最开始先将要调用的函数入栈，然后依次将要传入的参数入栈，调用pcall函数。最后，再从栈中获取函数返回的值。</p>
+          
+            <p>前一篇文章介绍了怎么从 C 程序中调用 Lua 代码。但内容并没有深入，还有很多东西需要反复去尝试，并且需要通过 Lua 辅助来调用 C 程序。 本章将着重介绍如何继续扩展你的 Lua 程序 - 在Lua中调用C函数。</p>
+<h2 id="剖析一个-Lua-程序对-C-的调用"><a href="#剖析一个-Lua-程序对-C-的调用" class="headerlink" title="剖析一个 Lua 程序对 C 的调用"></a>剖析一个 Lua 程序对 C 的调用</h2><p>从 Lua 的角度来看，调用 C 程序其实就是调用一个模块，在Lua中一个代码块称为chunk，一个chunk里面通常有若干函数，这些函数用table存储。而Lua的C扩展模块也是可以这样实现的，Lua调用C函数时，并不依赖于函数名、包的位置，而只依赖于注册函数时传入的函数地址。</p>
+<p>一个简单的 Lua 程序，调用一个包含了 <code>foo</code> 和 <code>bar</code> 函数的 <code>mylib</code> 模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">local mylib = require &quot;mylib&quot;</span><br><span class="line">mylib.foo()</span><br><span class="line">mylib.bar()</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码 <code>require &quot;mylib&quot;</code> 语句加载了一个名为 <code>mylib</code> 的模块，显然模块具有函数 <code>foo</code> 和 <code>bar</code>。所以 C 程序不仅需要定义 <code>foo()</code> 和 <code>bar()</code> 函数，还需要将自己注册为一个模块，并将函数注入模块当中。</p>
+<p><code>require &quot;mylib&quot;</code> 做了两件事：</p>
+<ul>
+<li>寻找一个叫做 <code>mylib.so</code> (windows 一个是 <code>mylib.dll</code>) 的动态库文件。</li>
+<li>一旦发现 <code>mylib.so</code> , 就会去查找一个名为 <code>luaopen_mylib</code> 的函数来运行。</li>
+</ul>
+<p>通常，创建 C 模块时，函数都是私有的，都声明为static。一个模块函数定义大概是这样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">static int foo(lua_State *L) &#123;</span><br><span class="line">    //do something...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static int bar(lua_State *L) &#123;</span><br><span class="line">    //do something...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了让模块函数注册到 Lua 中去，我们需要声明一个 <code>luaL_Reg</code> 的数组，来包含模块中的所有函数及名称。任何 <code>luaL_Reg</code> 数组都必须以一对为 <code>NULL</code> 的 name 与 func 结束：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static const struct luaL_Reg mylib[] = &#123;</span><br><span class="line">    &#123;&quot;foo&quot;, foo&#125;,</span><br><span class="line">    &#123;&quot;bar&quot;, bar&#125;,</span><br><span class="line">    &#123;NULL, NULL&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>最后，声明一个打开模块的主函数，该函数名称必须以 <code>luaopen_</code> 开头，后面跟着的是你编写的模块名称，它唯一的参数就是 Lua 状态机。并使用 <code>luaL_newlib</code> 创建一张新表，并把 <code>luaL_Reg</code> 中的函数注册进去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int luaopen_mylib(lua_State *L) &#123;</span><br><span class="line">    luaL_newlib(L, mylib);</span><br><span class="line">    return 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最棘手的莫过于编译一个写好的新模块，它看起来是这样子：</p>
+<p>在 Mac OS 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cc -o mylib.so mylib.c -I /usr/local/include -L /usr/local/lib -bundle -undefined dynamic_lookup</span><br></pre></td></tr></table></figure></p>
+<p>在 Linux 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -o mylib.so mylib.c -I/usr/include/lua5.1 -llua5.1 -Wall -shared -fPIC</span><br></pre></td></tr></table></figure></p>
+<h2 id="做的更好一些"><a href="#做的更好一些" class="headerlink" title="做的更好一些"></a>做的更好一些</h2><p>下面我们模拟编写一个名为 <code>power</code> 的模块，并实现两个名为 <code>square</code> 和 <code>cube</code> 的函数来进行计算任务，并把计算结果返回 Lua。</p>
+<p>首先，编写模块 C 程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#include &quot;lua.h&quot;</span><br><span class="line">#include &quot;lauxlib.h&quot;</span><br><span class="line">#include &quot;lualib.h&quot;</span><br><span class="line"></span><br><span class="line">static int square(lua_State *L)</span><br><span class="line">&#123;</span><br><span class="line">	float num = lua_tonumber(L, -1);</span><br><span class="line">	printf(&quot;square(), num = %f\n&quot;, num);</span><br><span class="line">	lua_pushnumber(L, num * num);</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static int cube(lua_State *L)</span><br><span class="line">&#123;</span><br><span class="line">	float num = lua_tonumber(L, -1);</span><br><span class="line">	printf(&quot;cube(), num = %f\n&quot;, num);</span><br><span class="line">	lua_pushnumber(L, num * num * num);</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static const struct luaL_Reg libs [] = &#123;</span><br><span class="line">	&#123;&quot;square&quot;, square&#125;,</span><br><span class="line">	&#123;&quot;cube&quot;, cube&#125;,</span><br><span class="line">	&#123;NULL, NULL&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int luaopen_power(lua_State *L)</span><br><span class="line">&#123;</span><br><span class="line">	luaL_newlib(L, libs);</span><br><span class="line">	return 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后，把c程序编译成动态库 pwer.so。<br>ps:MAC OSX中编译时需要加入-bundle -undefined dynamic_lookup 选项，不然会引起”multiple lua vms detected” 错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cc -o power.so power.c -I /usr/local/include -L /usr/local/lib -bundle -undefined dynamic_lookup</span><br></pre></td></tr></table></figure></p>
+<p>别写测试 Lua 脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">local power = require(&quot;power&quot;)</span><br><span class="line">print(power.square(2.5))</span><br><span class="line">print(power.cube(2.5))</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ lua test_power.lua</span><br><span class="line">square(), num = 2.500000</span><br><span class="line">6.25</span><br><span class="line">cube(), num = 2.500000</span><br><span class="line">15.625</span><br></pre></td></tr></table></figure></p>
+<h2 id="更进一步"><a href="#更进一步" class="headerlink" title="更进一步"></a>更进一步</h2><p>如果你已经和 Lua 一起工作过一段时间后，你一个会注意到 Lua 没有内置 <code>sleep()</code> 延迟函数。一种解决方案是调用 C 的 <code>sleep()</code> 函数。我们做的是需要实现两个名为 <code>sleep()</code> 和 <code>msleep</code> 和函数来让 Lua 代码延迟指定多少秒、多少毫秒。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2017/08/06/lua-c-api-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/06/lua-c-api-02/" itemprop="url">Lua C API 教程 - 从 C 程序调用 Lua</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-06T22:15:58+08:00">
+                2017-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/06/lua-c-api-02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/06/lua-c-api-02/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>从正在运行的 C 程序中，你可以调用 Lua 脚本。C 程序可以将参数传递给 Lua 脚本，而Lua脚本也可以向 C 程序传回一个返回值。Lua脚本可以用来初始化C程序，或者Lua脚本也可以在 C 程序中注册一个回调。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/06/lua-c-aip-02/#more" rel="contents">
+            <a class="btn" href="/2017/08/06/lua-c-api-02/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -789,7 +963,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/05/lua-c-api-01/" itemprop="url">Lua C API简介(上篇)</a></h1>
+                <a class="post-title-link" href="/2017/08/05/lua-c-api-01/" itemprop="url">Lua C API 教程 - 入门</a></h1>
         
 
         <div class="post-meta">
@@ -1594,7 +1768,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1616,7 +1790,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
