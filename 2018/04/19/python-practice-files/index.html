@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="os.path 模块os.path 模块包含了许多与文件名和文件路径相关的有用函数。例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。 1import os 文件与文件路径在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-19T14:03:33.042Z">
+<meta property="og:updated_time" content="2018-04-19T14:51:39.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python 快速上手 - 文件">
 <meta name="twitter:description" content="os.path 模块os.path 模块包含了许多与文件名和文件路径相关的有用函数。例如， 你已经使用了 os.path.join()来构建所有操作系统上都有效的路径。因为 os.path 是 os 模块中的模块， 所以只要执行 import os 就可以导入它。 1import os 文件与文件路径在 Windows 上， 路径书写使用倒斜杠作为文件夹之间的分隔符。但在 OS X 和Linux">
@@ -451,7 +451,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shelfFile = shelve.open(&apos;mydata&apos;)</span><br><span class="line">cats = [&apos;Zophie&apos;, &apos;Pooka&apos;, &apos;Simon&apos;]</span><br><span class="line">shelfFile[&apos;cats&apos;] = cats</span><br><span class="line">shelfFile.close()</span><br></pre></td></tr></table></figure>
 <p>然后，可以使用 shelve 模块， 重新打开这些文件并取出数据。<br>shelf 值不必用读模式或写模式打开，因为它们在打开后，既能读又能写。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shelfFile = shelve.open(&apos;mydata&apos;)</span><br><span class="line">print(shelfFile[&apos;cats&apos;])    # [&apos;Zophie&apos;, &apos;Pooka&apos;, &apos;Simon&apos;]</span><br><span class="line">shelfFile.close()</span><br></pre></td></tr></table></figure>
-<h2 id="shutil-模块"><a href="#shutil-模块" class="headerlink" title="shutil 模块"></a>shutil 模块</h2><p>shutil（或称为 shell 工具）模块中包含一些函数，让你在 Python 程序中复制、移动、改名和删除文件。<br>要使用 shutil 的函数，首先需要 <code>import shutil</code>。</p>
+<h3 id="shutil-模块"><a href="#shutil-模块" class="headerlink" title="shutil 模块"></a>shutil 模块</h3><p>shutil（或称为 shell 工具）模块中包含一些函数，让你在 Python 程序中复制、移动、改名和删除文件。<br>要使用 shutil 的函数，首先需要 <code>import shutil</code>。</p>
 <h3 id="复制文件和文件夹"><a href="#复制文件和文件夹" class="headerlink" title="复制文件和文件夹"></a>复制文件和文件夹</h3><p>调用 <code>shutil.copy(source, destination)</code>，将路径 source 处的文件复制到路径 destination处的文件夹。<br>如果 destination 是一个文件名，它将作为被复制文件的新名字。该函数返回一个字符串，表示被复制文件的路径。<br>另外，可以使用 <code>shutil.copytree()</code> 复制整个文件夹里面包含的文件夹和文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import shutil, os</span><br><span class="line"></span><br><span class="line">os.chdir(&apos;C:\\&apos;)</span><br><span class="line">shutil.copy(&apos;C:\\Users\\Ansh\\Desktop\\hello.txt&apos;, &apos;C:\\temp&apos;)</span><br><span class="line">shutil.copy(&apos;C:\\temp\\hello.txt&apos;, &apos;C:\\temp\\hello2.txt&apos;)</span><br><span class="line"></span><br><span class="line">shutil.copytree(&apos;C:\\temp&apos;, &apos;C:\\Users\\Ansh\\Desktop\\temp_backup&apos;)</span><br></pre></td></tr></table></figure>
 <h3 id="移动或改名文件和文件夹"><a href="#移动或改名文件和文件夹" class="headerlink" title="移动或改名文件和文件夹"></a>移动或改名文件和文件夹</h3><p>调用 <code>shutil.move(source, destination)</code>， 将路径 source 处的文件夹移动到路径 destination。</p>
@@ -520,6 +520,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/09/windows-10-bash-linux-subsystem-setup/" rel="prev" title="Windows 10 子系统安装指南">
+                Windows 10 子系统安装指南 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -603,7 +607,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -614,7 +618,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -625,7 +629,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -713,7 +717,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#os-path-模块"><span class="nav-number">1.</span> <span class="nav-text">os.path 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与文件路径"><span class="nav-number">2.</span> <span class="nav-text">文件与文件路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#当前工作目录"><span class="nav-number">3.</span> <span class="nav-text">当前工作目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新文件夹"><span class="nav-number">4.</span> <span class="nav-text">创建新文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理绝对路径和相对路径"><span class="nav-number">5.</span> <span class="nav-text">处理绝对路径和相对路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件大小和文件夹内容"><span class="nav-number">6.</span> <span class="nav-text">文件大小和文件夹内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查路径有效性"><span class="nav-number">7.</span> <span class="nav-text">检查路径有效性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开并读写文件"><span class="nav-number">8.</span> <span class="nav-text">打开并读写文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-shelve-模块保存变量"><span class="nav-number">9.</span> <span class="nav-text">使用 shelve 模块保存变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shutil-模块"><span class="nav-number">10.</span> <span class="nav-text">shutil 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件和文件夹"><span class="nav-number">10.1.</span> <span class="nav-text">复制文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动或改名文件和文件夹"><span class="nav-number">10.2.</span> <span class="nav-text">移动或改名文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#永久删除文件和文件夹"><span class="nav-number">10.3.</span> <span class="nav-text">永久删除文件和文件夹</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历目录树"><span class="nav-number">11.</span> <span class="nav-text">遍历目录树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-zipfile-模块压缩文件"><span class="nav-number">12.</span> <span class="nav-text">使用 zipfile 模块压缩文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建和添加到-ZIP-文件"><span class="nav-number">12.1.</span> <span class="nav-text">创建和添加到 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取-ZIP-文件"><span class="nav-number">12.2.</span> <span class="nav-text">读取 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加压缩-ZIP-文件"><span class="nav-number">12.3.</span> <span class="nav-text">加压缩 ZIP 文件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#os-path-模块"><span class="nav-number">1.</span> <span class="nav-text">os.path 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与文件路径"><span class="nav-number">2.</span> <span class="nav-text">文件与文件路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#当前工作目录"><span class="nav-number">3.</span> <span class="nav-text">当前工作目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新文件夹"><span class="nav-number">4.</span> <span class="nav-text">创建新文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理绝对路径和相对路径"><span class="nav-number">5.</span> <span class="nav-text">处理绝对路径和相对路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件大小和文件夹内容"><span class="nav-number">6.</span> <span class="nav-text">文件大小和文件夹内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查路径有效性"><span class="nav-number">7.</span> <span class="nav-text">检查路径有效性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开并读写文件"><span class="nav-number">8.</span> <span class="nav-text">打开并读写文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-shelve-模块保存变量"><span class="nav-number">9.</span> <span class="nav-text">使用 shelve 模块保存变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shutil-模块"><span class="nav-number">9.1.</span> <span class="nav-text">shutil 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件和文件夹"><span class="nav-number">9.2.</span> <span class="nav-text">复制文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动或改名文件和文件夹"><span class="nav-number">9.3.</span> <span class="nav-text">移动或改名文件和文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#永久删除文件和文件夹"><span class="nav-number">9.4.</span> <span class="nav-text">永久删除文件和文件夹</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历目录树"><span class="nav-number">10.</span> <span class="nav-text">遍历目录树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-zipfile-模块压缩文件"><span class="nav-number">11.</span> <span class="nav-text">使用 zipfile 模块压缩文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建和添加到-ZIP-文件"><span class="nav-number">11.1.</span> <span class="nav-text">创建和添加到 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取-ZIP-文件"><span class="nav-number">11.2.</span> <span class="nav-text">读取 ZIP 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加压缩-ZIP-文件"><span class="nav-number">11.3.</span> <span class="nav-text">加压缩 ZIP 文件</span></a></li></ol></li></ol></div>
             
 
           </div>

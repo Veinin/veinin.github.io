@@ -4,8 +4,30 @@
 
     
   <url>
+    <loc>https://veinin.com/2018/05/09/windows-10-bash-linux-subsystem-setup/</loc>
+    <lastmod>2018-05-09T16:03:07.306Z</lastmod>
+    <data>
+        <display>
+        <title>Windows 10 子系统安装指南</title>
+        <pubTime>2018-05-09T14:50:00.000Z</pubTime>
+        
+        <tag>Windows 10 Bash</tag>
+         
+        <tag>Linux Subsystem Setup</tag>
+         
+         
+           
+             
+              <breadCrumb title="System" url="https://veinin.com/categories/System/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://veinin.com/2018/04/19/python-practice-files/</loc>
-    <lastmod>2018-04-19T14:03:33.042Z</lastmod>
+    <lastmod>2018-04-19T14:51:39.588Z</lastmod>
     <data>
         <display>
         <title>Python 快速上手 - 文件</title>
