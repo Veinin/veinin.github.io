@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Phtreads,POSIX Pthreads," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="术语定义同步与异步同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。同步相对来说比较简单，但开销相对较大。 异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考">
+<meta name="keywords" content="Phtreads,POSIX Pthreads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX 多线程程序设计-概述">
+<meta property="og:url" content="https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="术语定义同步与异步同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。同步相对来说比较简单，但开销相对较大。 异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T14:26:51.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX 多线程程序设计-概述">
+<meta name="twitter:description" content="术语定义同步与异步同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。同步相对来说比较简单，但开销相对较大。 异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/"/>
+
+
+
+
+
+  <title>POSIX 多线程程序设计-概述 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POSIX 多线程程序设计-概述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-01T19:32:05+08:00">
+                2018-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/01/programming_with_posix_pthreads_01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/01/programming_with_posix_pthreads_01/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="术语定义"><a href="#术语定义" class="headerlink" title="术语定义"></a>术语定义</h2><h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><p>同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。<br>同步相对来说比较简单，但开销相对较大。</p>
+<p>异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考。<br>异步增加了复杂性以及更加麻烦的调试过程。如果你没有同时执行多个活动， 那么异步就没有什么优势。 如果你开始了一个异步活动， 然后什么也不做等待它结束， 则你并没有从异步那儿获得太多好处。</p>
+<a id="more"></a>
+<h3 id="并发与并行"><a href="#并发与并行" class="headerlink" title="并发与并行"></a>并发与并行</h3><p>并发（concurrency ) 的意思是指事情同时发生。 也是指让实际上可能串行发生的事情好像同时发生一样。 并发描述了单处理器系统中线程或进程的行为特点。在 POSIX 中，并发的定义要求“延迟调用线程的函数不应<br>该导致其他线程的无限期延迟。</p>
+<p>并行（parallelism) 指并发序列同时执行， 换言之，软件中的“并行”语言中的“并发”是相同的意思， 而区別于软件中的“并发”。指事情在相同的方向上独立进行（没有交错）。</p>
+<p>真正的并行只能在多处理器系统中存在， 但是并发可以在单处理器系统和多处理器系统中都存在。<br>并发能够在单处理器系统中存在是因为并发实际上是并行的假象。 并行要求程序能够同时执行多个操作，而并发只要求程序能够假装同时执行多个操作。</p>
+<h3 id="单处理器和多处理器"><a href="#单处理器和多处理器" class="headerlink" title="单处理器和多处理器"></a>单处理器和多处理器</h3><p>单处理器是指一台计算机只有一个编程人员可见的执行单元（处理器）。对于拥有超标量体系结构、向量或者其他数学或 I/O 协处理器的单一通用处理器，我们仍然把它当成单处理器。</p>
+<p>多处理器是指一台计算机拥有多个处理器，它们共享同一个指令集和相同的物理内存。虽然处理器不必同等地访问所有物理内存，但是每一个应该都能访问大部分内存。</p>
+<h3 id="线程安全和可重入"><a href="#线程安全和可重入" class="headerlink" title="线程安全和可重入"></a>线程安全和可重入</h3><p>线程安全是指代码能够被多个线程调用而不会产生灾难性的结果。它补要求代码在多个线程中高效的运行，只要求能够安全的运行。人部分现行函数可以利用 Pthreads 提供的互斥量、 条件变量和线程私有数据来实现线程的安全。比如，在进入函数时加锁，在退出函数时解锁。这样的函数可以被多个线程调用，但一次只能有一个线程调用它。</p>
+<p>“可重入”有时用来表示”有效的线程安全”。意味着函数不在连续的调用中保存静态数据，也不返回指向静态数据的指针。所有的数据都是由函数的调用程序提供的。重入函数不得调用非重入函数。</p>
+<h2 id="线程的好处"><a href="#线程的好处" class="headerlink" title="线程的好处"></a>线程的好处</h2><p>多线程编程模型具有以下优点：</p>
+<ul>
+<li>在多处理器系统中开发程序的并行性，除了并行性这一优点是需要特殊硬件支持外， 其他优点对硬件不做要求。</li>
+<li>在等待慢速外设 I/O 操作结束的同时， 程序可以执行其他计算， 为程序的并发提供更有效、 更自然的开发方式。</li>
+<li>一种模块化编程模型， 能清晰地表达程序中独立事件间的相互关系。</li>
+</ul>
+<h2 id="线程的代价"><a href="#线程的代价" class="headerlink" title="线程的代价"></a>线程的代价</h2><p>任何事情都有代价，线程也不例外。在很多情形下好处超过了代价，在其他情形下则相反。</p>
+<ul>
+<li>计算负荷。比如线程间同步会直接影响运行时间，对于两个总是同时使用的变量分别加以保护，这意味着你在同步上花费太多的时间而损失了并发。</li>
+<li>编程规则。尽管线程编程模型的基本思想简单，但是编写实际的代码不是件容易的事。编写能够在多个线程中良好工作的代码需要认真的思考和计划。你需要明白同步协议和程序中的不变量（invariant), 你不得不避免死锁、竞争和优先级倒置。</li>
+<li>更难以调试。调试不可避免地要改变事件的时序。在调试串行代码时不会有什么大问题，但是在调试异步代码时却是致命的。如果一个线程因调试陷阱而运行得稍微慢了，则你要跟踪的问题就可能不会出现。每个程序员都会遇到此类在调试时无法再现的错误，这在线程编程中会更加普遍。</li>
+</ul>
+<h2 id="选择线程还是不用线程"><a href="#选择线程还是不用线程" class="headerlink" title="选择线程还是不用线程"></a>选择线程还是不用线程</h2><p>线程并非总是容易使用，而且并非总是可达到最好的性能。一些问题本身就是非并发的，添加线程线程只能降低程序的性能并使程序复杂。如果程序中的每一步都需要上一步的结果，则使用线程不会有任何帮助。每个线程不得不等待其他线程的结束。</p>
+<p>最适合使用线程的应用包括以下这些：</p>
+<ul>
+<li>计算密集型应用，为了能在多处理器系统上运行，将这些计算分解到多个线程中实现。</li>
+<li>I/O 密集型应用，为提高性能，将 I/O 操作重叠。很多线程可以同时等待不同的 I/O 操作。分布式服务器应用就是很好的实例，它们必须响应多个客户的请求，必须为通过慢速网络的连接主动提供 I/O 准备。</li>
+</ul>
+<h2 id="POSIX线程概念"><a href="#POSIX线程概念" class="headerlink" title="POSIX线程概念"></a>POSIX线程概念</h2><p>POSIX 线程线程 API 遵循国际正式标准 POSIX 1003.1c-1995, 我们将使用非正式的术语 “Pthreads” 代表 “POSIX 1003.1c-1995”。</p>
+<p>线程系统包含三个基本要素：</p>
+<ul>
+<li>执行环境，是并发实体的状态。 并发系统必须提供建立、 删除执行环境和独立维护它们状态的方式。</li>
+<li>调度，决定在某个给定时刻该执行哪个环境（或环境组）， 并在不同的环境中切换。</li>
+<li>同步，为并发执行的环境提供了协调访问共享资源的一种机制。</li>
+</ul>
+<p>下表列出了上述三方面的几个不同的实例：</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>执行环境</th>
+<th>调度</th>
+<th>同步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>交通</td>
+<td>汽车</td>
+<td>红绿灯</td>
+<td>转变信号和刹车灯</td>
+</tr>
+<tr>
+<td>UNIX ( 无线程 )</td>
+<td>进程</td>
+<td>优先级</td>
+<td>等待和管道</td>
+</tr>
+<tr>
+<td>Pthreads</td>
+<td>线程</td>
+<td>策略、 优先级</td>
+<td>条件变量和互斥量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="结构概述"><a href="#结构概述" class="headerlink" title="结构概述"></a>结构概述</h3><p>使用 Pthreads, 通过调用 <code>pthread_create</code> 来创建执行环境（线程）。 创建一个线程同样也调度了该线程的执行，这将通过调用指定的 “<strong>线程启动</strong>” 函数开始。Pthreads 允许在创建线程时指定调度参数，或者在线程运行时设定。<br>当线程调用 <code>pthread_exit</code> 时退出，或者也可以从线程启动函数中返回时退出。</p>
+<p>基本的 Pthreads 同步模型使用 <strong>互斥量</strong> 来保护共享数据，使用 <strong>条件变量</strong> 来通信，还可以使用其他的同步机制，如 <strong>信号量</strong>、<strong>管道</strong> 和 <strong>消息队列</strong>。<br>互斥量允许线程在访问共享数据时锁定它，以避免其他线程的干扰。条件变量允许线程等待共享数据到达某个期望的状态（例如队列非空或者资源可用）。</p>
+<h3 id="类型和接口"><a href="#类型和接口" class="headerlink" title="类型和接口"></a>类型和接口</h3><p>POSIX 线程数据类型：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pthread_t</td>
+<td>线程标识符</td>
+</tr>
+<tr>
+<td>pthreae_mutex_t</td>
+<td>互斥量</td>
+</tr>
+<tr>
+<td>pthread_code_t</td>
+<td>条件变量</td>
+</tr>
+<tr>
+<td>pthread_key_t</td>
+<td>线程私有权握访问键</td>
+</tr>
+<tr>
+<td>pthread_attr_t</td>
+<td>线程属性对象</td>
+</tr>
+<tr>
+<td>pthread_mutexattr_t</td>
+<td>互斥量属性对</td>
+</tr>
+<tr>
+<td>pthread_condattr_t</td>
+<td>条件变属性对象</td>
+</tr>
+<tr>
+<td>pthread_once_t</td>
+<td>“一次性初始化”控制变量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="错误检查"><a href="#错误检查" class="headerlink" title="错误检查"></a>错误检查</h3><p>在传统的UNIX系统和原来的标准中．errno 是一个外部整型变量。由于该变量一次只能有一个值，所以只能支持进程中的单一执行流程。<br>传统的报错机制有许多问题，包括很难创建在报错的同时返回一个有用的 -1 值的函数。当引入多线程时会有更严重的问题。<br>Pthreads 修订版是 POSIX 中第一个与传统的 UNIX 和 C 语言报错机制相分离的部分。<br>Pthreads 中的新函数通过返回值来表示错误状态，而不是用变量。当成功时，Pthreads 函数返回 0, 并包含一个额外的输出参数来指向存有“有用结果”<br>的地址。当发生错误时，函数返回一个包含在 <code>errno</code> 变量以支持其他使用 <code>&lt;errao.h&gt;</code> 文件中的错误代码。</p>
+<p>下面程序是一个典型的线程错误检查代码，因为 <code>pthread_t</code> 变量拥有一个无效的值，所以在使用 <code>pthread_join</code> 在遇到无效线程ID时会返回错误代码 <code>ESRCH</code>。<br>运行下面程序将显示错误消息：<code>error 3: No such process</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line">    <span class="keyword">int</span> status;</span><br><span class="line"></span><br><span class="line">    status = pthread_join(thread, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (status != <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"error %d: %s\n"</span>, status, strerror(status));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了避免在实例代码的每个函数调用中都增加报错和退出的代码段，我们需要写两个报错宏使用 err_abort 检测标准的 Pthreads 错误， 使用 errno_abort 检测传统的 errno 错误变量方式。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> err_abort(code, text) \</span></span><br><span class="line">    <span class="keyword">do</span> &#123;\</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s at \"%s\":%d: %s\n"</span>,\</span><br><span class="line">            text, __FILE__, __LINE__, strerror(code));\</span><br><span class="line">        <span class="built_in">abort</span>();\</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> errno_abort(text) \</span></span><br><span class="line">    <span class="keyword">do</span> &#123;\</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s at \"%s\":%d: %s\n"</span>,\</span><br><span class="line">            text, __FILE__, __LINE__, strerror(errno));\</span><br><span class="line">        <span class="built_in">abort</span>();\</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="异步编程举例"><a href="#异步编程举例" class="headerlink" title="异步编程举例"></a>异步编程举例</h2><p>下面使用一个简单的闹钟实例程序来演示基本的异歩编程方法。该程序循环接受用户输入信息，直到出错或者输入完毕，用户输入的每行信息中，第一部分是闹钟等待的时间（ 以秒为单位），第二部分是闹钟时间到迖时显示的文本消息。</p>
+<h3 id="同步版本"><a href="#同步版本" class="headerlink" title="同步版本"></a>同步版本</h3><p>一直同步等待 <code>fgets</code> 产生输入，然后根据输入的秒数进行等待指定时间，最后输出闹钟响起的消息。该程序的问题是一次只能处理一个闹钟请求，如果你的程序设置了一个10分钟闹钟，就不能再继续让它在5分钟时响起另外一个闹钟。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"errors.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> seconds;</span><br><span class="line">    <span class="keyword">char</span> line[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">char</span> message[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Alarm&gt; "</span>);</span><br><span class="line">        <span class="keyword">if</span> (fgets(line, <span class="keyword">sizeof</span>(line), <span class="built_in">stdin</span>) == <span class="literal">NULL</span>)</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strlen</span>(line) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">sscanf</span>(line, <span class="string">"%d %64[^\n]"</span>, &amp;seconds, message) &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Bad command\n"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            sleep(seconds);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"(%d) %s\n"</span>, seconds, message);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多进程版本"><a href="#多进程版本" class="headerlink" title="多进程版本"></a>多进程版本</h3><p>为每个命令使用 <code>fork</code> 调用生成一个独立的子进程来处理闹钟。<code>fork</code> 版本是异步方式的的一种实现，该程序可以随时输入命令行，它们被彼此独立地执行。 新版本并不比同步版本复杂多少。<br>该版本的主要难点在于对所有己终止子进程的 <code>reap</code>。如果程序不做这个工作，则要等到程序退出的时候由系统回收，通常回收子进程的方法是调用某个 <code>wait</code> 系列函数。在本例中，我们调用 waitpid 函数，并设置 WNOHANG（父进程不必挂等待子进程的结束）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"errors.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">    <span class="keyword">int</span> seconds;</span><br><span class="line">    <span class="keyword">char</span> line[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">char</span> message[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Alarm&gt; "</span>);</span><br><span class="line">        <span class="keyword">if</span> (fgets(line, <span class="keyword">sizeof</span>(line), <span class="built_in">stdin</span>) == <span class="literal">NULL</span>)</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strlen</span>(line) &lt;= <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">sscanf</span>(line, <span class="string">"%d %64[^\n]"</span>, &amp;seconds, message) &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Bad command\n"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            pid = fork();</span><br><span class="line">            <span class="keyword">if</span> (pid == <span class="number">-1</span>)</span><br><span class="line">                errno_abort(<span class="string">"Fork"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (pid == (<span class="keyword">pid_t</span>)<span class="number">0</span>) &#123;</span><br><span class="line">                sleep(seconds);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"(%d) %s\n"</span>, seconds, message);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">do</span> &#123;</span><br><span class="line">                    pid = waitpid((<span class="keyword">pid_t</span>)<span class="number">-1</span>, <span class="literal">NULL</span>, WNOHANG);</span><br><span class="line">                    <span class="keyword">if</span> (pid == (<span class="keyword">pid_t</span>) <span class="number">-1</span>)</span><br><span class="line">                        errno_abort(<span class="string">"Wait for child"</span>);</span><br><span class="line">                &#125; <span class="keyword">while</span>(pid != (<span class="keyword">pid_t</span>)<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多线程版本"><a href="#多线程版本" class="headerlink" title="多线程版本"></a>多线程版本</h3><p>多线程版本与多进程十分相似，只是使用线程而非子进程来实现异步闹钟。本例中用到了以下三个Pthread函数：</p>
+<ul>
+<li><code>pthread_create</code> 函数建立一个线程， 运行由第三个参数 <code>alarm_thread</code> 指定的例程，并返回线程标识符 ID (保存在 <code>thread</code> 引用的变量中）</li>
+<li><code>pthread_self</code> 获取当前线程标识符 ID。</li>
+<li><code>pthread_detach</code> 函数允许在当线程终止时立刻回收线程资源。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"errors.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">alarm_tag</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span>  seconds;</span><br><span class="line">    <span class="keyword">char</span> message[<span class="number">64</span>];</span><br><span class="line">&#125; <span class="keyword">alarm_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">alarm_thread</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">alarm_t</span> *alarm = (<span class="keyword">alarm_t</span>*)arg;</span><br><span class="line">    <span class="keyword">int</span> status;</span><br><span class="line"></span><br><span class="line">    status = pthread_detach(pthread_self());</span><br><span class="line">    <span class="keyword">if</span> (status != <span class="number">0</span>)</span><br><span class="line">        err_abort(status, <span class="string">"Detach thread"</span>);</span><br><span class="line"></span><br><span class="line">    sleep(alarm-&gt;seconds);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"(%d) %s\n"</span>, alarm-&gt;seconds, alarm-&gt;message);</span><br><span class="line">    <span class="built_in">free</span>(alarm);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> status;</span><br><span class="line">    <span class="keyword">int</span> seconds;</span><br><span class="line">    <span class="keyword">char</span> line[<span class="number">128</span>];</span><br><span class="line">    <span class="keyword">alarm_t</span> *alarm;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Alarm&gt; "</span>);</span><br><span class="line">        <span class="keyword">if</span> (fgets(line, <span class="keyword">sizeof</span>(line), <span class="built_in">stdin</span>) == <span class="literal">NULL</span>)</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strlen</span>(line) &lt;= <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        alarm = (<span class="keyword">alarm_t</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">alarm_t</span>));</span><br><span class="line">        <span class="keyword">if</span> (alarm == <span class="literal">NULL</span>)</span><br><span class="line">            errno_abort(<span class="string">"Allocate alarm"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">sscanf</span>(line, <span class="string">"%d %64[^\n]"</span>, &amp;alarm-&gt;seconds, alarm-&gt;message) &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Bad command\n"</span>);</span><br><span class="line">            <span class="built_in">free</span>(alarm);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            status = pthread_create(&amp;thread, <span class="literal">NULL</span>, alarm_thread, alarm);</span><br><span class="line">            <span class="keyword">if</span> (status != <span class="number">0</span>)</span><br><span class="line">                err_abort(status, <span class="string">"Create alarm thread"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>系列文章目录：<ul>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://github.com/Veinin/programming-with-POSIX-threads-tutorials" target="_blank" rel="noopener">Github 示例源码</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Phtreads/" rel="tag"># Phtreads</a>
+          
+            <a href="/tags/POSIX-Pthreads/" rel="tag"># POSIX Pthreads</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/windows-10-bash-linux-subsystem-setup/" rel="next" title="Windows 10 子系统安装指南">
+                <i class="fa fa-chevron-left"></i> Windows 10 子系统安装指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/05/programming_with_posix_pthreads_02/" rel="prev" title="POSIX 多线程程序设计-线程">
+                POSIX 多线程程序设计-线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#术语定义"><span class="nav-number">1.</span> <span class="nav-text">术语定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步与异步"><span class="nav-number">1.1.</span> <span class="nav-text">同步与异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与并行"><span class="nav-number">1.2.</span> <span class="nav-text">并发与并行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单处理器和多处理器"><span class="nav-number">1.3.</span> <span class="nav-text">单处理器和多处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程安全和可重入"><span class="nav-number">1.4.</span> <span class="nav-text">线程安全和可重入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的好处"><span class="nav-number">2.</span> <span class="nav-text">线程的好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的代价"><span class="nav-number">3.</span> <span class="nav-text">线程的代价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择线程还是不用线程"><span class="nav-number">4.</span> <span class="nav-text">选择线程还是不用线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POSIX线程概念"><span class="nav-number">5.</span> <span class="nav-text">POSIX线程概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构概述"><span class="nav-number">5.1.</span> <span class="nav-text">结构概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型和接口"><span class="nav-number">5.2.</span> <span class="nav-text">类型和接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误检查"><span class="nav-number">5.3.</span> <span class="nav-text">错误检查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步编程举例"><span class="nav-number">6.</span> <span class="nav-text">异步编程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步版本"><span class="nav-number">6.1.</span> <span class="nav-text">同步版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多进程版本"><span class="nav-number">6.2.</span> <span class="nav-text">多进程版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程版本"><span class="nav-number">6.3.</span> <span class="nav-text">多线程版本</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/';
+          this.page.identifier = '2018/06/01/programming_with_posix_pthreads_01/';
+          this.page.title = 'POSIX 多线程程序设计-概述';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

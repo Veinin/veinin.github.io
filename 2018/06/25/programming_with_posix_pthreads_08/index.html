@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Phtreads,POSIX Pthreads," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。 线程同步四项原则线程同步的四项原则，按重要性排列：  首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 immutable 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。 其次是使用高级的并发编程构件，如 TaskQu">
+<meta name="keywords" content="Phtreads,POSIX Pthreads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX 多线程程序设计-线程同步精要">
+<meta property="og:url" content="https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。 线程同步四项原则线程同步的四项原则，按重要性排列：  首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 immutable 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。 其次是使用高级的并发编程构件，如 TaskQu">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T14:27:49.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX 多线程程序设计-线程同步精要">
+<meta name="twitter:description" content="本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。 线程同步四项原则线程同步的四项原则，按重要性排列：  首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 immutable 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。 其次是使用高级的并发编程构件，如 TaskQu">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/"/>
+
+
+
+
+
+  <title>POSIX 多线程程序设计-线程同步精要 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POSIX 多线程程序设计-线程同步精要</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-25T14:11:13+08:00">
+                2018-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/25/programming_with_posix_pthreads_08/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/25/programming_with_posix_pthreads_08/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。</p>
+<h2 id="线程同步四项原则"><a href="#线程同步四项原则" class="headerlink" title="线程同步四项原则"></a>线程同步四项原则</h2><p>线程同步的四项原则，按重要性排列：</p>
+<ul>
+<li>首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 <code>immutable</code> 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。</li>
+<li>其次是使用高级的并发编程构件，如 <code>TaskQueue</code>、<code>Producer-ConsumerQueue</code>、<code>CountDownLatch</code> 等等。</li>
+<li>最后不得已必须使用底层同步原语（primitives）时，只用非递归的互斥器和条件变量，慎用读写锁，不要用信号量。</li>
+<li>除了使用 <code>atomic</code> 整数之外，不自己编写 <code>lock-free</code> 代码，也不要用“内核级”同步原语。不凭空猜测“哪种做法性能会更好”，比如<code>spin lock</code> vs <code>mutex</code>。</li>
+</ul>
+<a id="more"></a>
+<h2 id="互斥器（mutex）"><a href="#互斥器（mutex）" class="headerlink" title="互斥器（mutex）"></a>互斥器（mutex）</h2><p>互斥器（mutex）是使用得最多的同步原语，粗略地说，它保护了临界区，任何一个时刻最多只能有一个线程在此 mutex 划出的临界区内活动。单独使用 mutex 时，我们主要为了保护共享数据。</p>
+<p>主要原则：</p>
+<ul>
+<li>在C++中，应该使用用<code>RAII</code>手法封装<code>mutex</code>的创建、销毁、加锁、解锁这四个操作。Java里的 <code>synchronized</code> 语句和C#的 <code>using</code> 语句也有类似的效果，即保证锁的生效期间等于一个作用域（scope），不会因异常而忘记解锁。</li>
+<li>只用非递归的 <code>mutex</code>（即不可重入的mutex）。</li>
+<li>不手工调用 <code>lock()</code> 和 <code>unlock()</code> 函数，</li>
+<li>在每次构造 <code>Guard</code> 对象的时候，思考一路上（调用栈上）已经持有的锁，防止因加锁顺序不同而导致死锁（deadlock）。</li>
+</ul>
+<p>次要原则：</p>
+<ul>
+<li>不使用跨进程的 <code>mutex</code>，进程间通信只用 TCPsockets。</li>
+<li>加锁、解锁在同一个线程，线程a不能去 <code>unlock</code> 线程b已经锁住的 <code>mutex</code>（RAII自动保证）。 别忘了解锁（RAII自动保证）。</li>
+<li>不重复解锁（RAII自动保证）。</li>
+<li>必要的时候可以考虑用 <code>PTHREAD_MUTEX_ERRORCHECK</code> 来排错。</li>
+</ul>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>互斥器（mutex）是加锁原语，用来排他性地访问共享数据，它不是等待原语。在使用 mutex 的时候，我们一般都会期望加锁不要阻塞，总是能立刻拿到锁。然后尽快访问数据，用完之后尽快解锁，这样才能不影响并发性和性能。</p>
+<p>如果需要等待某个条件成立，我们应该使用条件变量（conditionvariable）。条件变量顾名思义是一个或多个线程等待某个布尔表达式为真，即等待别的线程“唤醒”它。条件变量只有一种正确使用的方式，几乎不可能用错。</p>
+<p>对于wait端：</p>
+<ul>
+<li>必须与 <code>mutex</code> 一起使用，该布尔表达式的读写需受此mutex保护。</li>
+<li>在 <code>mutex</code> 已上锁的时候才能调用 <code>wait()</code>。</li>
+<li>把判断布尔条件和 <code>wait()</code> 放到 <code>while</code> 循环中。</li>
+</ul>
+<p>对于 signal/broadcast 端：</p>
+<ul>
+<li>不一定要在 <code>mutex</code> 已上锁的情况下调用 <code>signal</code>（理论上）。</li>
+<li>在 <code>signal</code> 之前一般要修改布尔表达式。</li>
+<li>修改布尔表达式通常要用 <code>mutex</code> 保护（至少用作fullmemorybarrier）。</li>
+<li>注意区分 <code>signal</code> 与 <code>broadcast</code>： <code>broadcast</code> 通常用于表明状态变化，<code>signal</code> 通常用于表示资源。</li>
+</ul>
+<p>条件变量是非常底层的同步原语，很少直接使用，一般都是用它来实现高层的同步措施，如 <code>BlockingQueue&lt;T&gt;</code> 或 <code>CountDownLatch</code>。</p>
+<p>倒计时（CountDownLatch）是一种常用且易用的同步手段。它主要有两种用途：</p>
+<ul>
+<li>主线程发起多个子线程，等这些子线程各自都完成一定的任务之后，主线程才继续执行。通常用于主线程等待多个子线程完成初始化。</li>
+<li>主线程发起多个子线程，子线程都等待主线程，主线程完成其他一些任务之后通知所有子线程开始执行。通常用于多个子线程等待主线程发出“起跑”命令。</li>
+</ul>
+<h2 id="不要使用读写锁和信号量"><a href="#不要使用读写锁和信号量" class="headerlink" title="不要使用读写锁和信号量"></a>不要使用读写锁和信号量</h2><p>读写锁（Readers-Writerlock，简写为rwlock）是个看上去很美的抽象，它明确区分了 read 和 write 两种行为。</p>
+<p>初学者常干的一件事情是，一见到某个共享数据结构频繁读而很少写，就把 mutex 替换为 rwlock。甚至首选 rwlock 来保护共享状态，这不见得是正确的。</p>
+<ul>
+<li>从正确性方面来说，一种典型的易犯错误是在持有 readlock 的时候修改了共享数据。这通常发生在程序的维护阶段，为了新增功能，程序员不小心在原来 readlock 保护的函数中调用了会修改状态的函数。这种错误的后果跟无保护并发读写共享数据是一样的。</li>
+<li>从性能方面来说，读写锁不见得比普通 mutex 更高效。无论如何 readerlock 加锁的开销不会比 mutexlock 小，因为它要更新当前 reader 的数目。如果临界区很小，锁竞争不激烈，那么 mutex 往往会更快。</li>
+<li>readerlock 可能允许提升为 writerlock，也可能不允许提升。如果处理不好容易导致程序崩溃和死锁。</li>
+<li>通常 readerlock 是可重入的，writerlock 是不可重入的。但是为了防止 writer 饥饿，writerlock通常会阻塞后来的readerlock，因此 readerlock 在重入的时候可能死锁。另外，在追求低延迟读取的场合也不适用读写锁。</li>
+</ul>
+<p>对于信号量（Semaphore），陈硕认为信号量不是必备的同步原语，因为条件变量配合互斥器可以完全替代其功能，而且更不易用错。<br>信号量的另一个问题在于它有自己的计数值，而通常我们自己的数据结构也有长度值，这就造成了同样的信息存了两份，需要时刻保持一致，这增加了程序员的负担和出错的可能。</p>
+<h2 id="归纳与总结"><a href="#归纳与总结" class="headerlink" title="归纳与总结"></a>归纳与总结</h2><hr>
+<ul>
+<li>系列文章目录：<ul>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://github.com/Veinin/programming-with-POSIX-threads-tutorials" target="_blank" rel="noopener">Github 示例源码</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Phtreads/" rel="tag"># Phtreads</a>
+          
+            <a href="/tags/POSIX-Pthreads/" rel="tag"># POSIX Pthreads</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/20/programming_with_posix_pthreads_07/" rel="next" title="POSIX 多线程程序设计-线程扩展">
+                <i class="fa fa-chevron-left"></i> POSIX 多线程程序设计-线程扩展
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程同步四项原则"><span class="nav-number">1.</span> <span class="nav-text">线程同步四项原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥器（mutex）"><span class="nav-number">2.</span> <span class="nav-text">互斥器（mutex）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件变量"><span class="nav-number">3.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不要使用读写锁和信号量"><span class="nav-number">4.</span> <span class="nav-text">不要使用读写锁和信号量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归纳与总结"><span class="nav-number">5.</span> <span class="nav-text">归纳与总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/';
+          this.page.identifier = '2018/06/25/programming_with_posix_pthreads_08/';
+          this.page.title = 'POSIX 多线程程序设计-线程同步精要';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

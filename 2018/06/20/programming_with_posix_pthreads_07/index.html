@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Phtreads,POSIX Pthreads," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="栅栏（Barriers）barrier 字面意思时栅栏，barrier 是将一组成员保持在一起的一种方式，它可以实现让一组线程等待至某个状之后再全部同时执行。一个 barrier 通常被用来确保某些井行算法中的所有合作线程在任何线程可以继续运行之前到达算法中的一个特定点。 barrier 的核心是一个计数器，我们可以称之为“阈值”，即在一个 barrier 上必须等待的线程数。计时器计算着当前线程">
+<meta name="keywords" content="Phtreads,POSIX Pthreads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX 多线程程序设计-线程扩展">
+<meta property="og:url" content="https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="栅栏（Barriers）barrier 字面意思时栅栏，barrier 是将一组成员保持在一起的一种方式，它可以实现让一组线程等待至某个状之后再全部同时执行。一个 barrier 通常被用来确保某些井行算法中的所有合作线程在任何线程可以继续运行之前到达算法中的一个特定点。 barrier 的核心是一个计数器，我们可以称之为“阈值”，即在一个 barrier 上必须等待的线程数。计时器计算着当前线程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T14:27:42.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX 多线程程序设计-线程扩展">
+<meta name="twitter:description" content="栅栏（Barriers）barrier 字面意思时栅栏，barrier 是将一组成员保持在一起的一种方式，它可以实现让一组线程等待至某个状之后再全部同时执行。一个 barrier 通常被用来确保某些井行算法中的所有合作线程在任何线程可以继续运行之前到达算法中的一个特定点。 barrier 的核心是一个计数器，我们可以称之为“阈值”，即在一个 barrier 上必须等待的线程数。计时器计算着当前线程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/"/>
+
+
+
+
+
+  <title>POSIX 多线程程序设计-线程扩展 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POSIX 多线程程序设计-线程扩展</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T22:12:24+08:00">
+                2018-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/20/programming_with_posix_pthreads_07/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/20/programming_with_posix_pthreads_07/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="栅栏（Barriers）"><a href="#栅栏（Barriers）" class="headerlink" title="栅栏（Barriers）"></a>栅栏（Barriers）</h2><p>barrier 字面意思时栅栏，barrier 是将一组成员保持在一起的一种方式，它可以实现让一组线程等待至某个状之后再全部同时执行。一个 barrier 通常被用来确保某些井行算法中的所有合作线程在任何线程可以继续运行之前到达算法中的一个特定点。</p>
+<p>barrier 的核心是一个计数器，我们可以称之为“阈值”，即在一个 barrier 上必须等待的线程数。计时器计算着当前线程的返回数量，如果数量未达到指定点，那么之前返回的线程都必须继续等待，直到最后一个线程返回，才能开始下一步。</p>
+<a id="more"></a>
+<p>你可以查看源文件 <code>barrier.h</code> 、<code>barrier.c</code>、<code>barrier_main.c</code>，这是一个比较容易理解的实现。</p>
+<p>另外 Pthreads 在 POSIX.14 草案标准（一个 “POSIX 标准子集”）中新增加了 Barriers 变量，其 API 如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_barrier_init</span><span class="params">(<span class="keyword">pthread_barrier_t</span> * <span class="keyword">restrict</span> barrier, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> <span class="keyword">pthread_barrierattr_t</span> * <span class="keyword">restrict</span> attr, <span class="keyword">unsigned</span> <span class="keyword">int</span> count)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_barrier_destroy</span><span class="params">(<span class="keyword">pthread_barrier_t</span> *barrier)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_barrier_wait</span><span class="params">(<span class="keyword">pthread_barrier_t</span> *barrier)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>源文件 <code>pthread_barrier.c</code> 是一个 Pthreads barrier 的简单实例。</p>
+<h2 id="读-写锁（Read-Write-Lock）"><a href="#读-写锁（Read-Write-Lock）" class="headerlink" title="读/写锁（Read-Write Lock）"></a>读/写锁（Read-Write Lock）</h2><p>读/写锁很像一个互斥量，它是阻止多个线程同时修改共享数据的另外一种方。但是不同于互斥量的是它区分读数据和写数据。一个互斥量排除所有的其他线程，而一个读/写锁如果线程不需要改变数据，则允许多个线程同时读数据。当一个线程需要更新缓存数据是，则必须以独占的方式进行，其他只读线程都不能继续占有锁。</p>
+<p>读/写锁被用来保护经常需要读但是通常不需要修改的信息（读多写少）。当写锁被释放时，如果读数据者和写数据者同时正在等待存取，则读数据者被优先给予访问权。因为潜在地允许许多线程同时完成工作，读访问优先有利于并发。</p>
+<p>文件 <code>rwlock.h</code> 、<code>rwlock.c</code>、<code>rwlock_main.c</code> 演示了如何使用标准的 Pthreads 互斥量和状况变量实现读写锁， 这是相对容易理解的可移植的实现。</p>
+<p>另外，在最新版本的 <code>X/Open XSH5 [UNIX98]</code> 标准中，Pthreads 增加了读写锁的支持，读写锁的数据类型为 <code>pthread_rwlock_t</code>，如果需要静态分配该类型数据，那么可通过<code>PTHREAD_RWLOCK_INITIALIZER</code> 宏来初始化它。Pthreads 读写锁 API 如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_rwlock_t</span> lock = PTHREAD_RWLOCK_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_init</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> * <span class="keyword">restrict</span> lock, <span class="keyword">const</span> <span class="keyword">pthread_rwlockattr_t</span> * <span class="keyword">restrict</span> attr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_destroy</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_rdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_timedrdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> * <span class="keyword">restrict</span> lock, <span class="keyword">const</span> struct timespec * <span class="keyword">restrict</span> abstime)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_tryrdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_wrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_timedwrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> * <span class="keyword">restrict</span> lock, <span class="keyword">const</span> struct timespec * <span class="keyword">restrict</span> abstime)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_trywrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_unlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>你可以查看源文件 <code>pthread_rwlock.c</code>，这是简单的 Pthread 读写锁的使用实例。</p>
+<h2 id="自旋锁（Spin-Locks）"><a href="#自旋锁（Spin-Locks）" class="headerlink" title="自旋锁（Spin Locks）"></a>自旋锁（Spin Locks）</h2><p>自旋锁（Spinlock）也是一种锁，自旋锁在线程尝试获取它时，会在一个循环中不停等待（旋转），同时反复检查锁是否可用。由于线程始终保持活动状态且并没有执行有用的任务，因此使用这种锁时将产生一种忙碌的等待情况。</p>
+<p>因为在一些多线程场景中我们需要避免操作系统进程的重新调度或者上下文的切换开销，所以如果线程仅仅只是短时间内被阻塞，那么使用自旋锁将是一种非常有效的方式。但是，如果你的程序需要比较长的时间保持锁的使用，那么自旋锁将会变的浪费，因为它会阻止其他线程运行。线程持有锁的时间越长，操作系统调度程序在保持锁定时中断线程的风险就越大。在这种情况下，其他线程将会不停“旋转”（反复尝试获取锁定），而持有锁的线程没有进行释放。结果将是无限期推迟，直到持有锁的线程完成并释放它。</p>
+<p>下面是一个自旋锁的实现方式，该实现中使用了 GCC 提供的原子操作的相关函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">spinlock_type</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> lock;</span><br><span class="line">&#125; <span class="keyword">spinlock_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spinlock_init</span><span class="params">(<span class="keyword">spinlock_t</span> *sl)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sl-&gt;lock = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spinlock_lock</span><span class="params">(<span class="keyword">spinlock_t</span> *sl)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(__sync_lock_test_and_set(&amp;sl-&gt;lock, <span class="number">1</span>)) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">spinlock_trylock</span><span class="params">(<span class="keyword">spinlock_t</span> *sl)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> __sync_lock_test_and_set(&amp;sl-&gt;lock, <span class="number">1</span>) == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spinlock_unlock</span><span class="params">(<span class="keyword">spinlock_t</span> *sl)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    __sync_lock_release(&amp;sl-&gt;lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spinlock_destroy</span><span class="params">(<span class="keyword">spinlock_t</span> *sl)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    (<span class="keyword">void</span>) sl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你可以查看源文件 <code>spinlock.h</code> 和 <code>spinlock_main.c</code>，这是一个自旋锁的简单使用实例，演示了10个线程并发使用自旋锁修改单一数据流程。</p>
+<p>另外，Pthreads 也提供了自旋锁的实现，其 API 定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_init</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock, <span class="keyword">int</span> pshared)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_lock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_trylock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_unlock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_destroy</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>你可以在源文件 <code>pthread_spinlock.c</code> 中查看对自旋锁的使用实例。</p>
+<h2 id="信号量（Semaphore）"><a href="#信号量（Semaphore）" class="headerlink" title="信号量（Semaphore）"></a>信号量（Semaphore）</h2><p>信号量是由 EW Dijkstra 在20世纪60年代后期设计的编程结构。Dijkstra 的模型是铁路运营。考虑一段铁路，其中存在单个轨道，在该轨道上一次只允许一列火车。</p>
+<p>信号量同步此轨道上的行程。火车必须在进入单轨之前等待，直到信号量处于允许旅行的状态。当火车进入轨道时，信号量改变状态以防止其他列车进入轨道。离开这段赛道的火车必须再次改变信号量的状态，以允许另一列火车进入。</p>
+<p>在计算机版本中，信号量似乎是一个简单的整数。线程等待许可继续，然后通过对信号量执行<code>P操作</code>来发出线程已经继续的信号。</p>
+<p>线程必须等到信号量的值为正，然后通过从值中减去1来更改信号量的值。完成此操作后，线程执行<code>V操作</code>，通过向该值加1来更改信号量的值。这些操作必须以原子方式进行。在<code>P操作</code>中，信号量的值必须在值递减之前为正，从而产生一个值，该值保证为非负值，并且比递减之前的值小1。</p>
+<h3 id="信号量-API"><a href="#信号量-API" class="headerlink" title="信号量 API"></a>信号量 API</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_trywait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_destroy</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>信号量初始化函数中，pshared的值为零，则不能在进程之间共享信号量。如果pshared的值非零，则可以在进程之间共享信号量。值 value 之名，<br>其中，<code>sem_post</code> 以原子方式递增sem指向的信号量。调用后，当信号量上的任何线程被阻塞时，其中一个线程被解除阻塞。<br>使用 <code>sem_wait</code> 来阻塞调用线程，直到sem指向的信号量计数变为大于零，然后原子地减少计数。</p>
+<h3 id="信号量解决生产者与消费者问题"><a href="#信号量解决生产者与消费者问题" class="headerlink" title="信号量解决生产者与消费者问题"></a>信号量解决生产者与消费者问题</h3><p>生产者和消费者问题是并发编程中标准的，众所周知的一个小问题。在一个缓冲区中，分为将项目放入缓冲区生产者，从缓冲区中取出项目的消费者。</p>
+<p>在缓冲区有可用空间之前，生产者不能在缓冲区中放置东西。在生产者写入缓冲区之前，消费者不能从缓冲区中取出东西。</p>
+<p>你可以查看源文件 <code>pthread-semaphore.c</code>，这是一个使用信号量解决生产者、消费者问题的实例。</p>
+<h2 id="工作队列"><a href="#工作队列" class="headerlink" title="工作队列"></a>工作队列</h2><p>工作队列是一组线程间分派工作的方法，创建工作队列时，可以指定需要的最大并发级别（最大线程数量）。</p>
+<p>依据工作量的要求，线程将被开始或停止。没有发现任何请求的一个线程将等待一段时间后终止。最优的时间段取决于在你的系统上创建一个新线程的开销、维护一个不做任何工作的线程的系统资源的开销，以及你将再次需要线程的可能性。</p>
+<p>源文件 <code>workq.h</code> 、<code>workq.c</code> 和 <code>workq_main.c</code> 显示了一个工作队列管理器的实现。</p>
+<hr>
+<ul>
+<li>系列文章目录：<ul>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://github.com/Veinin/programming-with-POSIX-threads-tutorials" target="_blank" rel="noopener">Github 示例源码</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Phtreads/" rel="tag"># Phtreads</a>
+          
+            <a href="/tags/POSIX-Pthreads/" rel="tag"># POSIX Pthreads</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/17/programming_with_posix_pthreads_06/" rel="next" title="POSIX 多线程程序设计-POSIX 针对线程的调整">
+                <i class="fa fa-chevron-left"></i> POSIX 多线程程序设计-POSIX 针对线程的调整
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/25/programming_with_posix_pthreads_08/" rel="prev" title="POSIX 多线程程序设计-线程同步精要">
+                POSIX 多线程程序设计-线程同步精要 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#栅栏（Barriers）"><span class="nav-number">1.</span> <span class="nav-text">栅栏（Barriers）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读-写锁（Read-Write-Lock）"><span class="nav-number">2.</span> <span class="nav-text">读/写锁（Read-Write Lock）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自旋锁（Spin-Locks）"><span class="nav-number">3.</span> <span class="nav-text">自旋锁（Spin Locks）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号量（Semaphore）"><span class="nav-number">4.</span> <span class="nav-text">信号量（Semaphore）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量-API"><span class="nav-number">4.1.</span> <span class="nav-text">信号量 API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量解决生产者与消费者问题"><span class="nav-number">4.2.</span> <span class="nav-text">信号量解决生产者与消费者问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作队列"><span class="nav-number">5.</span> <span class="nav-text">工作队列</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/';
+          this.page.identifier = '2018/06/20/programming_with_posix_pthreads_07/';
+          this.page.title = 'POSIX 多线程程序设计-线程扩展';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

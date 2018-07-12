@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Phtreads,POSIX Pthreads," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="多线程与fork多线程进程调用 fork 创造的子进程，只有调用 fork 的线程在子进程内存在，除了当前调用的线程，其他线程在子进程中都会消失，但消失的线程状态仍然保留为调用 fork 时的相同状态，线程会拥有与在父进程内当前调用线程的相同状态，拥有相同的互斥量，同样的线程私有数据键值等。 在 forked 的进程中只有一个线程，消失的其他线程并不会调用诸如 pthread_exit 退出，线程">
+<meta name="keywords" content="Phtreads,POSIX Pthreads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX 多线程程序设计-POSIX 针对线程的调整">
+<meta property="og:url" content="https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="多线程与fork多线程进程调用 fork 创造的子进程，只有调用 fork 的线程在子进程内存在，除了当前调用的线程，其他线程在子进程中都会消失，但消失的线程状态仍然保留为调用 fork 时的相同状态，线程会拥有与在父进程内当前调用线程的相同状态，拥有相同的互斥量，同样的线程私有数据键值等。 在 forked 的进程中只有一个线程，消失的其他线程并不会调用诸如 pthread_exit 退出，线程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T14:27:36.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX 多线程程序设计-POSIX 针对线程的调整">
+<meta name="twitter:description" content="多线程与fork多线程进程调用 fork 创造的子进程，只有调用 fork 的线程在子进程内存在，除了当前调用的线程，其他线程在子进程中都会消失，但消失的线程状态仍然保留为调用 fork 时的相同状态，线程会拥有与在父进程内当前调用线程的相同状态，拥有相同的互斥量，同样的线程私有数据键值等。 在 forked 的进程中只有一个线程，消失的其他线程并不会调用诸如 pthread_exit 退出，线程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/"/>
+
+
+
+
+
+  <title>POSIX 多线程程序设计-POSIX 针对线程的调整 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POSIX 多线程程序设计-POSIX 针对线程的调整</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-17T19:38:12+08:00">
+                2018-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/17/programming_with_posix_pthreads_06/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/17/programming_with_posix_pthreads_06/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="多线程与fork"><a href="#多线程与fork" class="headerlink" title="多线程与fork"></a>多线程与fork</h2><p>多线程进程调用 <code>fork</code> 创造的子进程，只有调用 <code>fork</code> 的线程在子进程内存在，除了当前调用的线程，其他线程在子进程中都会消失，但消失的线程状态仍然保留为调用 <code>fork</code> 时的相同状态，线程会拥有与在父进程内当前调用线程的相同状态，拥有相同的互斥量，同样的线程私有数据键值等。</p>
+<p>在 <code>forked</code> 的进程中只有一个线程，消失的其他线程并不会调用诸如 <code>pthread_exit</code> 退出，线程也不会再运用线程私有数据 <code>destructors</code> 或清除处理函数。<br>这里就存在一个很危险的局面，其他线程可能正好位于临界区之内，持有了某个锁，而它突然死亡，也就再也没有机会去解锁了。而如果子进程试图去对某个 <code>mutex</code> 加锁，那么马上就会造成死锁的局面。</p>
+<p>综上所述，除非你打算很快地在子进程中调用 <code>exec</code> 执行一个新程序， 否则应避免在一个多线程的程序中使用 <code>fork</code>。</p>
+<a id="more"></a>
+<p>如果你不能避免，那么你应该注意在子进程中不能调用以下这些函数（参考《Linux多线程服务端编程》）：</p>
+<ul>
+<li><code>malloc</code>,会访问全局状态，肯定会加锁。</li>
+<li>任何分配和释放内存的函数，诸如<code>new</code>、<code>delete</code>……</li>
+<li>任何 Pthreads 函数。</li>
+<li><code>printf</code> 系列函数。其他线程可能持有了stdout/stderr的锁。</li>
+<li><code>sigle</code> 中除了“sigle安全”之外的任何函数，应避免在信号处理函数内使用 <code>fork</code>。</li>
+</ul>
+<p>另外，Pthreads 增加了 <code>pthread_atfork</code> “fork 处理器” 机制以允许你的代码越过 <code>fork</code> 调用保护数据和不变量。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void));</span><br></pre></td></tr></table></figure>
+<p>该函数中，<code>prepare fork</code> 处理器以正确的顺序锁住所有的由相关代码使用的互斥量以阻止死锁的发生。<code>parent fork</code> 处理器只需要开锁所有互斥量即可，以允许父进程和所有线程继续正常工作。<code>child fork</code> 处理器经常可以与 parent fork 处评器一样； 但是有时需要重置程序或库的状态。</p>
+<p>在程序 <code>atfork.c</code> 中展示了如何使用 <code>fork</code> 处理器。</p>
+<h2 id="多线程与exec"><a href="#多线程与exec" class="headerlink" title="多线程与exec"></a>多线程与exec</h2><p><code>exec</code> 函数功能是消除当前程序的环境并且用一个新程序代替它，所以并没有受线程的影响。</p>
+<h2 id="多线程与signal"><a href="#多线程与signal" class="headerlink" title="多线程与signal"></a>多线程与signal</h2><p>在多线程程序中，使用 signal 的第一原则就是 <strong>不要使用 signal</strong>。</p>
+<p>尽管修改进程信号行为本身是线程安全的，但是不能防止其他线程随后很快地设置一个新的信号行为。任何印象线程的信号同样也会影响整个进程，这意味着向进程或进程内的任何线程传送一个 <code>SIGKILL</code> 信号，将终止进程。传送一个 <code>SIGSTOP</code> 停止命令时，将导致所有的线程停止直到收到 <code>SIGCOUNT</code> 信号。</p>
+<h2 id="多线程与stdio"><a href="#多线程与stdio" class="headerlink" title="多线程与stdio"></a>多线程与stdio</h2><p>Pthreads 要求 ANSI C 标准 I/O (stdio) 函数是线程安全的。因为 stdio 包需要为输出缓冲区和文件状态指定静态存储区，stdio 实现将使用互斥量或信号灯等同步机制。</p>
+<h3 id="flockfile-和-funlockfile"><a href="#flockfile-和-funlockfile" class="headerlink" title="flockfile 和 funlockfile"></a>flockfile 和 funlockfile</h3><p>在一些情况里，一系列 stdio 操作以不被中断的顺序执行是重要的。例如，一个提示符后面跟着一个从终端的读操作。为了不让其他线程在两个操作之间读 stdin 或者写<br>stdout，你应该在两个调用前后锁住 stdin 和 stdou。你可以使用使用 <code>flockfile</code> 和 <code>funlockfile</code> 以及 <code>ftrylockfile</code> 函数来确保一系列写操作不会被从其他线程的文件存取打断。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> flock <span class="title">file</span><span class="params">(FILE *file)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">ftrylockfile</span><span class="params">(FILE *file)</span></span></span><br><span class="line">void funlockfile(FILE *file)；</span><br></pre></td></tr></table></figure>
+<p>你可以参考程序 <code>flock.c</code> 实例。</p>
+<h3 id="getchar-unlocked-和-putchar-unlocked"><a href="#getchar-unlocked-和-putchar-unlocked" class="headerlink" title="getchar_unlocked 和 putchar_unlocked"></a>getchar_unlocked 和 putchar_unlocked</h3><p>函数 <code>getchar</code> 和 <code>putchar</code> 分别操作 stdin 和 stdout，而 <code>getc</code> 和 <code>putc</code> 能在任何stdio 文件流上被使用。Pthreads 要求这些函数锁住 stdio 流数据来防止代码对 stdio 缓冲区的偶然破坏。</p>
+<p>Phtread 提供了函数 <code>getc_unlocked</code>、<code>putc_unlocked</code>、 <code>getchar_unlocked</code> 和 <code>putchar_unlocked</code>，但它们不执行任何锁操作，因此你必须在这些操作附近使用 <code>flockfile</code> 和 <code>fimlockfili</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getc_unlocked</span><span class="params">(FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getchar_unlocked</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putc_unlocked</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putchar_unlocked</span> <span class="params">(<span class="keyword">int</span> c)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>程序 <code>putchar.c</code> 显示了使用 <code>putchar</code> 和在一个文件锁内调用一系列 <code>putchar_unlocked</code>之间的差异。</p>
+<h2 id="进程结束"><a href="#进程结束" class="headerlink" title="进程结束"></a>进程结束</h2><p>在一个多线程程序中，主函数是”进程主线程的启动函数”，从主函数返回将终止整个进程。与进程相关的所有内存（和线程）将消失。线程也不会执行清除处理器或线程私有数据 <code>destructors</code> 函数。调用 <code>exit</code> 具有同样的效果，你可以调用 <code>exit</code> 来很快地停止所有的线程。</p>
+<p>当你不想使用起始线程或让它等待其他线程结束时，可以通过调用 <code>pthread_exit</code> 而非返回或调用 <code>exit</code> 退出主函数。从主函数中调用 <code>pthread_exit</code> 将在不影响进程内其他线程的前提下终止起始线程，允许其他线程继续运作，直到正常完成。</p>
+<h2 id="线程安全函数"><a href="#线程安全函数" class="headerlink" title="线程安全函数"></a>线程安全函数</h2><p>Pthreads 定义了现存函数的线程安全的变体，它们在相应函数名结尾处添加后缀 <code>_r</code>：</p>
+<ul>
+<li>用户和终端ID，<code>getlogin_r</code>、<code>ctermid</code>、<code>ttyname_r</code>。</li>
+<li>目录搜索，<code>readdir_r</code>。</li>
+<li>字符串 token，<code>strtok_r</code>。</li>
+<li>时间表示，<code>asctime_r</code>、<code>ctime_r</code>、<code>gmtime_r</code>、<code>localtime_r</code>。</li>
+<li>随机数产生，<code>read_r</code>。</li>
+<li>组和用户数据库，<code>getgrgid_r</code>、<code>getgrnam_r</code>、<code>getpwuid_r</code>、<code>getpwnam_r</code>。</li>
+</ul>
+<p>程序 <code>getlogin.c</code> 是一个如何调用获取用户和终端ID的实例。</p>
+<hr>
+<ul>
+<li>系列文章目录：<ul>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
+<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://github.com/Veinin/programming-with-POSIX-threads-tutorials" target="_blank" rel="noopener">Github 示例源码</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Phtreads/" rel="tag"># Phtreads</a>
+          
+            <a href="/tags/POSIX-Pthreads/" rel="tag"># POSIX Pthreads</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/12/programming_with_posix_pthreads_05/" rel="next" title="POSIX 多线程程序设计-线程高级编程">
+                <i class="fa fa-chevron-left"></i> POSIX 多线程程序设计-线程高级编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/20/programming_with_posix_pthreads_07/" rel="prev" title="POSIX 多线程程序设计-线程扩展">
+                POSIX 多线程程序设计-线程扩展 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程与fork"><span class="nav-number">1.</span> <span class="nav-text">多线程与fork</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程与exec"><span class="nav-number">2.</span> <span class="nav-text">多线程与exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程与signal"><span class="nav-number">3.</span> <span class="nav-text">多线程与signal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程与stdio"><span class="nav-number">4.</span> <span class="nav-text">多线程与stdio</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flockfile-和-funlockfile"><span class="nav-number">4.1.</span> <span class="nav-text">flockfile 和 funlockfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getchar-unlocked-和-putchar-unlocked"><span class="nav-number">4.2.</span> <span class="nav-text">getchar_unlocked 和 putchar_unlocked</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程结束"><span class="nav-number">5.</span> <span class="nav-text">进程结束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程安全函数"><span class="nav-number">6.</span> <span class="nav-text">线程安全函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/';
+          this.page.identifier = '2018/06/17/programming_with_posix_pthreads_06/';
+          this.page.title = 'POSIX 多线程程序设计-POSIX 针对线程的调整';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

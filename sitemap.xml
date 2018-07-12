@@ -2,6 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/</loc>
+    
+    <lastmod>2018-07-12T14:30:26.217Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/</loc>
+    
+    <lastmod>2018-07-12T14:30:18.597Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/</loc>
+    
+    <lastmod>2018-07-12T14:27:49.486Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/</loc>
+    
+    <lastmod>2018-07-12T14:27:42.391Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/</loc>
+    
+    <lastmod>2018-07-12T14:27:36.398Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/12/programming_with_posix_pthreads_05/</loc>
+    
+    <lastmod>2018-07-12T14:27:30.015Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/07/programming_with_posix_pthreads_03/</loc>
+    
+    <lastmod>2018-07-12T14:27:15.566Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/</loc>
+    
+    <lastmod>2018-07-12T14:26:51.567Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://veinin.com/2018/05/09/windows-10-bash-linux-subsystem-setup/</loc>
     
     <lastmod>2018-05-09T16:03:07.306Z</lastmod>
