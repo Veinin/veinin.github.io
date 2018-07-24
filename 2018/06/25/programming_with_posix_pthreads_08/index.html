@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html class="theme-next gemini" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -111,7 +109,7 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。 线程同步四项原则线程同步的四项原则，按重要性排列：  首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 immutable 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。 其次是使用高级的并发编程构件，如 TaskQu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T14:27:49.486Z">
+<meta property="og:updated_time" content="2018-07-12T14:44:50.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="POSIX 多线程程序设计-线程同步精要">
 <meta name="twitter:description" content="本章节摘录自陈硕 《Linux多线程服务端编程:使用muduoC++网络库》 第二章关于线程同步笔记。 线程同步四项原则线程同步的四项原则，按重要性排列：  首要原则是尽量最低限度地共享对象，减少需要同步的场合。一个对象能不暴露给别的线程就不要暴露；如果要暴露，优先考虑 immutable 对象；实在不行才暴露可修改的对象，并用同步措施来充分保护它。 其次是使用高级的并发编程构件，如 TaskQu">
@@ -126,7 +124,7 @@
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -456,17 +454,19 @@
 <li>通常 readerlock 是可重入的，writerlock 是不可重入的。但是为了防止 writer 饥饿，writerlock通常会阻塞后来的readerlock，因此 readerlock 在重入的时候可能死锁。另外，在追求低延迟读取的场合也不适用读写锁。</li>
 </ul>
 <p>对于信号量（Semaphore），陈硕认为信号量不是必备的同步原语，因为条件变量配合互斥器可以完全替代其功能，而且更不易用错。<br>信号量的另一个问题在于它有自己的计数值，而通常我们自己的数据结构也有长度值，这就造成了同样的信息存了两份，需要时刻保持一致，这增加了程序员的负担和出错的可能。</p>
-<h2 id="归纳与总结"><a href="#归纳与总结" class="headerlink" title="归纳与总结"></a>归纳与总结</h2><hr>
+<h2 id="归纳与总结"><a href="#归纳与总结" class="headerlink" title="归纳与总结"></a>归纳与总结</h2><p>作者认为，应该先把程序写正确（并尽量保持清晰和简单），然后再考虑性能优化，如果确实还有必要优化的话。这在多线程下仍然成立。让一个正确的程序变快，远比“让一个快的程序变正确”容易得多。</p>
+<p>“效率”并不是我的主要考虑点，我提倡正确加锁而不是自己编写 <code>lock-free</code>算法（使用原子整数除外），更不要想当然地自己发明同步设施。在没有实测数据支持的情况下，妄谈哪种做法效率更高是靠不住的，不能听信传言或凭感觉“优化”。很多人误认为用锁会让程序变慢，其实真正影响性能的不是锁，而是锁争用（lockcontention）。</p>
+<hr>
 <ul>
 <li>系列文章目录：<ul>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+<li><a href="/2018/06/01/programming_with_posix_pthreads_01/">概述</a></li>
+<li><a href="/2018/06/05/programming_with_posix_pthreads_02/">线程</a></li>
+<li><a href="/2018/06/07/programming_with_posix_pthreads_03/">同步</a></li>
+<li><a href="/2018/06/09/programming_with_posix_pthreads_04/">使用线程方式</a></li>
+<li><a href="/2018/06/12/programming_with_posix_pthreads_05/">线程高级编程</a></li>
+<li><a href="/2018/06/17/programming_with_posix_pthreads_06/">POSIX 针对线程的调整</a></li>
+<li><a href="/2018/06/20/programming_with_posix_pthreads_07/">线程扩展</a></li>
+<li><a href="/2018/06/25/programming_with_posix_pthreads_08/">线程同步精要</a></li>
 </ul>
 </li>
 </ul>
@@ -597,7 +597,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -619,7 +619,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -784,8 +784,6 @@
   
 
 
-  
-
 
 
 
@@ -813,9 +811,6 @@
 
   
   <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-  
-  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
   

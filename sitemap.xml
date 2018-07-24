@@ -2,58 +2,65 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/</loc>
+    <loc>https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/</loc>
     
-    <lastmod>2018-07-12T14:30:26.217Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/</loc>
-    
-    <lastmod>2018-07-12T14:30:18.597Z</lastmod>
+    <lastmod>2018-07-24T14:20:27.652Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/</loc>
     
-    <lastmod>2018-07-12T14:27:49.486Z</lastmod>
+    <lastmod>2018-07-12T14:44:50.554Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/</loc>
     
-    <lastmod>2018-07-12T14:27:42.391Z</lastmod>
+    <lastmod>2018-07-12T14:44:39.879Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/</loc>
     
-    <lastmod>2018-07-12T14:27:36.398Z</lastmod>
+    <lastmod>2018-07-12T14:44:36.943Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/12/programming_with_posix_pthreads_05/</loc>
     
-    <lastmod>2018-07-12T14:27:30.015Z</lastmod>
+    <lastmod>2018-07-12T14:44:32.855Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/</loc>
+    
+    <lastmod>2018-07-12T14:44:26.398Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/07/programming_with_posix_pthreads_03/</loc>
     
-    <lastmod>2018-07-12T14:27:15.566Z</lastmod>
+    <lastmod>2018-07-12T14:44:21.968Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/</loc>
+    
+    <lastmod>2018-07-12T14:44:14.938Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/</loc>
     
-    <lastmod>2018-07-12T14:26:51.567Z</lastmod>
+    <lastmod>2018-07-12T14:43:46.241Z</lastmod>
     
   </url>
   

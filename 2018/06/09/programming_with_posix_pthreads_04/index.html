@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html class="theme-next gemini" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -111,14 +109,14 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="线程编程模型线程变成模型主要有以下3种：  流水线。每个线程反复地在数据系列集上执行冋一种操作，并把操作结果传递给下一步驟的其他线程。 工作组。每个线程在自己的数据上执行操作，工作组中的线程可能执行同样的操作，也可能执行不同的操作，但是它们一定独立地执行。 客户端/服务器。一个客户为每一件工作与一个独立的服务器“订契约”。通常“订契约”是匿名的，即一个请求通过某种接提交。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/images/pthreads/pipeline.png">
-<meta property="og:image" content="https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/images/pthreads/working_group.png">
-<meta property="og:image" content="https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/images/pthreads/clinet_server.png">
-<meta property="og:updated_time" content="2018-07-12T14:30:26.217Z">
+<meta property="og:image" content="https://veinin.com/images/pthreads/pipeline.png">
+<meta property="og:image" content="https://veinin.com/images/pthreads/working_group.png">
+<meta property="og:image" content="https://veinin.com/images/pthreads/clinet_server.png">
+<meta property="og:updated_time" content="2018-07-12T14:44:26.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="POSIX 多线程程序设计-使用线程方式">
 <meta name="twitter:description" content="线程编程模型线程变成模型主要有以下3种：  流水线。每个线程反复地在数据系列集上执行冋一种操作，并把操作结果传递给下一步驟的其他线程。 工作组。每个线程在自己的数据上执行操作，工作组中的线程可能执行同样的操作，也可能执行不同的操作，但是它们一定独立地执行。 客户端/服务器。一个客户为每一件工作与一个独立的服务器“订契约”。通常“订契约”是匿名的，即一个请求通过某种接提交。">
-<meta name="twitter:image" content="https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/images/pthreads/pipeline.png">
+<meta name="twitter:image" content="https://veinin.com/images/pthreads/pipeline.png">
 
 
 
@@ -130,7 +128,7 @@
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -414,24 +412,24 @@
 </ul>
 <a id="more"></a>
 <h2 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h2><p>在流水线（pipeline) 方式中，“数据元素”流串行地被一组线程顺序处理。每个线程依次在每个元素上执行一个特定的操作，并将结果传递给流<br>水线中的下一个线程。</p>
-<p><img src="images/pthreads/pipeline.png" alt="pipeline"></p>
+<p><img src="/images/pthreads/pipeline.png" alt="pipeline"></p>
 <p>例如， 数据可能是扫描的图像，线程 A 可能处理一个图像数组，线程 B 可能在处理的数据中搜索某个特定的属性集，而线程 C 可能控制从线程 B 中收集连续的搜索结果流井做出报告。或者每个线程可能执行某个数据修改序列中的一步。</p>
 <h2 id="工作组"><a href="#工作组" class="headerlink" title="工作组"></a>工作组</h2><p>在工作组模式中，数据由一组线程分别独立地处理。循环的“并行分解” 通常就是属于这种模式。</p>
-<p><img src="images/pthreads/working_group.png" alt="working_group"></p>
+<p><img src="/images/pthreads/working_group.png" alt="working_group"></p>
 <p>例如，可能建立一组线程，每个线程负责处理数组的某些行或列。单一数据集合在线程间分离成不同部分，且结果是一个数据集。<br>由于所有的工作线程在不同的数据部分上执行相同的操作，这种模式通常被称为 SIMD (single instruction, multiple data, 单指令多数据流）并行处理。</p>
 <h2 id="客户-服务器"><a href="#客户-服务器" class="headerlink" title="客户/服务器"></a>客户/服务器</h2><p>在客户服务器系统中，客户请求服务器对一组数据执行某个操作。服务器独立地执行操作——客户端或者等待服务器执行，或者并行地执行并在后面需要时査找结果。尽管让客户等待是最简单的，但这种方式很少有用，因为它不会为客户带来性能上的提高。另一方面，这又是一种对某些公共资源同步管理的简单方式。</p>
-<p><img src="images/pthreads/clinet_server.png" alt="clinet_server"></p>
+<p><img src="/images/pthreads/clinet_server.png" alt="clinet_server"></p>
 <hr>
 <ul>
 <li>系列文章目录：<ul>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+<li><a href="/2018/06/01/programming_with_posix_pthreads_01/">概述</a></li>
+<li><a href="/2018/06/05/programming_with_posix_pthreads_02/">线程</a></li>
+<li><a href="/2018/06/07/programming_with_posix_pthreads_03/">同步</a></li>
+<li><a href="/2018/06/09/programming_with_posix_pthreads_04/">使用线程方式</a></li>
+<li><a href="/2018/06/12/programming_with_posix_pthreads_05/">线程高级编程</a></li>
+<li><a href="/2018/06/17/programming_with_posix_pthreads_06/">POSIX 针对线程的调整</a></li>
+<li><a href="/2018/06/20/programming_with_posix_pthreads_07/">线程扩展</a></li>
+<li><a href="/2018/06/25/programming_with_posix_pthreads_08/">线程同步精要</a></li>
 </ul>
 </li>
 </ul>
@@ -566,7 +564,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -588,7 +586,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -753,8 +751,6 @@
   
 
 
-  
-
 
 
 
@@ -782,9 +778,6 @@
 
   
   <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-  
-  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
   

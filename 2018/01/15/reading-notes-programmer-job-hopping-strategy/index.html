@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="职业规划," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="原理篇跳槽不是什么跳槽不是为了追求价值最⼤化虽然前边我们从纯商业的⾓度讨论了跳槽这件事， 但实际上我们并不推荐求职者单纯地通过薪资的⾼低来选择雇主。 原因有两个。 ⼯作是⽣活的⼀部分你每天有24⼩时， 上班8⼩时， 它是你三分之⼀的⽣命。 如果你只是因为⾼薪选择了⼀家上班不开⼼的公司， 那么接下来三分之⼀的⽇ ⼦你都会在痛苦中渡过。 ⽽你得到的， 只是多出来的那么每⽉⼏千块钱⽽已。 职业的不可逆性">
+<meta name="keywords" content="职业规划">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《程序员跳槽全攻略》读书笔记">
+<meta property="og:url" content="https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="原理篇跳槽不是什么跳槽不是为了追求价值最⼤化虽然前边我们从纯商业的⾓度讨论了跳槽这件事， 但实际上我们并不推荐求职者单纯地通过薪资的⾼低来选择雇主。 原因有两个。 ⼯作是⽣活的⼀部分你每天有24⼩时， 上班8⼩时， 它是你三分之⼀的⽣命。 如果你只是因为⾼薪选择了⼀家上班不开⼼的公司， 那么接下来三分之⼀的⽇ ⼦你都会在痛苦中渡过。 ⽽你得到的， 只是多出来的那么每⽉⼏千块钱⽽已。 职业的不可逆性">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-24T14:20:27.652Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《程序员跳槽全攻略》读书笔记">
+<meta name="twitter:description" content="原理篇跳槽不是什么跳槽不是为了追求价值最⼤化虽然前边我们从纯商业的⾓度讨论了跳槽这件事， 但实际上我们并不推荐求职者单纯地通过薪资的⾼低来选择雇主。 原因有两个。 ⼯作是⽣活的⼀部分你每天有24⼩时， 上班8⼩时， 它是你三分之⼀的⽣命。 如果你只是因为⾼薪选择了⼀家上班不开⼼的公司， 那么接下来三分之⼀的⽇ ⼦你都会在痛苦中渡过。 ⽽你得到的， 只是多出来的那么每⽉⼏千块钱⽽已。 职业的不可逆性">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/"/>
+
+
+
+
+
+  <title>《程序员跳槽全攻略》读书笔记 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《程序员跳槽全攻略》读书笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-15T19:20:00+08:00">
+                2018-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/15/reading-notes-programmer-job-hopping-strategy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/15/reading-notes-programmer-job-hopping-strategy/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="原理篇"><a href="#原理篇" class="headerlink" title="原理篇"></a>原理篇</h2><h3 id="跳槽不是什么"><a href="#跳槽不是什么" class="headerlink" title="跳槽不是什么"></a>跳槽不是什么</h3><h4 id="跳槽不是为了追求价值最⼤化"><a href="#跳槽不是为了追求价值最⼤化" class="headerlink" title="跳槽不是为了追求价值最⼤化"></a>跳槽不是为了追求价值最⼤化</h4><p>虽然前边我们从纯商业的⾓度讨论了跳槽这件事， 但实际上我们并不推荐求职者单纯地通过薪资的⾼低来选择雇主。 原因有两个。</p>
+<h4 id="⼯作是⽣活的⼀部分"><a href="#⼯作是⽣活的⼀部分" class="headerlink" title="⼯作是⽣活的⼀部分"></a>⼯作是⽣活的⼀部分</h4><p>你每天有24⼩时， 上班8⼩时， 它是你三分之⼀的⽣命。 如果你只是因为⾼薪选择了⼀家上班不开⼼的公司， 那么接下来三分之⼀的⽇ ⼦你都会在痛苦中渡过。 ⽽你得到的， 只是<br>多出来的那么每⽉⼏千块钱⽽已。</p>
+<h4 id="职业的不可逆性"><a href="#职业的不可逆性" class="headerlink" title="职业的不可逆性"></a>职业的不可逆性</h4><p>别的事情错了我们可以重来， ⽽职业选择上， 每⼀步都是好⼏年的时光。 ⼀旦⾛下去， 就很难回头， 因为⼀旦换职业⽅向、 哪怕换个开发语⾔， 都意味着你之前的积累很可能前功尽弃。 所以眼光放⻓远点， 不要只看眼前的⾼薪， 更要看好未来的发展， ⽅向错了， 跑得越猛输得越狠。</p>
+<h4 id="跳槽不是找⼯作"><a href="#跳槽不是找⼯作" class="headerlink" title="跳槽不是找⼯作"></a>跳槽不是找⼯作</h4><p>跳槽不是找⼯作， ⽽是换⼯作。 所以它和你刚毕业时找⼯作不⼀样， 它是有成本的。到⼀家新的公司， 需要放弃原来公司的期权， 需要重新熟悉业务， 重新和同事搞好⼈际关系， 上班路上需要花更多的时间， 甚⾄需要离开⾃⼰熟悉的城市。你并不是⼀⽆所有， 虽然往往只有在你失去后才发现。 所以跳槽之前要考虑好⾃ ⼰的付出和收益， 衡量好得失， 没事别裸辞。</p>
+<h4 id="跳槽不是加薪的砝码"><a href="#跳槽不是加薪的砝码" class="headerlink" title="跳槽不是加薪的砝码"></a>跳槽不是加薪的砝码</h4><p>不要以跳槽为砝码去谈加薪， 这种迫胁性的谈薪资⽅式会使主管对你丧失信任。 不管涨薪成不成功， 他都不得不为你的离职做好准备， ⽽当准备完成后， 你就可以⾛⼈了。类似的， 当你提跳槽时， 如果你的主管通过加薪来挽留你， 最好也不要同意。</p>
+<a id="more"></a>
+<h3 id="程序员如何谈薪资"><a href="#程序员如何谈薪资" class="headerlink" title="程序员如何谈薪资"></a>程序员如何谈薪资</h3><p>如果你对现在公司很满意， 只是觉得薪资太低， 那么可以先和你的主管聊聊。</p>
+<p>我⼀般这么谈加薪的：</p>
+<ul>
+<li>⾸先， 讲⼀讲⾃ ⼰最近在⼯作上的成⻓， 看主管是否认同；</li>
+<li>然后， 从能⼒提升⾓度， 向主管要⼀个更⼤的发展空间和更⼤的业务挑战；</li>
+<li>最后， 问问当你的能⼒达到这个新的⽔平时， 薪资是否可以同步提升起来。</li>
+</ul>
+<p>这样谈有⼏个好处：</p>
+<ul>
+<li>它建⽴了⼀个谈话基础， 那就是薪资应该和能⼒相匹配；</li>
+<li>它不谈现在的薪资， ⽽是谈未来， ⼀⽅⾯表明你对现在的薪资还算满意（以减少主管顾虑） ， 另⼀⽅⾯对主管来讲， 他没有⽴刻给你涨薪的压⼒；</li>
+<li>它体现了你对⾃ ⼰能⼒提升的渴求， ⽽如果在谈话中出现任何不顺利， 你可以把中途把对话结束， 根本不提加薪的事情。</li>
+</ul>
+<p>当然， 坏处就是你得隔段时间才能加薪了。</p>
+<h3 id="跳槽的意义"><a href="#跳槽的意义" class="headerlink" title="跳槽的意义"></a>跳槽的意义</h3><p>跳槽其实是打⼯这种挣钱形态下， 我们进⾏自我调节的⽅式， 通过合理地跳槽， 我们可以寻找到市场需求和⾃ 我实现的最佳匹配， 从⽽在⾦钱和成⻓上双丰收。</p>
+<h3 id="跳槽的原则"><a href="#跳槽的原则" class="headerlink" title="跳槽的原则"></a>跳槽的原则</h3><p>永远不要因为「现在很差」 ⽽跳槽， 要因为「未来更好」 ⽽跳槽。 只有这样才能保证你⼀直往上⾛。</p>
+<h3 id="跳槽的节奏和路线图"><a href="#跳槽的节奏和路线图" class="headerlink" title="跳槽的节奏和路线图"></a>跳槽的节奏和路线图</h3><p>当我们还是⼀个应届毕业⽣的时候， 我们是不可能直接变成CTO的。 所以我们从CTO往下⼀层层画出节点来， ⼤概这个样⼦：</p>
+<p><strong>应届⽣ → 初级程序员 → ⼩组主管 → 部⻔经理 → 总监 → CTO</strong></p>
+<p>我们也会根据具体情况对职业线做出调整， ⽐如当你⼩组主管做的很出⾊， 但部⻔经理这个节点却很难达到时， 我们可以这么⾛：</p>
+<p><strong>应届⽣ → 初级程序员 → ⼩组主管 → 初创公司CTO → B轮公司CTO → 上市公司CTO</strong></p>
+<h2 id="准备篇"><a href="#准备篇" class="headerlink" title="准备篇"></a>准备篇</h2><h3 id="如何构架价值"><a href="#如何构架价值" class="headerlink" title="如何构架价值"></a>如何构架价值</h3><h4 id="我是谁，我有什么资源"><a href="#我是谁，我有什么资源" class="headerlink" title="我是谁，我有什么资源"></a>我是谁，我有什么资源</h4><p>这部分是对自己能力和资历的一个梳理。</p>
+<h4 id="我的竞争优势"><a href="#我的竞争优势" class="headerlink" title="我的竞争优势"></a>我的竞争优势</h4><p>这部分是基于自己的能力和资历，我们认为自己比别的求职者更有优势的地方。注意除了写上你已经有的优势外，还可以写上你可以有的优势。然后我们可以在准备期把这些暂时还没有的优势变成现实。这就是为什么我们建议大家提前1~3个月来准备下一次的跳槽。</p>
+<h4 id="谁可以帮助我"><a href="#谁可以帮助我" class="headerlink" title="谁可以帮助我"></a>谁可以帮助我</h4><p>这部分是指可以帮助你构建价值的人。我们把内部推荐放到这个地方的原因是，推荐你的人会为你做背书，从而证明你的高价值。推荐你的人是否认识和了解你，是否愿意赌上自己名声为你做背书，这很重要。某些网站提供的内部员工推荐并不能为你的价值加分，因为推荐人根本不认识你，这时内部推荐就降格成一种渠道了。</p>
+<h3 id="构建个人品牌"><a href="#构建个人品牌" class="headerlink" title="构建个人品牌"></a>构建个人品牌</h3><p>对于技术人员，下边这个列表我是建议你要有的：</p>
+<ul>
+<li>Github账号，不解释。</li>
+<li>技术博客，可以直接放到Github上，Big更高。</li>
+<li>微博，最好能加V，用于业内交流。</li>
+<li>技术社区账号，比如stackoverflow。</li>
+</ul>
+<p>有了这些账号还不行，还得有持续更新的优质内容。平时遇到的大小问题可以零星记录到微博上；相对大块的东西，可以写成文章放到博客，通过微信推送给订阅的朋友；成系统的东西，可以在文章基础上整理成迷你书。</p>
+<h3 id="学会沟通和写作"><a href="#学会沟通和写作" class="headerlink" title="学会沟通和写作"></a>学会沟通和写作</h3><h4 id="条理性"><a href="#条理性" class="headerlink" title="条理性"></a>条理性</h4><p>其实我们技术人员工作中大部分的写作，都是应用文写作，并不需要你有丰富的想象力、风趣幽默的文风、小清新的玻璃心或者历经沧桑的过去，只需要你把事情讲清楚就好了，所以只要内容条理性够好，听众就会很OK。</p>
+<h4 id="逻辑性"><a href="#逻辑性" class="headerlink" title="逻辑性"></a>逻辑性</h4><p>虽然缺乏逻辑性是产品经理的而不是程序员的通病，这里也提一下吧。我们写文章或者做汇报时，前后文之间是应该有明确关系的，后一句对于前一句，或者是后续、或者是或者是论据、或者是总结、或者是并列。不要搞跳跃性思维，不能前边一句说你去了洗手间，后一句说你吃得很饱，这会出人命的。</p>
+<h3 id="走完分享的最后一公里"><a href="#走完分享的最后一公里" class="headerlink" title="走完分享的最后一公里"></a>走完分享的最后一公里</h3><p>下边给⼀些常⻅的渠道， 如果是技术⽂章：</p>
+<ul>
+<li>⾸先可以发布到你⾃⼰的技术博客</li>
+<li>然后同步到微博（可以⽤ifttt）</li>
+<li>如果反响不错， 可以再通过微信公众号推送给订阅读者</li>
+<li>提交到 startup news 和 cdsn的极客头条</li>
+</ul>
+<p>针对⽂章的受欢迎程度，我们还可以进⾏⼆次加⼯：</p>
+<ul>
+<li>根据⽂章内容制作PPT， 通过slideshare和微盘分享</li>
+<li>定期精选系列⽂章， 更新到最新后整理成PDF， 通过微盘分享</li>
+<li>对于特别受欢迎的教程类⽂章， 可以做screencast， 通过在线教育网站（⽐如优才<br>网、 慕课网等） 进⾏传播</li>
+</ul>
+<p>如果是开源项目， 当然就是GitHub了。</p>
+<h3 id="提升架构能力"><a href="#提升架构能力" class="headerlink" title="提升架构能力"></a>提升架构能力</h3><h4 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h4><p>DRY是Don’tRepeatYourself的缩写，翻译过来就是「不做重复事」。<br>这正是一个逼近软件本质的原则，它指导我们把经常使用的功能抽象成库，把重复出现的代码重构为可重用的框架模块。如果你用DRY来要求自己，很快你就会发现自己抽象和架构能力的飙升。</p>
+<h4 id="半自动化"><a href="#半自动化" class="headerlink" title="半自动化"></a>半自动化</h4><p>除了手动和自动，我们还可以半自动化——让机器做完所有繁杂的常规操作，人类来处理需要智慧的那一点点工作就好，这也能极大的提升工作效率。</p>
+<h4 id="正交性"><a href="#正交性" class="headerlink" title="正交性"></a>正交性</h4><p>正交性的意思是，功能和功能之间应该尽可能不互相干扰。只有这样，我们才能有效地控制每个部分的行为。所以功能之间的依赖尽可能少，如果有，规则一定要明确，不要试图去做一些自作聪明的事情。</p>
+<h2 id="操作篇"><a href="#操作篇" class="headerlink" title="操作篇"></a>操作篇</h2><h3 id="求职材料"><a href="#求职材料" class="headerlink" title="求职材料"></a>求职材料</h3><h4 id="简历的本质"><a href="#简历的本质" class="headerlink" title="简历的本质"></a>简历的本质</h4><p>是⼈⽣履历， 不是项目清单， 也不是技能⼤放送。简历的存在只有⼀个目的 —— 帮你约到⾯试。 只要能达到这个目的， 简历可以是⼀段视<br>频， ⼀个开源项目， ⼀张照⽚， 甚⾄是⼀⾏字。绝⼤部分简历的形式， 就是我们所熟知的， 是⼀篇⽂章。</p>
+<h4 id="简历要说什么"><a href="#简历要说什么" class="headerlink" title="简历要说什么"></a>简历要说什么</h4><p>⼀份好的简历， 要低调的告诉招聘⽅， 爷很NB。 通过FAB法则来增强其说服⼒：</p>
+<ul>
+<li>Feature： 是什么</li>
+<li>Advantage： ⽐别⼈好在哪些地⽅</li>
+<li>Benefit： 如果雇佣你， 招聘⽅会得到什么好处</li>
+</ul>
+<h4 id="给论据别给论题"><a href="#给论据别给论题" class="headerlink" title="给论据别给论题"></a>给论据别给论题</h4><p>论据要具体， 最基本的是要数字化， 再好点的论据要让⼈印象深刻。 每天PV8个亿， 这是数字化； 访问量超越Google App Engine， 这是让⼈印象深刻。</p>
+<h4 id="对⽐体现成⻓"><a href="#对⽐体现成⻓" class="headerlink" title="对⽐体现成⻓"></a>对⽐体现成⻓</h4><p>我在项目⾥边没有那么显赫的成绩可以说怎么办？<br>讲不出成绩时， 就讲你的成⻓。 因为学习能⼒也是每家公司都看中的东⻄。 你可以写你在这个项目⾥边遇到了⼀个什么样的问题， 之前怎么解决的， 之后解决的， 新⽅案好在什么地⽅， 你是寻找到这个新⽅案的， 最终这个⽅案的效果如何。<br>具体、 量化、 有说服⼒， 是技术简历特别需要注重的地⽅。</p>
+<h4 id="求职邮件"><a href="#求职邮件" class="headerlink" title="求职邮件"></a>求职邮件</h4><p>求职邮件只需要简单的写上在什么地⽅看到招聘启事， 应聘什么职位即可。<br>最好在正⽂中写上完整的⽂本简历， 然后在附件⾥附上PDF版本。 这样招聘⽅更容易查找到你。<br>如果你要使⽤QQ邮箱， 请确保你的⽤户名看起来像个程序员。 建议使⽤Gmail或者⾃⼰的域名邮箱。<br>作为附件的PDF不要起名为「个⼈简历.PDF」 ， ⽽应该是「 XXX简历.PHP开发⼯程师.PDF 」 ， 这样当HR分拣简历⽂件时能第⼀时间看到你。</p>
+<h3 id="求职渠道"><a href="#求职渠道" class="headerlink" title="求职渠道"></a>求职渠道</h3><h4 id="⼈脉：-最优途径"><a href="#⼈脉：-最优途径" class="headerlink" title="⼈脉： 最优途径"></a>⼈脉： 最优途径</h4><p>在求职过程中， 信任是⾮常重要的， 原本冗⻓复杂的⼈才筛选和鉴定流程， 因为信任， 可以简单。</p>
+<h4 id="竞拍：-遍历潜在机会"><a href="#竞拍：-遍历潜在机会" class="headerlink" title="竞拍： 遍历潜在机会"></a>竞拍： 遍历潜在机会</h4><p>⼤部分程序员都⽐较内向， 更喜欢和机器打交道， 所以在找⼯作的时候， 能帮忙的朋友并不多。 这个时候，竞拍就变成了最靠谱的渠道了。</p>
+<h4 id="猎头：-求职中的隐私保护"><a href="#猎头：-求职中的隐私保护" class="headerlink" title="猎头： 求职中的隐私保护"></a>猎头： 求职中的隐私保护</h4><p>猎头渠道已经变得很乱了，⽐如卖简历。最好不要在简历中留自己的常⽤电话号码，可以买⼀个号专⻔求职⽤，比如阿里同学“亲⼼⼩号”。</p>
+<h4 id="常规渠道"><a href="#常规渠道" class="headerlink" title="常规渠道"></a>常规渠道</h4><p>技术社区的招聘版</p>
+<ul>
+<li>V2ex - <a href="http://v2ex.com/go/jobs" target="_blank" rel="noopener">http://v2ex.com/go/jobs</a></li>
+<li>ChinaUnix - <a href="http://bbs.chinaunix.net/forum-32-1.html" target="_blank" rel="noopener">http://bbs.chinaunix.net/forum-32-1.html</a></li>
+<li>OSchina - <a href="http://www.oschina.net/job" target="_blank" rel="noopener">http://www.oschina.net/job</a></li>
+<li>ThinkPHP - <a href="http://www.thinkphp.cn/topic/job.html" target="_blank" rel="noopener">http://www.thinkphp.cn/topic/job.html</a></li>
+<li>前端乱炖 - <a href="http://www.html-js.com/job" target="_blank" rel="noopener">http://www.html-js.com/job</a></li>
+</ul>
+<p>⾏业招聘⺴站</p>
+<ul>
+<li>内推网 <a href="http://neitui.com" target="_blank" rel="noopener">http://neitui.com</a></li>
+<li>拉勾网 <a href="http://lagou.com" target="_blank" rel="noopener">http://lagou.com</a></li>
+</ul>
+<h4 id="直投：-绕过HR"><a href="#直投：-绕过HR" class="headerlink" title="直投： 绕过HR"></a>直投： 绕过HR</h4><p>HR本⾝是不懂技术的， 所以他们也很难准确的进⾏简历筛选。对技术主管进⾏直投是很好地补充⼿段。<br>微博， 要找这些技术主管其实并不难， 只需要在微博搜索⻚⾯， 按公司搜⼈就可以得到该公司的员⼯列表， 然后发私信或评论给他们， 问问他们公司是否招⼈， 是否可以帮忙推荐简历。</p>
+<h3 id="面试准备"><a href="#面试准备" class="headerlink" title="面试准备"></a>面试准备</h3><ul>
+<li>遍历简历知识点。⾯试时， 很多问题都由简历引申出来。</li>
+<li>技能树。</li>
+<li>常⻅⾯试问题。为什么要离职？遇到过的最⼤的挑战以及解决的办法？你希望三年后， 成为⼀个什么样的⼈？你还有什么要问我们的？…</li>
+<li>知⼰知彼。如果你知道⾯试⼈是谁， 那么在⾯试之前记得仔细读⼀读他的博客和微博。</li>
+<li>准时和礼。和招聘⽅约定好的时间应该尽量准时， 晚到的话， 应该发短信告知。 如果你已经确定了offer， 不想再⾯试了， 应该给之前承诺参加⾯试的招聘⽅群发短信或邮件告知。</li>
+</ul>
+<h3 id="离职"><a href="#离职" class="headerlink" title="离职"></a>离职</h3><p>离职访谈可以对具体的规定吐吐苦⽔， 但尽量避免对同事， 尤其是上级， 尤其是上级的⼈品发表评论。<br>说什么？ ⽼规矩， 要讲因为新的机遇⽐较好， 所以才离职； 原来公司同事都很好， 有些舍不得， 所以现在才⾛；给公司的建议挑两个⽆关痛痒的提就好了， 没必要当真。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/职业规划/" rel="tag"># 职业规划</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/31/reading-notes-a-brief-history-of-humankind/" rel="next" title="《人类简史》读书笔记">
+                <i class="fa fa-chevron-left"></i> 《人类简史》读书笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/25/reading-notes-rich-dad-poor-dad/" rel="prev" title="《富爸爸，穷爸爸》读书笔记">
+                《富爸爸，穷爸爸》读书笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Veinin Guo" />
+          <p class="site-author-name" itemprop="name">Veinin Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/veinin || github" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:veininguo@gmail.com || envelope" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/veinin" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理篇"><span class="nav-number">1.</span> <span class="nav-text">原理篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#跳槽不是什么"><span class="nav-number">1.1.</span> <span class="nav-text">跳槽不是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳槽不是为了追求价值最⼤化"><span class="nav-number">1.1.1.</span> <span class="nav-text">跳槽不是为了追求价值最⼤化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#⼯作是⽣活的⼀部分"><span class="nav-number">1.1.2.</span> <span class="nav-text">⼯作是⽣活的⼀部分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#职业的不可逆性"><span class="nav-number">1.1.3.</span> <span class="nav-text">职业的不可逆性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳槽不是找⼯作"><span class="nav-number">1.1.4.</span> <span class="nav-text">跳槽不是找⼯作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳槽不是加薪的砝码"><span class="nav-number">1.1.5.</span> <span class="nav-text">跳槽不是加薪的砝码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序员如何谈薪资"><span class="nav-number">1.2.</span> <span class="nav-text">程序员如何谈薪资</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳槽的意义"><span class="nav-number">1.3.</span> <span class="nav-text">跳槽的意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳槽的原则"><span class="nav-number">1.4.</span> <span class="nav-text">跳槽的原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳槽的节奏和路线图"><span class="nav-number">1.5.</span> <span class="nav-text">跳槽的节奏和路线图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备篇"><span class="nav-number">2.</span> <span class="nav-text">准备篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何构架价值"><span class="nav-number">2.1.</span> <span class="nav-text">如何构架价值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#我是谁，我有什么资源"><span class="nav-number">2.1.1.</span> <span class="nav-text">我是谁，我有什么资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我的竞争优势"><span class="nav-number">2.1.2.</span> <span class="nav-text">我的竞争优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#谁可以帮助我"><span class="nav-number">2.1.3.</span> <span class="nav-text">谁可以帮助我</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建个人品牌"><span class="nav-number">2.2.</span> <span class="nav-text">构建个人品牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学会沟通和写作"><span class="nav-number">2.3.</span> <span class="nav-text">学会沟通和写作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#条理性"><span class="nav-number">2.3.1.</span> <span class="nav-text">条理性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑性"><span class="nav-number">2.3.2.</span> <span class="nav-text">逻辑性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#走完分享的最后一公里"><span class="nav-number">2.4.</span> <span class="nav-text">走完分享的最后一公里</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提升架构能力"><span class="nav-number">2.5.</span> <span class="nav-text">提升架构能力</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DRY"><span class="nav-number">2.5.1.</span> <span class="nav-text">DRY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#半自动化"><span class="nav-number">2.5.2.</span> <span class="nav-text">半自动化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正交性"><span class="nav-number">2.5.3.</span> <span class="nav-text">正交性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作篇"><span class="nav-number">3.</span> <span class="nav-text">操作篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#求职材料"><span class="nav-number">3.1.</span> <span class="nav-text">求职材料</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简历的本质"><span class="nav-number">3.1.1.</span> <span class="nav-text">简历的本质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简历要说什么"><span class="nav-number">3.1.2.</span> <span class="nav-text">简历要说什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#给论据别给论题"><span class="nav-number">3.1.3.</span> <span class="nav-text">给论据别给论题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对⽐体现成⻓"><span class="nav-number">3.1.4.</span> <span class="nav-text">对⽐体现成⻓</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求职邮件"><span class="nav-number">3.1.5.</span> <span class="nav-text">求职邮件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#求职渠道"><span class="nav-number">3.2.</span> <span class="nav-text">求职渠道</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#⼈脉：-最优途径"><span class="nav-number">3.2.1.</span> <span class="nav-text">⼈脉： 最优途径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#竞拍：-遍历潜在机会"><span class="nav-number">3.2.2.</span> <span class="nav-text">竞拍： 遍历潜在机会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#猎头：-求职中的隐私保护"><span class="nav-number">3.2.3.</span> <span class="nav-text">猎头： 求职中的隐私保护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常规渠道"><span class="nav-number">3.2.4.</span> <span class="nav-text">常规渠道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直投：-绕过HR"><span class="nav-number">3.2.5.</span> <span class="nav-text">直投： 绕过HR</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面试准备"><span class="nav-number">3.3.</span> <span class="nav-text">面试准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#离职"><span class="nav-number">3.4.</span> <span class="nav-text">离职</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://veininguo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/';
+          this.page.identifier = '2018/01/15/reading-notes-programmer-job-hopping-strategy/';
+          this.page.title = '《程序员跳槽全攻略》读书笔记';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://veininguo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

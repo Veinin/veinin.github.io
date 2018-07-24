@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html class="theme-next gemini" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -111,12 +109,12 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="建立和使用线程线程标识符程序中使用线程标识符 ID 来表示线程。线程 ID 属于封装的 pthreadLt 类型。为建立线程，你需要在程序中声明一个 pthread_t 类型的变量。 如果只需在某个函数中使用线程 ID，或者函数直到线程终止时才返回，则可以将线程 ID 声明为自动存储变量，不过大部分时间内， 线程 ID 保存在共享变量中（静态或外部）， 或者保存在堆空间的结构体中。 1pthrea">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/images/pthreads/lifecycle.png">
-<meta property="og:updated_time" content="2018-07-12T14:30:18.597Z">
+<meta property="og:image" content="https://veinin.com/images/pthreads/lifecycle.png">
+<meta property="og:updated_time" content="2018-07-12T14:44:14.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="POSIX 多线程程序设计-线程">
 <meta name="twitter:description" content="建立和使用线程线程标识符程序中使用线程标识符 ID 来表示线程。线程 ID 属于封装的 pthreadLt 类型。为建立线程，你需要在程序中声明一个 pthread_t 类型的变量。 如果只需在某个函数中使用线程 ID，或者函数直到线程终止时才返回，则可以将线程 ID 声明为自动存储变量，不过大部分时间内， 线程 ID 保存在共享变量中（静态或外部）， 或者保存在堆空间的结构体中。 1pthrea">
-<meta name="twitter:image" content="https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/images/pthreads/lifecycle.png">
+<meta name="twitter:image" content="https://veinin.com/images/pthreads/lifecycle.png">
 
 
 
@@ -128,7 +126,7 @@
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -429,21 +427,21 @@
 <li>终止（Terminated）状态。线程从起始函数中返回，或调用 pthread_exit，或者被取消，终止自己并完成所有资源清理。不是被分离，也不是被连接，一且线程被分离或者连接，它就可以被收回。</li>
 </ul>
 <p>下面是线程的状态转换图：</p>
-<p><img src="images/pthreads/lifecycle.png" alt="pipeline"></p>
+<p><img src="/images/pthreads/lifecycle.png" alt="pipeline"></p>
 <p>下面程序展示了一个线程使用的完整生命周期实例：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"errors.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_routine</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> arg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> thread_id;</span><br><span class="line">    <span class="keyword">void</span> *thread_result;</span><br><span class="line">    <span class="keyword">int</span> status;</span><br><span class="line"></span><br><span class="line">    status = pthread_create(&amp;thread_id, <span class="literal">NULL</span>, thread_routine, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (status != <span class="number">0</span>)</span><br><span class="line">        err_abort(status, <span class="string">"Create thread"</span>);</span><br><span class="line"></span><br><span class="line">    status = pthread_join(thread_id, &amp;thread_result);</span><br><span class="line">    <span class="keyword">if</span> (status != <span class="number">0</span>)</span><br><span class="line">        err_abort(status, <span class="string">"Join thread"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (thread_result == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面程序中 <code>pthread_create</code> 创建线程后，线程处于就绪状态。受调度机制的限制，新线程可能在就绪状态下停留一段时间才被执行。<br>当处理器选中一个就绪线程执行它时，该线程进入运行态。通常这意味着某个其他线程被阻塞或者被时间片机制抢占，处理器会保存被阻塞（或抢占）线程的环境并恢复下二个就绪线程的环境。<br>主线程在调用 <code>pthread_join</code> 进入阻塞状态，等待它创建的线程运行结束。<br>当调用 <code>pthread_exit</code> 退出线程或调用 <code>pthread_cancel</code> 取消线程时， 线程在调用完清理过程后也将进入终止态。而主线程等到创建的线程终止后重新运行直到结束。</p>
 <hr>
 <ul>
 <li>系列文章目录：<ul>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+<li><a href="/2018/06/01/programming_with_posix_pthreads_01/">概述</a></li>
+<li><a href="/2018/06/05/programming_with_posix_pthreads_02/">线程</a></li>
+<li><a href="/2018/06/07/programming_with_posix_pthreads_03/">同步</a></li>
+<li><a href="/2018/06/09/programming_with_posix_pthreads_04/">使用线程方式</a></li>
+<li><a href="/2018/06/12/programming_with_posix_pthreads_05/">线程高级编程</a></li>
+<li><a href="/2018/06/17/programming_with_posix_pthreads_06/">POSIX 针对线程的调整</a></li>
+<li><a href="/2018/06/20/programming_with_posix_pthreads_07/">线程扩展</a></li>
+<li><a href="/2018/06/25/programming_with_posix_pthreads_08/">线程同步精要</a></li>
 </ul>
 </li>
 </ul>
@@ -578,7 +576,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -600,7 +598,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -765,8 +763,6 @@
   
 
 
-  
-
 
 
 
@@ -794,9 +790,6 @@
 
   
   <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-  
-  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
   

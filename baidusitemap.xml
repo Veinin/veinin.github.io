@@ -4,43 +4,19 @@
 
     
   <url>
-    <loc>https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/</loc>
-    <lastmod>2018-07-12T14:30:26.217Z</lastmod>
+    <loc>https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/</loc>
+    <lastmod>2018-07-24T14:20:27.652Z</lastmod>
     <data>
         <display>
-        <title>POSIX 多线程程序设计-使用线程方式</title>
-        <pubTime>2018-06-09T13:15:44.000Z</pubTime>
+        <title>《程序员跳槽全攻略》读书笔记</title>
+        <pubTime>2018-01-15T11:20:00.000Z</pubTime>
         
-        <tag>Phtreads</tag>
-         
-        <tag>POSIX Pthreads</tag>
+        <tag>职业规划</tag>
          
          
            
              
-              <breadCrumb title="并发编程" url="https://veinin.com/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/</loc>
-    <lastmod>2018-07-12T14:30:18.597Z</lastmod>
-    <data>
-        <display>
-        <title>POSIX 多线程程序设计-线程</title>
-        <pubTime>2018-06-05T14:22:01.000Z</pubTime>
-        
-        <tag>Phtreads</tag>
-         
-        <tag>POSIX Pthreads</tag>
-         
-         
-           
-             
-              <breadCrumb title="并发编程" url="https://veinin.com/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
+              <breadCrumb title="读书笔记" url="https://veinin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
           
         </display>
     </data>
@@ -49,7 +25,7 @@
     
   <url>
     <loc>https://veinin.com/2018/06/25/programming_with_posix_pthreads_08/</loc>
-    <lastmod>2018-07-12T14:27:49.486Z</lastmod>
+    <lastmod>2018-07-12T14:44:50.554Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-线程同步精要</title>
@@ -71,7 +47,7 @@
     
   <url>
     <loc>https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/</loc>
-    <lastmod>2018-07-12T14:27:42.391Z</lastmod>
+    <lastmod>2018-07-12T14:44:39.879Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-线程扩展</title>
@@ -93,7 +69,7 @@
     
   <url>
     <loc>https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/</loc>
-    <lastmod>2018-07-12T14:27:36.398Z</lastmod>
+    <lastmod>2018-07-12T14:44:36.943Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-POSIX 针对线程的调整</title>
@@ -115,7 +91,7 @@
     
   <url>
     <loc>https://veinin.com/2018/06/12/programming_with_posix_pthreads_05/</loc>
-    <lastmod>2018-07-12T14:27:30.015Z</lastmod>
+    <lastmod>2018-07-12T14:44:32.855Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-线程高级编程</title>
@@ -136,8 +112,30 @@
 
     
   <url>
+    <loc>https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/</loc>
+    <lastmod>2018-07-12T14:44:26.398Z</lastmod>
+    <data>
+        <display>
+        <title>POSIX 多线程程序设计-使用线程方式</title>
+        <pubTime>2018-06-09T13:15:44.000Z</pubTime>
+        
+        <tag>Phtreads</tag>
+         
+        <tag>POSIX Pthreads</tag>
+         
+         
+           
+             
+              <breadCrumb title="并发编程" url="https://veinin.com/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://veinin.com/2018/06/07/programming_with_posix_pthreads_03/</loc>
-    <lastmod>2018-07-12T14:27:15.566Z</lastmod>
+    <lastmod>2018-07-12T14:44:21.968Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-同步</title>
@@ -158,8 +156,30 @@
 
     
   <url>
+    <loc>https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/</loc>
+    <lastmod>2018-07-12T14:44:14.938Z</lastmod>
+    <data>
+        <display>
+        <title>POSIX 多线程程序设计-线程</title>
+        <pubTime>2018-06-05T14:22:01.000Z</pubTime>
+        
+        <tag>Phtreads</tag>
+         
+        <tag>POSIX Pthreads</tag>
+         
+         
+           
+             
+              <breadCrumb title="并发编程" url="https://veinin.com/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/</loc>
-    <lastmod>2018-07-12T14:26:51.567Z</lastmod>
+    <lastmod>2018-07-12T14:43:46.241Z</lastmod>
     <data>
         <display>
         <title>POSIX 多线程程序设计-概述</title>

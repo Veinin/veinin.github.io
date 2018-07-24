@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html class="theme-next gemini" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -111,7 +109,7 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="术语定义同步与异步同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。同步相对来说比较简单，但开销相对较大。 异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T14:26:51.567Z">
+<meta property="og:updated_time" content="2018-07-12T14:43:46.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="POSIX 多线程程序设计-概述">
 <meta name="twitter:description" content="术语定义同步与异步同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。同步相对来说比较简单，但开销相对较大。 异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考">
@@ -126,7 +124,7 @@
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -533,14 +531,14 @@
 <hr>
 <ul>
 <li>系列文章目录：<ul>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_01/" target="_blank" rel="noopener">概述</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_02/" target="_blank" rel="noopener">线程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_03/" target="_blank" rel="noopener">同步</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_04/" target="_blank" rel="noopener">使用线程方式</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_05/" target="_blank" rel="noopener">线程高级编程</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_06/" target="_blank" rel="noopener">POSIX 针对线程的调整</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_07/" target="_blank" rel="noopener">线程扩展</a></li>
-<li><a href="https:/veinin.com/2018/06/01/programming_with_posix_pthreads_08/" target="_blank" rel="noopener">线程同步精要</a></li>
+<li><a href="/2018/06/01/programming_with_posix_pthreads_01/">概述</a></li>
+<li><a href="/2018/06/05/programming_with_posix_pthreads_02/">线程</a></li>
+<li><a href="/2018/06/07/programming_with_posix_pthreads_03/">同步</a></li>
+<li><a href="/2018/06/09/programming_with_posix_pthreads_04/">使用线程方式</a></li>
+<li><a href="/2018/06/12/programming_with_posix_pthreads_05/">线程高级编程</a></li>
+<li><a href="/2018/06/17/programming_with_posix_pthreads_06/">POSIX 针对线程的调整</a></li>
+<li><a href="/2018/06/20/programming_with_posix_pthreads_07/">线程扩展</a></li>
+<li><a href="/2018/06/25/programming_with_posix_pthreads_08/">线程同步精要</a></li>
 </ul>
 </li>
 </ul>
@@ -675,7 +673,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -697,7 +695,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -862,8 +860,6 @@
   
 
 
-  
-
 
 
 
@@ -891,9 +887,6 @@
 
   
   <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-  
-  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
   
