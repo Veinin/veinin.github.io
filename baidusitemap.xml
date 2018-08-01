@@ -4,8 +4,96 @@
 
     
   <url>
+    <loc>https://veinin.com/2018/07/31/dev_notes-game-UI-semi-automated-development/</loc>
+    <lastmod>2018-08-01T14:39:59.893Z</lastmod>
+    <data>
+        <display>
+        <title>开发笔记：游戏 UI 半自动化开发流程</title>
+        <pubTime>2018-07-31T12:10:00.000Z</pubTime>
+        
+        <tag>半自动化，游戏UI开发，Unity</tag>
+         
+        <tag>MVC</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发笔记" url="https://veinin.com/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://veinin.com/2017/08/06/lua-c-api-03/</loc>
+    <lastmod>2018-07-24T15:50:48.487Z</lastmod>
+    <data>
+        <display>
+        <title>Lua C API 教程 - 从 Lua 调用 C 函数</title>
+        <pubTime>2017-08-06T14:15:58.000Z</pubTime>
+        
+        <tag>Lua</tag>
+         
+        <tag>Lua C API</tag>
+         
+         
+           
+             
+              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://veinin.com/2017/08/05/lua-c-api-01/</loc>
+    <lastmod>2018-07-24T15:02:50.910Z</lastmod>
+    <data>
+        <display>
+        <title>Lua C API 教程 - 入门</title>
+        <pubTime>2017-08-05T08:14:27.000Z</pubTime>
+        
+        <tag>Lua</tag>
+         
+        <tag>Lua C API</tag>
+         
+         
+           
+             
+              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://veinin.com/2017/08/06/lua-c-api-02/</loc>
+    <lastmod>2018-07-24T15:02:44.351Z</lastmod>
+    <data>
+        <display>
+        <title>Lua C API 教程 - 从 C 程序调用 Lua</title>
+        <pubTime>2017-08-06T14:15:58.000Z</pubTime>
+        
+        <tag>Lua</tag>
+         
+        <tag>Lua C API</tag>
+         
+         
+           
+             
+              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/</loc>
-    <lastmod>2018-07-24T14:20:27.652Z</lastmod>
+    <lastmod>2018-07-24T14:25:35.393Z</lastmod>
     <data>
         <display>
         <title>《程序员跳槽全攻略》读书笔记</title>
@@ -285,72 +373,6 @@
            
              
               <breadCrumb title="Git" url="https://veinin.com/categories/Git/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://veinin.com/2017/08/06/lua-c-api-02/</loc>
-    <lastmod>2018-04-02T15:53:58.512Z</lastmod>
-    <data>
-        <display>
-        <title>Lua C API 教程 - 从 C 程序调用 Lua</title>
-        <pubTime>2017-08-06T14:15:58.000Z</pubTime>
-        
-        <tag>Lua</tag>
-         
-        <tag>Lua C API</tag>
-         
-         
-           
-             
-              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://veinin.com/2017/08/06/lua-c-api-03/</loc>
-    <lastmod>2018-04-02T11:03:33.000Z</lastmod>
-    <data>
-        <display>
-        <title>Lua C API 教程 - 从 Lua 调用 C 函数</title>
-        <pubTime>2017-08-06T14:15:58.000Z</pubTime>
-        
-        <tag>Lua</tag>
-         
-        <tag>Lua C API</tag>
-         
-         
-           
-             
-              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://veinin.com/2017/08/05/lua-c-api-01/</loc>
-    <lastmod>2018-04-02T06:10:28.000Z</lastmod>
-    <data>
-        <display>
-        <title>Lua C API 教程 - 入门</title>
-        <pubTime>2017-08-05T08:14:27.000Z</pubTime>
-        
-        <tag>Lua</tag>
-         
-        <tag>Lua C API</tag>
-         
-         
-           
-             
-              <breadCrumb title="Lua" url="https://veinin.com/categories/Lua/"/>
           
         </display>
     </data>

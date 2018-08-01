@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://veinin.com/2018/07/31/dev_notes-game-UI-semi-automated-development/</loc>
+    
+    <lastmod>2018-08-01T14:39:59.893Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2017/08/06/lua-c-api-03/</loc>
+    
+    <lastmod>2018-07-24T15:50:48.487Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2017/08/05/lua-c-api-01/</loc>
+    
+    <lastmod>2018-07-24T15:02:50.910Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2017/08/06/lua-c-api-02/</loc>
+    
+    <lastmod>2018-07-24T15:02:44.351Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://veinin.com/2018/01/15/reading-notes-programmer-job-hopping-strategy/</loc>
     
-    <lastmod>2018-07-24T14:20:27.652Z</lastmod>
+    <lastmod>2018-07-24T14:25:35.393Z</lastmod>
     
   </url>
   
@@ -89,27 +117,6 @@
     <loc>https://veinin.com/2018/04/01/git-tutorial-basics/</loc>
     
     <lastmod>2018-04-02T16:45:24.344Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2017/08/06/lua-c-api-02/</loc>
-    
-    <lastmod>2018-04-02T15:53:58.512Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2017/08/06/lua-c-api-03/</loc>
-    
-    <lastmod>2018-04-02T11:03:33.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2017/08/05/lua-c-api-01/</loc>
-    
-    <lastmod>2018-04-02T06:10:28.000Z</lastmod>
     
   </url>
   
