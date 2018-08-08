@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://veinin.com/about/index.html</loc>
+    
+    <lastmod>2018-08-08T16:15:55.354Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/booklist/index.html</loc>
+    
+    <lastmod>2018-08-08T16:02:49.988Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/</loc>
+    
+    <lastmod>2018-08-08T15:29:28.255Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://veinin.com/2018/03/24/dev-notes-designer-formula-processing-solution-in-game/</loc>
+    
+    <lastmod>2018-08-08T15:28:12.197Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://veinin.com/2018/07/31/dev_notes-game-UI-semi-automated-development/</loc>
     
     <lastmod>2018-08-01T14:39:59.893Z</lastmod>
@@ -135,13 +163,6 @@
   </url>
   
   <url>
-    <loc>https://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/</loc>
-    
-    <lastmod>2018-04-01T07:47:18.876Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://veinin.com/2018/04/01/git-tutorial-started/</loc>
     
     <lastmod>2018-04-01T03:01:23.352Z</lastmod>
@@ -177,23 +198,9 @@
   </url>
   
   <url>
-    <loc>https://veinin.com/2018/03/24/dev-notes-designer-formula-processing-solution-in-game/</loc>
-    
-    <lastmod>2018-03-24T13:50:02.180Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://veinin.com/2017/08/26/how-to-read-a-book/</loc>
     
     <lastmod>2018-03-05T15:17:36.746Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/booklist/index.html</loc>
-    
-    <lastmod>2018-03-04T14:36:10.150Z</lastmod>
     
   </url>
   
@@ -292,13 +299,6 @@
     <loc>https://veinin.com/2017/02/17/hello-world/</loc>
     
     <lastmod>2017-03-01T16:07:31.003Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/about/index.html</loc>
-    
-    <lastmod>2017-02-17T07:45:21.172Z</lastmod>
     
   </url>
   

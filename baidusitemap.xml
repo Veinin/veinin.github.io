@@ -3,6 +3,52 @@
 
 
     
+    
+    
+  <url>
+    <loc>https://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/</loc>
+    <lastmod>2018-08-08T15:29:28.255Z</lastmod>
+    <data>
+        <display>
+        <title>开发笔记：MMORPG场景同步AOI解决方案</title>
+        <pubTime>2018-03-23T11:20:00.000Z</pubTime>
+        
+        <tag>MMORPG</tag>
+         
+        <tag>AOI</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发笔记" url="https://veinin.com/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://veinin.com/2018/03/24/dev-notes-designer-formula-processing-solution-in-game/</loc>
+    <lastmod>2018-08-08T15:28:12.197Z</lastmod>
+    <data>
+        <display>
+        <title>开发笔记：游戏中属性定义、策划公式处理方案</title>
+        <pubTime>2018-03-24T13:28:00.000Z</pubTime>
+        
+        <tag>游戏角色属性设计</tag>
+         
+        <tag>游戏策划公式设计</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发笔记" url="https://veinin.com/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
   <url>
     <loc>https://veinin.com/2018/07/31/dev_notes-game-UI-semi-automated-development/</loc>
     <lastmod>2018-08-01T14:39:59.893Z</lastmod>
@@ -426,28 +472,6 @@
 
     
   <url>
-    <loc>https://veinin.com/2018/03/23/dev-notes-mmorpg-aoi-algorithm/</loc>
-    <lastmod>2018-04-01T07:47:18.876Z</lastmod>
-    <data>
-        <display>
-        <title>开发笔记：MMORPG场景同步AOI解决方案</title>
-        <pubTime>2018-03-23T11:20:00.000Z</pubTime>
-        
-        <tag>MMORPG</tag>
-         
-        <tag>AOI</tag>
-         
-         
-           
-             
-              <breadCrumb title="开发笔记" url="https://veinin.com/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://veinin.com/2018/04/01/git-tutorial-started/</loc>
     <lastmod>2018-04-01T03:01:23.352Z</lastmod>
     <data>
@@ -560,28 +584,6 @@
 
     
   <url>
-    <loc>https://veinin.com/2018/03/24/dev-notes-designer-formula-processing-solution-in-game/</loc>
-    <lastmod>2018-03-24T13:50:02.180Z</lastmod>
-    <data>
-        <display>
-        <title>开发笔记：游戏中属性定义、策划公式处理方案</title>
-        <pubTime>2018-03-24T13:28:00.000Z</pubTime>
-        
-        <tag>游戏角色属性设计</tag>
-         
-        <tag>游戏策划公式设计</tag>
-         
-         
-           
-             
-              <breadCrumb title="开发笔记" url="https://veinin.com/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://veinin.com/2017/08/26/how-to-read-a-book/</loc>
     <lastmod>2018-03-05T15:17:36.746Z</lastmod>
     <data>
@@ -602,7 +604,6 @@
     </data>
     </url>
 
-    
     
   <url>
     <loc>https://veinin.com/2018/03/04/reading-notes-money-oder-das/</loc>
@@ -904,7 +905,6 @@
     </data>
     </url>
 
-    
     
     
 </urlset>
