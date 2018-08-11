@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="AI,行为树,状态机," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一个典型的 AI 系统通常包含：感知、导航和决策三个子系统。对于游戏来说，感知系统是可以“作弊”的，不需要NPC真的去“感知”世界，系统可以告诉NPC世界是怎么的。所以，对于导航系统，不再属于本文的讨论范畴。而决策系统才是让NPC看起来可以有自己的意图和信念的，所以本文讨论的是决策系统。 一个 AI 决策系统模型看起来是这样的：  最开始，游戏 AI 的决策系统往往会这样写： 1234567891">
+<meta name="keywords" content="AI,行为树,状态机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 行为树设计与实现-理论篇">
+<meta property="og:url" content="https://veinin.com/2018/08/07/ai_behavior_tree_design_and_implementation_01/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="一个典型的 AI 系统通常包含：感知、导航和决策三个子系统。对于游戏来说，感知系统是可以“作弊”的，不需要NPC真的去“感知”世界，系统可以告诉NPC世界是怎么的。所以，对于导航系统，不再属于本文的讨论范畴。而决策系统才是让NPC看起来可以有自己的意图和信念的，所以本文讨论的是决策系统。 一个 AI 决策系统模型看起来是这样的：  最开始，游戏 AI 的决策系统往往会这样写： 1234567891">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://veinin.com/images/btree/decision.png">
+<meta property="og:image" content="https://veinin.com/images/btree/fms.png">
+<meta property="og:image" content="https://veinin.com/images/btree/behavior_tree.png">
+<meta property="og:image" content="https://veinin.com/images/btree/behavior_tree_npc.png">
+<meta property="og:updated_time" content="2018-08-11T11:05:08.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AI 行为树设计与实现-理论篇">
+<meta name="twitter:description" content="一个典型的 AI 系统通常包含：感知、导航和决策三个子系统。对于游戏来说，感知系统是可以“作弊”的，不需要NPC真的去“感知”世界，系统可以告诉NPC世界是怎么的。所以，对于导航系统，不再属于本文的讨论范畴。而决策系统才是让NPC看起来可以有自己的意图和信念的，所以本文讨论的是决策系统。 一个 AI 决策系统模型看起来是这样的：  最开始，游戏 AI 的决策系统往往会这样写： 1234567891">
+<meta name="twitter:image" content="https://veinin.com/images/btree/decision.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/08/07/ai_behavior_tree_design_and_implementation_01/"/>
+
+
+
+
+
+  <title>AI 行为树设计与实现-理论篇 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/08/07/ai_behavior_tree_design_and_implementation_01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AI 行为树设计与实现-理论篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-07T18:36:00+08:00">
+                2018-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index">
+                    <span itemprop="name">AI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/07/ai_behavior_tree_design_and_implementation_01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/08/07/ai_behavior_tree_design_and_implementation_01/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一个典型的 AI 系统通常包含：感知、导航和决策三个子系统。对于游戏来说，感知系统是可以“作弊”的，不需要NPC真的去“感知”世界，系统可以告诉NPC世界是怎么的。所以，对于导航系统，不再属于本文的讨论范畴。而决策系统才是让NPC看起来可以有自己的意图和信念的，所以本文讨论的是决策系统。</p>
+<p>一个 AI 决策系统模型看起来是这样的：</p>
+<p><img src="/images/btree/decision.png" alt="decision"></p>
+<p>最开始，游戏 AI 的决策系统往往会这样写：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(自己)</span><br><span class="line">    case '血量充足':</span><br><span class="line">        攻击();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    case '快死了':</span><br><span class="line">        加血();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> ‘死了’:</span><br><span class="line">        游戏结束();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>随机计算机硬件的不断提升，可以分配给 AI 运算的 CPU 时间越来越长，我们对游戏 AI 的要求也自然提高了，比如我们可以相处这样的策略：有多个敌人时，使用群体技能；只有单个敌人时，使用强力的单体攻击；魔法低于50时，吃药补魔法；血量低于100时，吃个大的血瓶回血。</p>
+<p>于是，AI 程序员在上面的需求到来的时候，不得不继续扩充上的 swtich 条件，然后在 case 里面增加自己的逻辑。可以想象，如果一个 Moba 类游戏中，一个地狱难度的电脑的 AI 需要根据场上的情况使用各种策略。当策划的需求越来越多，很快，一个带有上万行的代码函数就横空出世啦。如果这时候遇到了一个 Bug ，不要说修复，仅仅是阅读这个函数的代码都恐怕让人觉得畏惧了。</p>
+<p>毫无疑问，当一个函数遇到大量的状态转换判断的时候，很容易让整个程序崩溃，不过经过后辈们前赴后继的努力，目前市面上关于游戏的 AI 有了更加精简的代码手段。比如常见 的 AI 模型：FSM（有限状态机）和 Behavior Tree（行为树）。</p>
+<h2 id="有限状态机（FMS）"><a href="#有限状态机（FMS）" class="headerlink" title="有限状态机（FMS）"></a>有限状态机（FMS）</h2><p>相对于 <code>switch - case</code> 来说， FSM 编程与人类的思维相似，更易于梳理，更加灵活。当每种状态封装后，就不在会有一个“中央”函数来控制所有的逻辑，每个状态只要管好自己的业务就行。这样，一个复杂的决策系统就被切割成了两子系统，不同的状态以及状态之间的转换。切割后的子系统与原有的系统被大大简化，从而使得代码变得可以维护。FSM 在相当多的游戏中已经被应用，甚至 Unreal Engine 的脚本语言是直接支持状态编程的。</p>
+<p>当游戏中的NPC决策并不太复杂时候，FSM是非常有效的。比如 Half-Life 这款游戏，里面的AI被业界称赞了很久，而其中的AI就是通过FSM来实现的。</p>
+<h3 id="有限状态机举例"><a href="#有限状态机举例" class="headerlink" title="有限状态机举例"></a>有限状态机举例</h3><p>我们接下来通过一个简单的例子来认识一下FSM。比如一个AI文字表述如下：</p>
+<p>1.平时的状态是巡逻</p>
+<ol start="2">
+<li>如果遇到敌人之后打量一下敌人</li>
+<li>如果敌人比自己弱小，那就打攻击</li>
+<li>如果敌人比自己强大，那就跑逃跑</li>
+</ol>
+<p>那么这个可以很自然的转换成 FSM，然后进行编程实现，我们可以看看整个 AI 流程图：</p>
+<p><img src="/images/btree/fms.png" alt="fms"></p>
+<h3 id="有限状态机缺点"><a href="#有限状态机缺点" class="headerlink" title="有限状态机缺点"></a>有限状态机缺点</h3><p>虽然FSM简洁，和人的直觉思维相近，但是FSM也是有缺点的：</p>
+<ul>
+<li>由于我们所能做的仅是编辑从一状态到另一状态的转换，而无法做出更高层次的模式功能，所以会导致我们发现自己总是在构建相似的行为，这会花费我们大部分时间。</li>
+<li>使用 FSM 实现目标导向的行为需要做很多工作。这是一个大问题，因为大部分有针对性的AI 需要处理长远目标。</li>
+<li>FSM 难以并发。当并行运行多个状态机，要么死锁，要么我们通过手工编辑来确保它们在某个程度上能够兼容。</li>
+<li>大规模支持较差，即使是分层的有限状态机，也难以大规模扩展。它们往往是在其中夹杂一大块逻辑代码，而非行为编辑模块化。</li>
+<li>用 FSM 实现任何设计都需要做大量工作，需要花费设计师的大量时间(并非编程时间)，甚至最终这还会成行为中的 bugs 的来源。</li>
+</ul>
+<h2 id="行为树（Behavior-Tree）"><a href="#行为树（Behavior-Tree）" class="headerlink" title="行为树（Behavior Tree）"></a>行为树（Behavior Tree）</h2><p>行为树是在Next-Gen AI中提出的模型，虽说是Next-Gen AI，但距其原型提出已有约10年时间。其中Spore(孢子)，Crysis(孤岛危机)2，Red Dead Redemption(荒野大镖客：救赎)等就是用行为树作为它们的AI模型。而越来越多的引擎也都开始直接支持行为树，比如 Cry Engine, Havok等。</p>
+<p>对于用行为树定模型构造的AI系统来说，每次执行AI时 ，系统都会从根节点遍历整个树，父节点执行子节点，子节点执行完后将结果返回父节点，然后父节点根据子节点的结果来决定接下来怎么做。</p>
+<p>所谓树，那么其就存在很多节点，而对于行为树来说，它把基本节点类型分为两大类：</p>
+<h3 id="控制节点"><a href="#控制节点" class="headerlink" title="控制节点"></a>控制节点</h3><p>在行为树中我们所看到的所有父节点都被称为控制节点。控制节点是行为树的核心部分，它与具体的游戏是无关的，它只负责整个行为树的逻辑控制。其包含以下几种类型：</p>
+<ul>
+<li>选择节点(Selector)：属于组合节点，顺序执行子节点，只要碰到一个子节点返回true，则停止继续执行，并返回true，否则返回false，类似于程序中的逻辑或。</li>
+<li>顺序节点(Sequence)：属于组合节点，顺序执行子节点，只要碰到一个子节点返回false，则停止继续执行，并返回false，否则返回true，类似于程序中的逻辑与。</li>
+<li>平行节点(Parallel)：提供了平行的概念，无论子节点返回值是什么都会遍历所有子节点。所以不需要像 Selector/Sequence 那样预判哪个 Child Node 应摆前，哪个应摆后。Parallel Node增加方便性的同时，也增加实现和维护复杂度。</li>
+<li>组合节点(Coposite)：可以组合多个子节点。</li>
+<li>装饰节点(Decoraor)：可以作为某种节点的一种额外的附加条件，如允许次数限制，时间限制，错误处理等。</li>
+<li>循环节点(Loop)：循环执行相应的动作，并返回结果。</li>
+</ul>
+<h3 id="行为节点"><a href="#行为节点" class="headerlink" title="行为节点"></a>行为节点</h3><p>行为树的行为定义都在行为节点中，也就是我们说的叶子节点。行为节点是与我们的具体需求相关的，不同的需求定义会有不同的行为节点。</p>
+<ul>
+<li>条件节点(Condition)：属于叶子节点，判断条件是否成立。</li>
+<li>动作节点(Action)：属于叶子节点，执行动作，一般返回true。</li>
+</ul>
+<p>当然，如果有更多需求，也可以自己继续拓展，通过控制与行为节点的组合，最终，会产生一颗行为树，它看起来会是这样的：</p>
+<p><img src="/images/btree/behavior_tree.png" alt="behavior_tree"></p>
+<h3 id="行为树举例"><a href="#行为树举例" class="headerlink" title="行为树举例"></a>行为树举例</h3><p>我们可以来看一个行为树构造 AI 的例子，这个AI的逻辑文字表述为：</p>
+<p>1.一个NPC在晚上需要执行守夜巡逻的任务。<br>2.如果到了白天，那么NPC需要休息。<br>3.如果天下雨的话，则需要打伞。<br>4.如果天气变晴，处在打伞状态下的人需要把伞收起。</p>
+<p>通过以上条件，我们可以转换成一颗行为树：</p>
+<p><img src="/images/btree/behavior_tree_npc.png" alt="behavior_tree_npc"></p>
+<h3 id="行为树优缺点"><a href="#行为树优缺点" class="headerlink" title="行为树优缺点"></a>行为树优缺点</h3><p>行为树模型看似简单，但是以下几个优点让行为树目前变成了复杂AI的主流模型：</p>
+<ul>
+<li>静态性。越复杂的功能越需要简单的基础，否则最后连自己都玩不过来。即使系统需要某些”动态”性，也应该尽量使用静态的行为树来表示。静态性直接带来的好处就是整棵树的规划无需再运行时动态调整，大大方便设计人员和编程人员，并且大大减少诡异的bug，同时这也为很多优化和预编辑都带来方便。</li>
+<li>直观性。行为树可以方便地把复杂的AI知识条目组织得非常直观。默认的组合节点处理子节点的迭代方式就像是处理一个预设优先策略队列，也非常符合人类的正常思考模式：先最优再次优。此外，行为树编辑器对优秀的程序员来说也是唾手可得。</li>
+<li>复用性。各种节点，包括叶子节点，可复用性都极高。</li>
+<li>扩展性。可以容易地为项目量身定做新的组合节点或修饰节点。还可以积累一个项目相关的节点库，长远来说非常有价值。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AI/" rel="tag"># AI</a>
+          
+            <a href="/tags/行为树/" rel="tag"># 行为树</a>
+          
+            <a href="/tags/状态机/" rel="tag"># 状态机</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/31/dev_notes-game-UI-semi-automated-development/" rel="next" title="开发笔记：游戏 UI 半自动化开发流程">
+                <i class="fa fa-chevron-left"></i> 开发笔记：游戏 UI 半自动化开发流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/" rel="prev" title="AI 行为树设计与实现-实现篇">
+                AI 行为树设计与实现-实现篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#有限状态机（FMS）"><span class="nav-number">1.</span> <span class="nav-text">有限状态机（FMS）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#有限状态机举例"><span class="nav-number">1.1.</span> <span class="nav-text">有限状态机举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有限状态机缺点"><span class="nav-number">1.2.</span> <span class="nav-text">有限状态机缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行为树（Behavior-Tree）"><span class="nav-number">2.</span> <span class="nav-text">行为树（Behavior Tree）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#控制节点"><span class="nav-number">2.1.</span> <span class="nav-text">控制节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为节点"><span class="nav-number">2.2.</span> <span class="nav-text">行为节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为树举例"><span class="nav-number">2.3.</span> <span class="nav-text">行为树举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为树优缺点"><span class="nav-number">2.4.</span> <span class="nav-text">行为树优缺点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
