@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://veinin.com/2018/08/08/ai_behavior_tree_design_and_implementation_02/</loc>
+    
+    <lastmod>2018-08-11T14:26:15.839Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://veinin.com/about/index.html</loc>
     
     <lastmod>2018-08-11T11:08:25.637Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://veinin.com/2018/08/07/ai_behavior_tree_design_and_implementation_01/</loc>
     
     <lastmod>2018-08-11T11:05:08.175Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://veinin.com/2018/08/08/ai_behavior_tree_design_and_implementation_02/</loc>
-    
-    <lastmod>2018-08-11T11:05:01.280Z</lastmod>
     
   </url>
   
