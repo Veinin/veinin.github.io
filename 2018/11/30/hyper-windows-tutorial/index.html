@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hyper,Shell,Zsh,CMD," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作">
+<meta name="keywords" content="Hyper,Shell,Zsh,CMD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="玩转终端软件 Hyper">
+<meta property="og:url" content="https://veinin.com/2018/11/30/hyper-windows-tutorial/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://veinin.com/images/hyper/insall-path.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/13041/16820268/13c9bfe6-4905-11e6-8fe4-baf8fc8d9293.gif">
+<meta property="og:image" content="https://veinin.com/images/hyper/themes.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/6589909/28026422-9dc92218-655b-11e7-8852-3ee8d57c87d5.gif">
+<meta property="og:image" content="https://veinin.com/images/hyper/auosuggestions.gif">
+<meta property="og:image" content="https://veinin.com/images/hyper/agnoster.png">
+<meta property="og:updated_time" content="2018-11-29T17:21:40.171Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="玩转终端软件 Hyper">
+<meta name="twitter:description" content="相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作">
+<meta name="twitter:image" content="https://veinin.com/images/hyper/insall-path.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/11/30/hyper-windows-tutorial/"/>
+
+
+
+
+
+  <title>玩转终端软件 Hyper | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/11/30/hyper-windows-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">玩转终端软件 Hyper</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T01:20:00+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hyper/" itemprop="url" rel="index">
+                    <span itemprop="name">Hyper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/30/hyper-windows-tutorial/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/11/30/hyper-windows-tutorial/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作 Linux 系统还是会觉得缺了点什么。</p>
+<p>目前市面上很多终端软件都比 Windows 自带终端好太多，比如这篇文章就介绍了 20 个比较好用终端软件：</p>
+<p><a href="https://www.slant.co/topics/1552/~best-terminal-emulators-for-windows" target="_blank" rel="noopener">THE BEST 1 OF 20 OPTIONS</a></p>
+<p>之前用过一个不错得软件叫做 <a href="http://cmder.net/" target="_blank" rel="noopener">Cmder</a>，但它不是今天得主角，我们今天要介绍得是另一款更符合我口味得终端软件 Hyper。</p>
+<h2 id="获取并安装-Hyper"><a href="#获取并安装-Hyper" class="headerlink" title="获取并安装 Hyper"></a>获取并安装 Hyper</h2><p>你可以在一下几个地方获取到 Hyper：</p>
+<ul>
+<li>官方网站：<a href="http://cmder.net/" target="_blank" rel="noopener">入口</a></li>
+<li>Github：<a href="https://github.com/zeit/hyper" target="_blank" rel="noopener">入口</a></li>
+</ul>
+<p>下载到二进制安装包后，直接安装就可以运行，本文运行环境是 Windows。</p>
+<h2 id="基础插件安装"><a href="#基础插件安装" class="headerlink" title="基础插件安装"></a>基础插件安装</h2><p>Hyper 本身是支持插件系统的，在安装扩展插件时，你需要先安装 Hyper 命令行程序，你可以点击菜单，选择 <code>Plugin</code> 选项，点击 <code>Install Hyper CLI command in PATH</code>。</p>
+<p><img src="/images/hyper/insall-path.png" alt="install"></p>
+<p>其官方在首页推荐了4个比较易用的插件，推荐直接全部安装。安装地址请点击 <a href="https://hyper.is/plugins" target="_blank" rel="noopener">链接</a>。其中4款插件分别为：</p>
+<ul>
+<li><a href="https://hyper.is/plugins/hypercwd" target="_blank" rel="noopener">hypercwd</a>，它可以让你的终端在新建标签页时，保持上一个终端的目录地址。安装命令： <code>hyper i hypercwd</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-search" target="_blank" rel="noopener">hyper-search</a>，它可以让你搜索整个终端的所有文本内容。安装命令： <code>hyper i hyper-search</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyper-pane</a>，增强窗口导航，对于支持多个页签的软件来说这是个利器。安装命令： <code>hyper i hyper-pane</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyperpower</a>，这是一个让你的终端变得更加绚丽的插件，当然这么炫酷的效果是不是会影响你的工作呢，还是要视个人情而定。安装命令： <code>hyper i hyperpower</code>。</li>
+</ul>
+<p><img src="https://cloud.githubusercontent.com/assets/13041/16820268/13c9bfe6-4905-11e6-8fe4-baf8fc8d9293.gif" alt="hyperpower"></p>
+<a id="more"></a>
+<h2 id="主题插件安装"><a href="#主题插件安装" class="headerlink" title="主题插件安装"></a>主题插件安装</h2><p>Hyper 支持插件系统，自然就少不了主题了，官方首页推荐了4种同颜色的主题，你可以直接在<a href="https://hyper.is/themes" target="_blank" rel="noopener">主题地址</a>查看并安装。</p>
+<p><img src="/images/hyper/themes.png" alt="install"></p>
+<p>当然，上面的满足不了你，你也可以去在上面的主题地址中的页签 <code>NEWEST</code> 找到更多主题，或者你也可以直接去 GitHub 搜索，抑或是你自己写一个主题插件。总之，你最终会找到一款符合你的主题皮肤。</p>
+<h2 id="其他插件"><a href="#其他插件" class="headerlink" title="其他插件"></a>其他插件</h2><p>GitHub 有一个项目叫做 <a href="https://github.com/bnb/awesome-hyper" target="_blank" rel="noopener">awesome-hyper</a>，其列出了 Hyper 社区中精选的软件包、主题和相关有趣的资源列表，比如下面这款当你输入 <code>git push</code> 成功执行后，终端会出现火箭动画：</p>
+<p><img src="https://user-images.githubusercontent.com/6589909/28026422-9dc92218-655b-11e7-8852-3ee8d57c87d5.gif" alt="git-push"></p>
+<h2 id="Hyper-集成-WSL"><a href="#Hyper-集成-WSL" class="headerlink" title="Hyper 集成 WSL"></a>Hyper 集成 WSL</h2><p>通常我们在使用 WSL 工作时，希望启动终端时就进入 WSL bash 内部，Windows 中有一个 base.exe 程序可以让我们在启动终端后输入 <code>bash</code> 后进入 WSL 终端。<br>但这一步实在太繁琐了，有了 Hyper，我们只需要改动一下配置文件，上面这步就可以直接省略。</p>
+<p>现在，你只需打开 Hyper 设置页面文件，这一步需要从菜单 Edit -&gt; Preferences 进入，然后编辑 <code>shell</code> 和 <code>shellArgs</code> 参数：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell: 'C:\\Windows\\System32\\wsl.exe',</span><br><span class="line">shellArgs: [],</span><br></pre></td></tr></table></figure>
+<p>再次从新打开 Hyper，你会发现默认已经进入了 base 终端页面。</p>
+<h2 id="使用-zsh-代替-bash"><a href="#使用-zsh-代替-bash" class="headerlink" title="使用 zsh 代替 bash"></a>使用 zsh 代替 bash</h2><p>通常 Linux 服务器上面默认使用的命令模式是 <code>bash</code>，除了 <code>bash</code> 之外，还有很多其他诸如 <code>zsh</code>、<code>csh</code>、<code>fish</code>等，这其中，我认为 <code>zsh</code> 增强功能（标签完成和拼写错误修正）会很吸引人。</p>
+<h3 id="安装-zsh-和-oh-my-zsh"><a href="#安装-zsh-和-oh-my-zsh" class="headerlink" title="安装 zsh 和 oh-my-zsh"></a>安装 zsh 和 oh-my-zsh</h3><p>虽然 <code>zsh</code> 配置很繁琐，但这一步已经有人帮你完成了，GitHub 上面有一个项目叫做 <a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">oh-my-zsh</a> 就是专门用来管理配置 <code>zsh</code> 的一个框架。</p>
+<p>在使用 <code>oh-my-zsh</code> 之前，你需要安装 <code>zsh</code>，各个平台安装的方式可能不一样，你可以通过这个 <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH" target="_blank" rel="noopener">链接</a> 查看 <code>zsh</code> 安装方式。</p>
+<p>有了 <code>zsh</code> 后，要安装 <code>oh-my-zsh</code>，你还需要用 <code>wget</code> 或者 <code>curl</code> 来辅助安装：</p>
+<ul>
+<li>通过 curl 安装，<code>sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;</code></li>
+<li>通过 wget 安装，<code>sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;</code></li>
+</ul>
+<p>安装完成后，你可以通过命令 <code>chsh -s /bin/zsh</code> 设置 <code>zsh</code> 为默认的 shell。</p>
+<h3 id="安装自动补全功能"><a href="#安装自动补全功能" class="headerlink" title="安装自动补全功能"></a>安装自动补全功能</h3><p>使用 <code>zsh</code> 我认为第一个吸引我的重要插件就是 <a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">zsh-autosuggestions</a>。它会自动为你的终端命令提供补全建议，让你能更加快速的完成命令输入，有了它，你再也不用一遍遍的按 <code>tab</code> 来加快你的命令输入了。</p>
+<p><code>zsh-autosuggestions</code> 安装文档你可以点击这个<a href="https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md" target="_blank" rel="noopener">链接</a> 进入查看，比如使用 Git 安装步骤如下：</p>
+<p>使用 Git 把项目从仓库 Clone 下来：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+<p>将以下内容添加到 <code>.zshrc</code> 文件内：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh</span><br></pre></td></tr></table></figure>
+<p>重新开启终端会话，你就可以享受 <code>zsh-autosuggestions</code> 给你带来的便利了。</p>
+<p><img src="/images/hyper/auosuggestions.gif" alt="install"></p>
+<h3 id="配置主题"><a href="#配置主题" class="headerlink" title="配置主题"></a>配置主题</h3><p><code>Oh My Zsh</code> 附带了大量的插件和主题，你可以利用它们可以进一步增强和美化你的终端功能。要想配置主题和插件，你可以直接修改 <code>~/.zshrc</code> 文件。</p>
+<p>对于插件启用，你可以编辑 <code>plugins</code> 输入你想要加载的插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">plugins =（</span><br><span class="line">  git</span><br><span class="line">  bundler</span><br><span class="line">  dotenv</span><br><span class="line">  osx</span><br><span class="line">  rake</span><br><span class="line">  rbenv</span><br><span class="line">  ruby</span><br><span class="line">）</span><br></pre></td></tr></table></figure>
+<p>对于主题，你也可以编辑文件 <code>~/.zshrc</code>，在 <code>ZSH_THEME</code> 修改主题名称即可，链接 <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes" target="_blank" rel="noopener">External themes</a> 提供了大部分主题的样式，你可以直接修改参数后即可看到主题效果，比如 <code>agnoster</code> 主题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZSH_THEME="agnoster"</span><br></pre></td></tr></table></figure>
+<p>修改完成后，你的终端会变成这个样子：</p>
+<p><img src="/images/hyper/agnoster.png" alt="install"></p>
+<p>请注意，很多主题如果你无法显示预期效果，那是因为响应的主题系统字体没有安装，你需要正确的安装了 <a href="https://github.com/powerline/fonts" target="_blank" rel="noopener">Powerline字体</a> 字体才会显示出来。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文详细阐述了如何安装 Hyper 终端软件，其中包括配置 Hyper 插件和主题设置，并讲述了如何使用 Hyper 完全代替 Windows 的默认终端软件 CMD。<br>最后，介绍了一种使用 zsh 来代替 bash 的方法，你可以让你的终端功能更加强大易用。<br>用一句时髦的话来总结：Hyper 长得很漂亮哦。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hyper/" rel="tag"># Hyper</a>
+          
+            <a href="/tags/Shell/" rel="tag"># Shell</a>
+          
+            <a href="/tags/Zsh/" rel="tag"># Zsh</a>
+          
+            <a href="/tags/CMD/" rel="tag"># CMD</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/" rel="next" title="AI 行为树设计与实现-实现篇">
+                <i class="fa fa-chevron-left"></i> AI 行为树设计与实现-实现篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取并安装-Hyper"><span class="nav-number">1.</span> <span class="nav-text">获取并安装 Hyper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础插件安装"><span class="nav-number">2.</span> <span class="nav-text">基础插件安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题插件安装"><span class="nav-number">3.</span> <span class="nav-text">主题插件安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他插件"><span class="nav-number">4.</span> <span class="nav-text">其他插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hyper-集成-WSL"><span class="nav-number">5.</span> <span class="nav-text">Hyper 集成 WSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-zsh-代替-bash"><span class="nav-number">6.</span> <span class="nav-text">使用 zsh 代替 bash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-zsh-和-oh-my-zsh"><span class="nav-number">6.1.</span> <span class="nav-text">安装 zsh 和 oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装自动补全功能"><span class="nav-number">6.2.</span> <span class="nav-text">安装自动补全功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置主题"><span class="nav-number">6.3.</span> <span class="nav-text">配置主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
