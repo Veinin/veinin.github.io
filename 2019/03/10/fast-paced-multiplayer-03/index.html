@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="多人游戏,多人游戏网络同步," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="介绍在本系列的第一篇文章中，我们介绍了权威服务器的概念及其防止客户欺骗的用处。然而，天真地使用这种技术可能会导致关于可玩性和响应性的潜在问题。在第二篇文章中，我们提出了客户端预测作为克服这些限制的方法。 这两篇文章的最终结果传递的一组概念与技术是允许玩家通过互联网连接到权威的服务器，并在传输延迟的情况下，让玩家以一种完全像玩单机游戏的感觉方式控制游戏中的角色。 在本文中，我们将对连接到同一服务器的">
+<meta name="keywords" content="多人游戏,多人游戏网络同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快节奏多人游戏（3）：实体插值">
+<meta property="og:url" content="https://veinin.com/2019/03/10/fast-paced-multiplayer-03/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="介绍在本系列的第一篇文章中，我们介绍了权威服务器的概念及其防止客户欺骗的用处。然而，天真地使用这种技术可能会导致关于可玩性和响应性的潜在问题。在第二篇文章中，我们提出了客户端预测作为克服这些限制的方法。 这两篇文章的最终结果传递的一组概念与技术是允许玩家通过互联网连接到权威的服务器，并在传输延迟的情况下，让玩家以一种完全像玩单机游戏的感觉方式控制游戏中的角色。 在本文中，我们将对连接到同一服务器的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://veinin.com/images/fpm/fpm3-01.png">
+<meta property="og:image" content="https://veinin.com/images/fpm/fpm3-02.png">
+<meta property="og:updated_time" content="2019-03-18T14:55:11.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快节奏多人游戏（3）：实体插值">
+<meta name="twitter:description" content="介绍在本系列的第一篇文章中，我们介绍了权威服务器的概念及其防止客户欺骗的用处。然而，天真地使用这种技术可能会导致关于可玩性和响应性的潜在问题。在第二篇文章中，我们提出了客户端预测作为克服这些限制的方法。 这两篇文章的最终结果传递的一组概念与技术是允许玩家通过互联网连接到权威的服务器，并在传输延迟的情况下，让玩家以一种完全像玩单机游戏的感觉方式控制游戏中的角色。 在本文中，我们将对连接到同一服务器的">
+<meta name="twitter:image" content="https://veinin.com/images/fpm/fpm3-01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2019/03/10/fast-paced-multiplayer-03/"/>
+
+
+
+
+
+  <title>快节奏多人游戏（3）：实体插值 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/03/10/fast-paced-multiplayer-03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">快节奏多人游戏（3）：实体插值</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T20:05:00+08:00">
+                2019-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多人游戏/" itemprop="url" rel="index">
+                    <span itemprop="name">多人游戏</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/10/fast-paced-multiplayer-03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/03/10/fast-paced-multiplayer-03/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在本系列的第一篇文章中，我们介绍了权威服务器的概念及其防止客户欺骗的用处。然而，天真地使用这种技术可能会导致关于可玩性和响应性的潜在问题。在第二篇文章中，我们提出了客户端预测作为克服这些限制的方法。</p>
+<p>这两篇文章的最终结果传递的一组概念与技术是允许玩家通过互联网连接到权威的服务器，并在传输延迟的情况下，让玩家以一种完全像玩单机游戏的感觉方式控制游戏中的角色。</p>
+<p>在本文中，我们将对连接到同一服务器的其他玩家进行探索。</p>
+<a id="more"></a>
+<h2 id="服务器时间步长"><a href="#服务器时间步长" class="headerlink" title="服务器时间步长"></a>服务器时间步长</h2><p>在上一篇文章中，我们描述服务器的行为非常简单：它读取客户的输入，更新游戏状态，并发送结果给客户端。但当多个客户端连接时，服务器的主循环将会有所不同。</p>
+<p>在多个客户端同时连接同一个服务器的情况下，多个客户端可能同时发送输入信息，并且速度将非常快（玩家可以快速的发送诸如按箭头按键、移动鼠标或者点击屏幕的输入操作）。服务器接受每个客户端的输入操作然后马上广播更新后的游戏世界状态将是非常消耗CPU和网络带宽的。</p>
+<p>一个更好的方式是对接受的每个客户端输入进行排队，而不需要接受一个就马上进行处理。相反，游戏世界以一个较低的频率周期性的更新。例如每秒更新 10 次，每次更新之间产生的延迟（这种情况下为 100 毫秒），我们称之为步长。在每次更新循环的迭代中，所有未处理的客户都输入指令都将应用到游戏世界中去（处理这些指令的时间增量可能比时间步长更小一些），并将新状态广播给客户端。</p>
+<p>总之，服务器游戏世界里面的更新步长速率是根据客户端的输入而独立存在的，并且是可以被预测的。</p>
+<h2 id="处理低频率更新"><a href="#处理低频率更新" class="headerlink" title="处理低频率更新"></a>处理低频率更新</h2><p>从客户的角度来看，上面提到的方案可以很容易的进程预测，客户都的预测工作因为与延迟无关，因此在相对不频繁的状态更新的中也是可以进行预测的。但是，由于客户端的低频率广播（继续使用100毫秒的示例），客户端得到的关于其他实体可能在游戏中移动的信息是非常少的。</p>
+<p>在下面的第一个实现中，我们将在接受到服务器的状态更新后再更新角色的位置信息，但这回导致角色的运动非常不稳定，你可能看到的是每 100 毫秒玩家就瞬移一次，而不是很平滑的移动到目的地。</p>
+<p><img src="/images/fpm/fpm3-01.png" alt="fpm"></p>
+<p>根据你正在开发的游戏类型中，有很多方法可以解决这个问题。一般来说，你的游戏实体越可预测，那么就越容易做到正确。</p>
+<h2 id="航位（Dead-reckoning）推算"><a href="#航位（Dead-reckoning）推算" class="headerlink" title="航位（Dead reckoning）推算"></a>航位（Dead reckoning）推算</h2><p>假设你正在制作一款赛车游戏，一辆正在快速行驶的汽车是非常容易预测的。例如，如果它以每秒100米的运行速度，一秒钟后它距离开始的地点大约是100米。</p>
+<p>为什么只能是概略的计算呢？因为一秒钟内，汽车可能会加速或者减速，抑或是转向左侧或右侧一点，这里的关键字是“一点”。不管玩家实际在做什么，汽车的可操作性使得其在高速运行时的任何一个时间点的位置高度依赖于其之前的位置、速度和方向<br>。换句话说，赛车是不可能立即就旋转 180 度的。</p>
+<p>这种情况下，我们应该如何在每 100 毫秒的步长情况下发送服务器的更新呢？客户端每收到一次其他车辆的速度和方向后，在接下来的 100 毫秒它将无法再接收到任何新的信息，但客户端却依旧需要显示车辆正在运行。最简单的解决方案是假设汽车的方向和加速度都会在 100 毫秒内保持不变，我们可以使用这个参数在本地运行汽车的物理模拟。然后，100 毫秒后，当服务器的更新到达时，再将汽车的位置进行校正。</p>
+<p>在很多变动的因素下，这些校正的参数可能会很大，当然也可能相对较小。如果玩家确实把汽车保持在直线上并且不改变汽车的速度，那么预测的位置将和校正位置完全相同。另外，如果玩家遭受到了撞击，那么预测的位置可能会有非常大的错误。</p>
+<p>需要注意的是航行位置推算可以应用于低速的情况，例如战舰。事实上，“航位推算”一词来源于海上航行。</p>
+<h2 id="实体插值"><a href="#实体插值" class="headerlink" title="实体插值"></a>实体插值</h2><p>在某些情况下，根本无法运用航位推算，特别是在玩家的方向和速度可以可以立刻改变的情况下。例如，在 3D 射击游戏中，玩家通常会以非常高的速度进行跑动、停止和转向操作，这使得航位推算根本无法应用，因为根据玩家之前的位置和速度的数据根本无法预测接下来会发生什么。</p>
+<p>当服务器发送权威数据时，你不能只更新玩家的位置，这样你只会让玩家每 100 毫秒只更新一次位置，这会让游戏无法继续玩下去。</p>
+<p>你需要解决的是在你拥有的每 100 毫秒的权威位置数据里面，如何和向玩家展示中间发生了什么事情。解决这个问题的关键是展示其他玩家相对当前玩家来说的过去时间。</p>
+<p>假设你在 t = 1000 时收到位置数据，并且你已经在 t = 900 时也收到了数据，因此你现在知道玩家在 t = 900 和 t = 1000 时的位置数据。你可以在 t = 1000 和 t = 1100 显示其他玩家从 t = 900 到 t = 1000 所做的事情。在“延迟”显示100毫秒的情况下，通过这种方式，你始终会显示用户的实际移动数据。</p>
+<p><img src="/images/fpm/fpm3-02.png" alt="fpm"></p>
+<p>用于从 t = 900 到 t = 1000 进行插值的位置数据取决于游戏。通常插值效果以及不错了，如果觉得还不够好，你可以让服务器在每次更新时发送更详细的移动数据。例如，玩家紧随一系列的直线段，或每隔 10 ms 采样一次的位置，这样的插值看起来会更好（在你发送一些增量的小规模移动数据时，你可以针对此特殊情况对线路上的数据格式进行大量优化，因此你不太需要为此发送10倍数量级的数据）。</p>
+<p>请注意，使用这种技术，每个玩家看到游戏世界的渲染都会略有不同，因为每个玩家虽能看到现在的自己，但看到的其他实体却是过去的行为。然而，即使对于快节奏的游戏，看到具有 100 毫秒延迟的其他实体通常也是显而易见的。</p>
+<p>这里有一些例外，当你需要很多空间和时间精度时，例如当玩家向其他玩家射击时，由于看的是过去的其他玩家，你的目标是延迟 100 毫秒的，也就是说，你的射击的是 100 毫秒前目标！我们将在下一篇文章中讨论这个问题。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在具有权威服务器的客户端-服务器环境中，因为不太频繁的更新与网络延迟，你仍然必须给予每个玩家显示连续性和平稳移动的假象。在本系列文章的第2部分中，我们探索了一种使用客户端预测和服务器协调来实时显示用户控制的玩家的移动方法，这可确保用户输入会立即对本地玩家产生影响，消除因为延迟而导致游戏无法继续下去的影响。</p>
+<p>但是，游戏中的其他实体仍然是个问题。在本文中，我们探讨了两种处理它们的方法。</p>
+<p>第一种方法，航位推算，适用于实体的位置可以从先前的实体数据（例如位置，速度和加速度）进行预估的游戏。当不满足这些条件时，此方法将不可行。</p>
+<p>第二个方法，实体插值，当你根本无法预测实体未来的位置时，且它仅能使用服务器提供的真实实体数据时，你可以显示其他实体时在时间上稍微做一些延迟让步。实际效果是用户能看到玩家自己在当前的实际数据，但其他实体看到的却是过去。这通常会带来难以置信的无缝体验。</p>
+<p>但是，如果不做其他事情，当需要高分辨率和时间精度时，例如对一个移动的目标进行瞄准射击，上面的做法将不可用：当客户端2渲染客户端1的位置与服务器端客户端1的位置不匹配时，这会让爆头射击变得不可用。由于没有了爆头射击功能，游戏也会变得不完整，我们将在下一篇文章中处理这个问题。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/多人游戏/" rel="tag"># 多人游戏</a>
+          
+            <a href="/tags/多人游戏网络同步/" rel="tag"># 多人游戏网络同步</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/06/fast-paced-multiplayer-02/" rel="next" title="快节奏多人游戏（2）：客户端预测与服务器协调">
+                <i class="fa fa-chevron-left"></i> 快节奏多人游戏（2）：客户端预测与服务器协调
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/14/fast-paced-multiplayer-04/" rel="prev" title="快节奏多人游戏（4）：延迟补偿">
+                快节奏多人游戏（4）：延迟补偿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器时间步长"><span class="nav-number">2.</span> <span class="nav-text">服务器时间步长</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理低频率更新"><span class="nav-number">3.</span> <span class="nav-text">处理低频率更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#航位（Dead-reckoning）推算"><span class="nav-number">4.</span> <span class="nav-text">航位（Dead reckoning）推算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实体插值"><span class="nav-number">5.</span> <span class="nav-text">实体插值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
