@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm3-01.png">
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm3-02.png">
-<meta property="og:updated_time" content="2019-03-18T14:55:11.487Z">
+<meta property="og:updated_time" content="2019-03-20T13:50:04.106Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快节奏多人游戏（3）：实体插值">
 <meta name="twitter:description" content="介绍在本系列的第一篇文章中，我们介绍了权威服务器的概念及其防止客户欺骗的用处。然而，天真地使用这种技术可能会导致关于可玩性和响应性的潜在问题。在第二篇文章中，我们提出了客户端预测作为克服这些限制的方法。 这两篇文章的最终结果传递的一组概念与技术是允许玩家通过互联网连接到权威的服务器，并在传输延迟的情况下，让玩家以一种完全像玩单机游戏的感觉方式控制游戏中的角色。 在本文中，我们将对连接到同一服务器的">
@@ -412,6 +412,19 @@
 <p>第一种方法，航位推算，适用于实体的位置可以从先前的实体数据（例如位置，速度和加速度）进行预估的游戏。当不满足这些条件时，此方法将不可行。</p>
 <p>第二个方法，实体插值，当你根本无法预测实体未来的位置时，且它仅能使用服务器提供的真实实体数据时，你可以显示其他实体时在时间上稍微做一些延迟让步。实际效果是用户能看到玩家自己在当前的实际数据，但其他实体看到的却是过去。这通常会带来难以置信的无缝体验。</p>
 <p>但是，如果不做其他事情，当需要高分辨率和时间精度时，例如对一个移动的目标进行瞄准射击，上面的做法将不可用：当客户端2渲染客户端1的位置与服务器端客户端1的位置不匹配时，这会让爆头射击变得不可用。由于没有了爆头射击功能，游戏也会变得不完整，我们将在下一篇文章中处理这个问题。</p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/03/02/fast-paced-multiplayer-01/">快节奏多人游戏（1）：客户端与服务器架构</a></li>
+<li><a href="/2019/03/06/fast-paced-multiplayer-02/">快节奏多人游戏（2）：客户端预测与服务器协调</a></li>
+<li><a href="/2019/03/10/fast-paced-multiplayer-03/">快节奏多人游戏（3）：实体插值</a></li>
+<li><a href="/2019/03/14/fast-paced-multiplayer-04/">快节奏多人游戏（4）：延迟补偿</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/entity-interpolation.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
 
       
     </div>

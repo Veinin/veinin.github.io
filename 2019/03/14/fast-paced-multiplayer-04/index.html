@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="Veinin">
 <meta property="og:description" content="介绍前面 3 篇文章阐述了游戏客户端-服务器的架构，我们总结如下：  服务器从所有客户端获取带有时间戳的输入 服务器处理输入后更新游戏世界状态 服务器将游戏世界的快照发送给所有客户端 客户端发送输入并在本地模拟其效果 客户端获得游戏世界更新，同步预测状态和权威状态，并插入其他实体已知的过去状态。  从玩家的角度来看，这里有两个重要的结论：  玩家可以看到现在的自己 玩家可以看到其他实体的过去  这">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-18T14:55:16.280Z">
+<meta property="og:updated_time" content="2019-03-20T13:51:56.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快节奏多人游戏（4）：延迟补偿">
 <meta name="twitter:description" content="介绍前面 3 篇文章阐述了游戏客户端-服务器的架构，我们总结如下：  服务器从所有客户端获取带有时间戳的输入 服务器处理输入后更新游戏世界状态 服务器将游戏世界的快照发送给所有客户端 客户端发送输入并在本地模拟其效果 客户端获得游戏世界更新，同步预测状态和权威状态，并插入其他实体已知的过去状态。  从玩家的角度来看，这里有两个重要的结论：  玩家可以看到现在的自己 玩家可以看到其他实体的过去  这">
@@ -417,7 +417,20 @@
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>这是我对于快节奏多人游戏的最后一篇文章。很显然很多事情很难做到正确，但是对于正在发生的事情有明确的概念性理解，这并不是很困难。</p>
 <p>虽然这些文章的读者都是游戏开发者，但它也发现了另一群对这个感兴趣的读者：游戏玩家！从游戏玩家的角度来看，理解为什么有些事情以这种方式发生也是非常有趣的。</p>
 <h2 id="进一步阅读"><a href="#进一步阅读" class="headerlink" title="进一步阅读"></a>进一步阅读</h2><p>尽管这些技术看起来很聪明，但我不能说对它们有任何功劳，这些文章只是我从其他渠道学到的一些概念所整理成的简单易懂的指南，其中包括文章、源代码以及一些实验。</p>
-<p>关于这个主题相关的文章你可以参考：<a href="http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/" target="_blank" rel="noopener">What Every Programmer Needs To Know About Game Networking</a> 和 <a href="https://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization" target="_blank" rel="noopener">Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization</a></p>
+<p>关于这个主题相关的文章你可以参考：<a href="http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/" target="_blank" rel="noopener">What Every Programmer Needs To Know About Game Networking</a> 与 <a href="https://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization" target="_blank" rel="noopener">Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization</a></p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/03/02/fast-paced-multiplayer-01/">快节奏多人游戏（1）：客户端与服务器架构</a></li>
+<li><a href="/2019/03/06/fast-paced-multiplayer-02/">快节奏多人游戏（2）：客户端预测与服务器协调</a></li>
+<li><a href="/2019/03/10/fast-paced-multiplayer-03/">快节奏多人游戏（3）：实体插值</a></li>
+<li><a href="/2019/03/14/fast-paced-multiplayer-04/">快节奏多人游戏（4）：延迟补偿</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/lag-compensation.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
 
       
     </div>

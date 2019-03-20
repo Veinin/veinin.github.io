@@ -95,7 +95,7 @@
 <meta property="og:description" content="介绍这是探索使快节奏多人游戏成为可能的技术和算法的系列文章中的第一篇。下面只是一个介绍性的入门讨论，如果你已经熟悉多人游戏设计背后的理念，你可以跳到下一篇文章。 开发任何类型的游戏本身都是具有非常大的挑战性的。然而，多人游戏却增加了很多需要我们处理的新问题。有趣的是，其核心问题却是人性和物理！ 作弊问题多人游戏的一切都始于作弊。 作为一个游戏开发者，你通常并不关心一个玩家是否在一个买断制的单机游戏">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm1-01.png">
-<meta property="og:updated_time" content="2019-03-18T14:54:55.208Z">
+<meta property="og:updated_time" content="2019-03-20T13:49:28.313Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快节奏多人游戏（1）：客户端与服务器架构">
 <meta name="twitter:description" content="介绍这是探索使快节奏多人游戏成为可能的技术和算法的系列文章中的第一篇。下面只是一个介绍性的入门讨论，如果你已经熟悉多人游戏设计背后的理念，你可以跳到下一篇文章。 开发任何类型的游戏本身都是具有非常大的挑战性的。然而，多人游戏却增加了很多需要我们处理的新问题。有趣的是，其核心问题却是人性和物理！ 作弊问题多人游戏的一切都始于作弊。 作为一个游戏开发者，你通常并不关心一个玩家是否在一个买断制的单机游戏">
@@ -400,6 +400,19 @@
 <p>回到我们上一个例子，你的客户端向服务器发送了一个输入：我按下了右箭头，服务器在50毫秒后获得它，假设服务器处理请求并立即发回更新的状态。您的客户端在50毫秒后获得最新的游戏状态：你现在处于位置 (1, 0)。从你的角度来看，在你按下右箭头的 1/10 秒内没有发生任何事情，然后你的角色终于向右移动了一个方格，你的输入与输出的结果的显示延迟看起来并不多，但它们是显而易见的。当然，如果你的延迟在半秒以上，你的游戏甚至会因为出现卡顿而无法继续进行下去。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>联网的多人游戏非常有趣，但它也引入了一系列全新的挑战。权威的服务器架构非常擅长阻止大多数的作弊，但其实现可能会使游戏中的操作产生延迟，并使玩家感到反应迟钝。</p>
 <p>在下面的文章中，我们将探讨如何构建一个权威服务器的系统，同时最大限度的减少玩家所经历的操作延迟，使其几乎与本地单人游戏无任何区别。</p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/03/02/fast-paced-multiplayer-01/">快节奏多人游戏（1）：客户端与服务器架构</a></li>
+<li><a href="/2019/03/06/fast-paced-multiplayer-02/">快节奏多人游戏（2）：客户端预测与服务器协调</a></li>
+<li><a href="/2019/03/10/fast-paced-multiplayer-03/">快节奏多人游戏（3）：实体插值</a></li>
+<li><a href="/2019/03/14/fast-paced-multiplayer-04/">快节奏多人游戏（4）：延迟补偿</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/client-server-game-architecture.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
 
       
     </div>

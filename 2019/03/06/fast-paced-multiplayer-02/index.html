@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm2-03.png">
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm2-04.png">
 <meta property="og:image" content="https://veinin.com/images/fpm/fpm2-05.png">
-<meta property="og:updated_time" content="2019-03-18T14:55:00.547Z">
+<meta property="og:updated_time" content="2019-03-20T13:49:39.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快节奏多人游戏（2）：客户端预测与服务器协调">
 <meta name="twitter:description" content="介绍在本系列文章的第一篇文章中，我们探讨了一个客户端-服务器模型，它具有一个权威的服务器和愚蠢的客户端，客户端只是输入发送指令到服务器，然后服务器发送更新后的游戏状态给客户端进行展示。 该方案的简单实现会导致客户端输入指令和屏幕上的更新之间产生延迟。例如一个玩家按下了右键，角色开始移动前需要等待半秒钟，这是因为客户端的输入必须首先发送给服务器，服务器必须处理输入并计算出最新的游戏状态，并且把更新后">
@@ -413,6 +413,19 @@
 <p>由于游戏状态的复杂性，并不是很容易把状态逆转回来。你可能希望避免直接预测角色的死亡状态，直到服务器告诉你角色死亡后才真正执行死亡逻辑，虽然有时候角色的血量在客户的游戏状态已经降为 0 以下了（如果另外一个角色在受到致命打击之前使用了急救箱，而此时服务器还没告诉你）。</p>
 <p>这给我们带来了一个有趣的观点，即使游戏世界是完全确定并且没有任何作弊的客户端，客户端预测的状态和服务器发送的状态仍然可能在协调后不匹配。如上所诉，本文的描述不太可能使用在单个玩家身上，但当多个玩家连接到一个服务器上时这些问题很容易就遇到。我们将在下一篇文章继续讲解。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用权威的服务器时，你需要等待服务器实际处理的输入时提供一些模拟响应的假象，因此，客户端需要模拟输入的结果，当服务器实际的状态到达时，预测的客户端将从更新的状态中以及客户端发送的输入指令重新计算。</p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/03/02/fast-paced-multiplayer-01/">快节奏多人游戏（1）：客户端与服务器架构</a></li>
+<li><a href="/2019/03/06/fast-paced-multiplayer-02/">快节奏多人游戏（2）：客户端预测与服务器协调</a></li>
+<li><a href="/2019/03/10/fast-paced-multiplayer-03/">快节奏多人游戏（3）：实体插值</a></li>
+<li><a href="/2019/03/14/fast-paced-multiplayer-04/">快节奏多人游戏（4）：延迟补偿</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/client-side-prediction-server-reconciliation.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
 
       
     </div>
