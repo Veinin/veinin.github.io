@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://veinin.com/images/pathfinding/path1-01.png">
 <meta property="og:image" content="https://veinin.com/images/pathfinding/path1-02.png">
 <meta property="og:image" content="https://veinin.com/images/pathfinding/path1-03.png">
-<meta property="og:updated_time" content="2019-03-25T15:55:36.619Z">
+<meta property="og:updated_time" content="2019-03-25T16:24:54.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="寻路算法揭秘（1）：通用搜索">
 <meta name="twitter:description" content="介绍寻路算法通常是游戏开发者一个比较困惑的主题。特别是 A* 算法常常令人费解，人们普遍会认为这是一种神秘的魔法。 本系列文章的目的是以一种非常清晰易懂的方式解释常规的寻路与 A* 算法，你不必误解这是一个非常困难的话题，如果解释的当，这将是非常简单明了的问题。 请注意，我们的重点将放在游戏领域的寻路，与学术化的方法不同，我们将跳过诸如深度优先（Depth-First）或广度优先（Breadth-">
@@ -435,7 +435,7 @@
 <h2 id="在线演示"><a href="#在线演示" class="headerlink" title="在线演示"></a>在线演示</h2><p>下面是一个在线演示和上面算法的实现示例。<code>choose_node</code> 只是一个随机选择的节点。你可以一步步的运行它，并查看 <code>可达(reachable)</code> 和 <code>已探索(explored)</code> 节点的变化情况，以及 <code>前驱(previous)</code> 节点的连接情况。</p>
 <script src="http://www.gabrielgambetta.com/js/path_helpers.js"></script>
 
-<table><tr><td width="201" height="201"><canvas width="201" height="201" id="demo"></canvas></td><td><p id="reachable" style="color:green; font-family:courier;">reachable = []</p><p id="explored" style="color:red; font-family:courier;">explored = []</p><p id="path" style="font-family:courier;"></p><p><input type="button" value="Restart" onclick="stopRunSearch(); search.reset();"> &lt;input type=”button” value=”Step”onclick=”stopRunSearch(); search.step();”&gt; <input type="button" value="Run" onclick="runSearch();"></p></td></tr></table>
+<table><tr><td><canvas width="201" height="201" id="demo"></canvas></td><td><p id="reachable" style="color:green; font-family:courier;">reachable = []</p><p id="explored" style="color:red; font-family:courier;">explored = []</p><p id="path" style="font-family:courier;"></p><p><input type="button" value="Restart" onclick="stopRunSearch(); search.reset();"> <input type="button" value="Step" onclick="stopRunSearch(); search.step();"> <input type="button" value="Run" onclick="runSearch();"></p></td></tr></table>
 
 <script>
 // Choose a random node from the reachable list.
@@ -477,8 +477,8 @@ render(search);
 <ul>
 <li><a href="/2019/02/18/pathfinding-demystified-01/">寻路算法揭秘（1）：通用搜索</a></li>
 <li><a href="/2019/02/20/pathfinding-demystified-02/">寻路算法揭秘（2）：搜索策略</a></li>
-<li><a href="/2019/02/23/pathfinding-demystified-03/">寻路算法揭秘（2）：A* 解密</a></li>
-<li><a href="/2019/02/28/pathfinding-demystified-04/">寻路算法揭秘（3）：实用 A* 算法</a></li>
+<li><a href="/2019/02/23/pathfinding-demystified-03/">寻路算法揭秘（3）：A* 解密</a></li>
+<li><a href="/2019/02/28/pathfinding-demystified-04/">寻路算法揭秘（4）：实用 A* 算法</a></li>
 </ul>
 </li>
 <li><p><a href="http://www.gabrielgambetta.com/generic-search.html" target="_blank" rel="noopener">翻译原文</a></p>
@@ -627,7 +627,7 @@ render(search);
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
