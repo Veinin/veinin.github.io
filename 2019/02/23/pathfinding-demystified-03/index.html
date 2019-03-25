@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="寻路算法,A*," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="介绍本系列文章中的第一篇介绍了通用的寻路算法，每种不同类型的寻路算法背后都是它的一个微小变化。 第二篇文章揭示了不同搜索算法背后的秘密：这一切都要归结于 choose_node 函数。它还提供了一个相当简单的 choose_node 函数来生成一个称为统一搜索成本的算法。 这个算法非常好：它将找到从开始节点到目标节点的最短路径。然而，它也有一点点浪费：它会前往人们可以很容易察觉到的错误路径节点，这">
+<meta name="keywords" content="寻路算法,A*">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寻路算法揭秘（3）：A* 解密">
+<meta property="og:url" content="https://veinin.com/2019/02/23/pathfinding-demystified-03/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="介绍本系列文章中的第一篇介绍了通用的寻路算法，每种不同类型的寻路算法背后都是它的一个微小变化。 第二篇文章揭示了不同搜索算法背后的秘密：这一切都要归结于 choose_node 函数。它还提供了一个相当简单的 choose_node 函数来生成一个称为统一搜索成本的算法。 这个算法非常好：它将找到从开始节点到目标节点的最短路径。然而，它也有一点点浪费：它会前往人们可以很容易察觉到的错误路径节点，这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-25T16:00:36.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="寻路算法揭秘（3）：A* 解密">
+<meta name="twitter:description" content="介绍本系列文章中的第一篇介绍了通用的寻路算法，每种不同类型的寻路算法背后都是它的一个微小变化。 第二篇文章揭示了不同搜索算法背后的秘密：这一切都要归结于 choose_node 函数。它还提供了一个相当简单的 choose_node 函数来生成一个称为统一搜索成本的算法。 这个算法非常好：它将找到从开始节点到目标节点的最短路径。然而，它也有一点点浪费：它会前往人们可以很容易察觉到的错误路径节点，这">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2019/02/23/pathfinding-demystified-03/"/>
+
+
+
+
+
+  <title>寻路算法揭秘（3）：A* 解密 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/02/23/pathfinding-demystified-03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">寻路算法揭秘（3）：A* 解密</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-23T20:21:00+08:00">
+                2019-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/寻路算法/" itemprop="url" rel="index">
+                    <span itemprop="name">寻路算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/23/pathfinding-demystified-03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/02/23/pathfinding-demystified-03/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本系列文章中的第一篇介绍了通用的寻路算法，每种不同类型的寻路算法背后都是它的一个微小变化。</p>
+<p>第二篇文章揭示了不同搜索算法背后的秘密：这一切都要归结于 <code>choose_node</code> 函数。它还提供了一个相当简单的 <code>choose_node</code> 函数来生成一个称为<strong>统一搜索成本</strong>的算法。</p>
+<p>这个算法非常好：它将找到从开始节点到目标节点的最短路径。然而，它也有一点点浪费：它会前往人们可以很容易察觉到的错误路径节点，这往往会让目标偏移，我们能避免这种情况的发生吗？</p>
+<h2 id="魔术算法"><a href="#魔术算法" class="headerlink" title="魔术算法"></a>魔术算法</h2><p>想象一下，我们在一台特殊的计算机上运行搜索算法，它拥有一个可以变魔术的芯片。有了这个很棒的芯片，我们就能用一种非常简单的方式来表达 <code>choose_node</code> 函数，它保证产生最短的路径，不会浪费时间去探索那些不会通向目标地方的道路:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">function choose_node (reachable):</span><br><span class="line">    return magic(reachable, &quot;最短路径的下一个节点是什么&quot;)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>虽然这很诱人，但是神奇的芯片仍然需要一些更低级别的代码，下面是一个类似的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function choose_node (reachable):</span><br><span class="line">    min_cost = infinity</span><br><span class="line">    best_node = None</span><br><span class="line"></span><br><span class="line">    for node in reachable:</span><br><span class="line">        cost_start_to_node = node.cost</span><br><span class="line">        cost_node_to_goal = magic(node, &quot;shortest path to the goal&quot;)</span><br><span class="line">        total_cost = cost_start_to_node + cost_node_to_goal</span><br><span class="line"></span><br><span class="line">        if min_cost &gt; total_cost:</span><br><span class="line">            min_cost = total_cost</span><br><span class="line">            best_node = node</span><br><span class="line"></span><br><span class="line">    return best_node</span><br></pre></td></tr></table></figure>
+<p>这是选择下一个节点的好方式：我们选择从开始节点到目标节点的最短路径，而这正是我们想要的。</p>
+<p>我们还最大幅度的减少了魔法的使用：我们确切的知道从起始节点到目标节点（即node.cost）所需成本，并且我们只是使用魔法来预测从当前节点前往目标节点的成本。</p>
+<h2 id="不神奇但是非常棒的-A-算法"><a href="#不神奇但是非常棒的-A-算法" class="headerlink" title="不神奇但是非常棒的 A* 算法"></a>不神奇但是非常棒的 A* 算法</h2><p>不幸的是，魔术芯片很新，但我们希望其支持传统的硬件。上面大多数代码都没问题，除了这一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 抛出麻瓜处理器异常</span><br><span class="line">cost_node_to_goal = magic(node, &quot;shortest path to the goal&quot;)</span><br></pre></td></tr></table></figure>
+<p>所以，我们并不能用魔法来知道我们尚未探索的道路的成本。很好，那让我们来猜猜看，我们很乐观，所以我们假设当前节点到目标节点之间没有任何东西，我们可以直接走：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cost_node_to_goal = distance(node, goal_node)</span><br></pre></td></tr></table></figure>
+<p>注意，最短路径和最小距离是不同的：最小距离假定了当前节点和目标节点之间绝对没有障碍物。</p>
+<p>这个假设当然非常简单。在我们基于网格的示例种，它是两个节点之间的曼哈顿距离，而所谓“曼哈顿距离”是指两点在在东西方向上的距离加上南北方向上的距离，即：abs(Ax - Bx) + abs(Ay - By)。如果你可以移动到对角线，则它的距离会是：sqrt( (Ax - Bx)^2 + (Ay - By)^2)。诸如此类，但最重要的是永远不要高估道路的成本。</p>
+<p>所以，下面是一个没有魔法的 <code>choose_node</code> 版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function choose_node (reachable):</span><br><span class="line">    min_cost = infinity</span><br><span class="line">    best_node = None</span><br><span class="line"></span><br><span class="line">    for node in reachable:</span><br><span class="line">        cost_start_to_node = node.cost</span><br><span class="line">        cost_node_to_goal = estimate_distance(node, goal_node)</span><br><span class="line">        total_cost = cost_start_to_node + cost_node_to_goal</span><br><span class="line"></span><br><span class="line">        if min_cost &gt; total_cost:</span><br><span class="line">            min_cost = total_cost</span><br><span class="line">            best_node = node</span><br><span class="line"></span><br><span class="line">    return best_node</span><br></pre></td></tr></table></figure>
+<p>预估从节点到目标节点的距离的函数成为<strong>启发式算法</strong>，观众朋友们，我们称这种算法叫做 _A*_。</p>
+<h2 id="在线演示"><a href="#在线演示" class="headerlink" title="在线演示"></a>在线演示</h2><p>当你从意识到神秘的 _A*_ 算法实际上那么简单的震惊中恢复过来时，这里有一个你可以试玩的演示。与前面的示例不同，你会注意到整个搜索在错误的方向上浪费的时间非常少。</p>
+<script src="http://www.gabrielgambetta.com/js/path_helpers.js"></script>
+
+<table><tr><td><canvas width="401" height="401" id="demo"></canvas></td><td><p id="reachable" style="color:green; font-family:courier;">reachable = []</p><p id="explored" style="color:red; font-family:courier;">explored = []</p><p id="path" style="font-family:courier;"></p><p><input type="button" value="Restart" onclick="stopRunSearch(); search.reset();"> <input type="button" value="Step" onclick="stopRunSearch(); search.step();"> <input type="button" value="Run" onclick="runSearch();"></p></td></tr></table>
+
+<script>
+// Choose the node with the lowest path cost.
+Search.prototype.chooseNode = function() {
+    // return this.reachable[Math.floor(Math.random() * this.reachable.length)];
+    var min_cost = Infinity;
+    var best_node = undefined;
+
+    for (var i in this.reachable) {
+        var node = this.reachable[i];
+
+        // Compute Manhattan distance to goal.
+        var idx = getNodeIndex(node, this.graph.nodes);
+        var nr = Math.floor(idx / this.graph.cols);
+        var nc = idx % this.graph.cols; 
+
+        idx = getNodeIndex(this.goal_node, this.graph.nodes);
+        var gr = Math.floor(idx / this.graph.cols);
+        var gc = idx % this.graph.cols; 
+
+        var node_to_goal_distance_estimate = Math.abs(nr - gr) + Math.abs(nc - gc);
+        var total_cost = node.cost + node_to_goal_distance_estimate;
+
+        if (total_cost < min_cost) {
+            min_cost = total_cost;
+            best_node = node;
+        }
+    }
+
+    return best_node;
+}
+
+Search.prototype.addAdjacent = function(node, adjacent) {
+    if (findNode(adjacent, this.explored)) {
+        return;
+    }
+
+    if (!findNode(adjacent, this.reachable)) {
+        this.reachable.push(adjacent);
+    }
+
+    if (adjacent.cost > node.cost + 1) {
+        adjacent.cost = node.cost + 1;
+        adjacent.previous = node;
+    }
+}
+
+// Build the grid used in the example.
+// "*" represent a blocked square, " " an open one.
+var graph = new Graph(["          ",
+                       "          ",
+                       "          ",
+                       "          ",
+                       "          ",
+                       "          ",
+                       "        * ",
+                       "       ** ",
+                       "      **  ",
+                       "          "]);
+
+var stepDelay = 100;
+
+var search = new Search(graph, "BN", "CK");
+search.reset();
+
+render(search);
+</script>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>我们最终得到了 _A*_ 算法，它只不过是第一篇文章中描述的通用搜索算法，在第二篇文章的描述中加入了一些改进，使用 <code>choose_node</code> 函数选择我们预估的节点将使我们更加接近目标，仅此而已。</p>
+<p>参照上面的结论，我们给出了主要方法的伪代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">function find_path(start_node, goal_node):</span><br><span class="line">    reachable = [start_node]</span><br><span class="line">    explored = []</span><br><span class="line"></span><br><span class="line">    while reachable is not empty:</span><br><span class="line">        # 选择一个我们知道如何到达的节点</span><br><span class="line">        node = choose_node(reachable)</span><br><span class="line"></span><br><span class="line">        # 如果我们刚好到达了目标节点，则构建并返回路径。</span><br><span class="line">        if node == goal_node:</span><br><span class="line">            return build_path(goal_node)</span><br><span class="line"></span><br><span class="line">        # 记录已经处理的节点，防止重复处理</span><br><span class="line">        reachable.remove(node)</span><br><span class="line">        explored.add(node)</span><br><span class="line"></span><br><span class="line">        # 我们能从这个节点得到我们以前没有探索过的新节点</span><br><span class="line">        new_reachable = get_adjacent_node(node) - explored</span><br><span class="line">        for adjacent in new_reachable:</span><br><span class="line">            # 是不是第一次抵达这个节点</span><br><span class="line">            if adjacent not in reachable:</span><br><span class="line">                reachable.add(adjacent)</span><br><span class="line"></span><br><span class="line">            # 如果这是一个新路径，或者比现有的路径更短，则保留它</span><br><span class="line">            if node.cost + 1 &lt; adjacent.cost:</span><br><span class="line">                adjacent.previous = node</span><br><span class="line">                adjacent.cost = node.cost + 1</span><br><span class="line"></span><br><span class="line">    # 如果我们到达了这里，则路径没有找到</span><br><span class="line">    return None</span><br></pre></td></tr></table></figure>
+<p><code>build_path</code> 方法实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function build_path(to_node):</span><br><span class="line">    path = []</span><br><span class="line">    while to_node != None:</span><br><span class="line">        path.add(to_node)</span><br><span class="line">        to_node = to_node.previous</span><br><span class="line">    return path</span><br></pre></td></tr></table></figure>
+<p>使用 A* 算法实现的 <code>choose_node</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function choose_node(reachable):</span><br><span class="line">    min_cost = infinity</span><br><span class="line">    best_node = None</span><br><span class="line"></span><br><span class="line">    for node in reachable:</span><br><span class="line">        cost_start_to_node = node.cost</span><br><span class="line">        cost_node_to_goal = estimate_distance(node, goal_node)</span><br><span class="line">        total_cost = cost_start_to_node + cost_node_to_goal</span><br><span class="line"></span><br><span class="line">        if min_cost &gt; total_cost:</span><br><span class="line">            min_cost = total_cost</span><br><span class="line">            best_node = node</span><br><span class="line"></span><br><span class="line">    return best_node</span><br></pre></td></tr></table></figure>
+<p>经此而已。</p>
+<p>那么为什么本系列文章还有第四部分？</p>
+<p>现在你已经了解了 _A*_ 算法的工作原理，我想探索一些令人难以置信的应用程序，而不仅仅是在一个正方形的网格中搜索路径。</p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/02/18/pathfinding-demystified-01/">寻路算法揭秘（1）：通用搜索</a></li>
+<li><a href="/2019/02/20/pathfinding-demystified-02/">寻路算法揭秘（2）：搜索策略</a></li>
+<li><a href="/2019/02/23/pathfinding-demystified-03/">寻路算法揭秘（2）：A* 解密</a></li>
+<li><a href="/2019/02/28/pathfinding-demystified-04/">寻路算法揭秘（3）：实用 A* 算法</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/generic-search.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/寻路算法/" rel="tag"># 寻路算法</a>
+          
+            <a href="/tags/A/" rel="tag"># A*</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/20/pathfinding-demystified-02/" rel="next" title="寻路算法揭秘（2）：搜索策略">
+                <i class="fa fa-chevron-left"></i> 寻路算法揭秘（2）：搜索策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/28/pathfinding-demystified-04/" rel="prev" title="寻路算法揭秘（4）：实用 A* 算法">
+                寻路算法揭秘（4）：实用 A* 算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#魔术算法"><span class="nav-number">2.</span> <span class="nav-text">魔术算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不神奇但是非常棒的-A-算法"><span class="nav-number">3.</span> <span class="nav-text">不神奇但是非常棒的 A* 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在线演示"><span class="nav-number">4.</span> <span class="nav-text">在线演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">5.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

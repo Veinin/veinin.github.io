@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="寻路算法,A*," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="介绍本系列的前三篇文章从寻路算法的基础知识开始，最后非常清晰明了地阐述了A *算法。这在理论上是很好的，但对于理解如何在实践中应用它却是一个不同的主题。 例如，如果你的世界不是网格怎么办？ 如果你的角色不能瞬间旋转90度怎么办？ 如果你的世界是无限的，你又该如何建立一个图表？ 如果您不关心路径上的长度，但是您依赖太阳光并且需要尽可能地在阳光下呢？ 如何找到两个目标节点中任何一个的最短路径？">
+<meta name="keywords" content="寻路算法,A*">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寻路算法揭秘（4）：实用 A* 算法">
+<meta property="og:url" content="https://veinin.com/2019/02/28/pathfinding-demystified-04/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="介绍本系列的前三篇文章从寻路算法的基础知识开始，最后非常清晰明了地阐述了A *算法。这在理论上是很好的，但对于理解如何在实践中应用它却是一个不同的主题。 例如，如果你的世界不是网格怎么办？ 如果你的角色不能瞬间旋转90度怎么办？ 如果你的世界是无限的，你又该如何建立一个图表？ 如果您不关心路径上的长度，但是您依赖太阳光并且需要尽可能地在阳光下呢？ 如何找到两个目标节点中任何一个的最短路径？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-25T16:00:50.345Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="寻路算法揭秘（4）：实用 A* 算法">
+<meta name="twitter:description" content="介绍本系列的前三篇文章从寻路算法的基础知识开始，最后非常清晰明了地阐述了A *算法。这在理论上是很好的，但对于理解如何在实践中应用它却是一个不同的主题。 例如，如果你的世界不是网格怎么办？ 如果你的角色不能瞬间旋转90度怎么办？ 如果你的世界是无限的，你又该如何建立一个图表？ 如果您不关心路径上的长度，但是您依赖太阳光并且需要尽可能地在阳光下呢？ 如何找到两个目标节点中任何一个的最短路径？">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2019/02/28/pathfinding-demystified-04/"/>
+
+
+
+
+
+  <title>寻路算法揭秘（4）：实用 A* 算法 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/02/28/pathfinding-demystified-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">寻路算法揭秘（4）：实用 A* 算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-28T22:13:45+08:00">
+                2019-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/寻路算法/" itemprop="url" rel="index">
+                    <span itemprop="name">寻路算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/28/pathfinding-demystified-04/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/02/28/pathfinding-demystified-04/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本系列的前三篇文章从寻路算法的基础知识开始，最后非常清晰明了地阐述了A *算法。这在理论上是很好的，但对于理解如何在实践中应用它却是一个不同的主题。</p>
+<p>例如，如果你的世界不是网格怎么办？</p>
+<p>如果你的角色不能瞬间旋转90度怎么办？</p>
+<p>如果你的世界是无限的，你又该如何建立一个图表？</p>
+<p>如果您不关心路径上的长度，但是您依赖太阳光并且需要尽可能地在阳光下呢？</p>
+<p>如何找到两个目标节点中任何一个的最短路径？</p>
+<a id="more"></a>
+<h2 id="成本（Cost）函数"><a href="#成本（Cost）函数" class="headerlink" title="成本（Cost）函数"></a>成本（Cost）函数</h2><p>在最初的示例中，我们搜索了从开始节点到目标节点之间的最短路径。然而，我们没有将路径长度存储在一个变量 <code>length</code> 中，而是将其命名为 <code>cost</code>，为什么呢？</p>
+<p>A* 搜索不仅仅能搜索到最短路径，还可以搜索到你定义的“最好”的路径，这对我们的目标是有好处的。当我们想要最短路径时，代价时路径的长度；但当我们想要最小化，比如说，燃料消耗，那就得把它当作消耗成本（cost）；如果你想最大化“阳光下的时间”，那么成本就是没有阳光的时间。诸如此类…</p>
+<p>这通常意味着图中的每一条边都与一个特定的成本相关。在最初的例子中，因为我们在计算路径上的步长，路径的成本是隐式的，假设它总是为 1，但是你可以根据你想要的最小化的任何值来调整每条边的成本。</p>
+<h2 id="目标（Goal）函数"><a href="#目标（Goal）函数" class="headerlink" title="目标（Goal）函数"></a>目标（Goal）函数</h2><p>假设你是一辆汽车，需要去加油站。任何加油站都可以。您想要到最短的路径的最近加油站。</p>
+<p>一种天真的方法是依次计算到每个加油站的最短路径，然后选择最短的路径。这会奏效，但这会非常浪费。</p>
+<p>你可以做的是用过一个方法来替换单一的目标节点（goal_node），这个方法根据给定的节点来判断是否是目标节点。这样你可以同时寻找多个目标，你还可以调整启发式算法，以返回所有可能目标的最小估计成本。</p>
+<p>根据你的具体情况，你可能无法准确到达目标，或者这样做成本很高（如果你在一张巨大的地图中传送一个角色，你会在一哪怕一英寸的差距吗？），因此，方法 <code>is_goal_node</code> 可以在“足够接近”时返回 <code>true</code>。</p>
+<h2 id="不需要很明确"><a href="#不需要很明确" class="headerlink" title="不需要很明确"></a>不需要很明确</h2><p>将世界表示为离散的网格对于许多游戏来说可能不够好。例如，考虑第一人称射击游戏或赛车游戏，世界是离散的，你不能用网格来表示它。</p>
+<p>但这还有一个更大的难题，如果世界是无限大的呢？在这种情况下，即使你可以把它表示成为一个网格，你也不能建立与网格相对应的图形，因为它是一个无限大的图像。</p>
+<p>然而，希望并没有丧失。我们确实需要一个图表来运行图形搜索算法，但是没人说图表必须是明确的。</p>
+<p>如果仔细查看算法，你会注意到我们对图表整体没有做任何事情。相反，我们通过正在考虑的节点中获取可以到达的节点，正如 A* 算法演示中看到的，图中的一些节点根本没有被探索过。</p>
+<p>那么，如果我们只是在搜索时才去构建图形该怎么办？</p>
+<p>我们将起始节点设置为当前角色的位置。无论何时调用方法 <code>get_adjacent_nodes</code>，它都可以找出角色从给定节点移动的可能方向，并在运行中创建相邻节点。</p>
+<h2 id="超越三重维度"><a href="#超越三重维度" class="headerlink" title="超越三重维度"></a>超越三重维度</h2><p>即使您的世界是 2D 网格，也需要考虑其他因素。例如，如果你的角色不能瞬间转90度或180度，这种情况该怎么办？</p>
+<p>每个搜索节点所代表的状态步兵局限于某个位置，相反，它可以包括一组任意复杂的值。例如，如果旋转90度从一个方块走到另外一个方块所需的时间相同，那么角色的状态可以是： [坐标(position), 航向(heading)]。现在，每个节点不仅仅表示角色的位置，还表示角色的航向，图的每一条新边（隐式或显示）反应了这一点。</p>
+<p>回到最初的 5x5 的网格，现在搜索的起始坐标可能是 [A, East]，相邻节点现在则是 [B, East] 和 [A, South]。如果你想到达 F 节点，首先你需要先修正你的航向，所以路径将是 [A, East] -&gt; [A, South] -&gt; [F, South]。</p>
+<p>而第一人称射击游戏呢？你至少需要四个维度：[X, Y, Z, 航向]，设置可能是：[X, Y, Z, 航向, 血量, 弹药]。</p>
+<p>请注意，状态越复杂，启发式函数也就会越复杂。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>这几篇文章的目的是一劳永逸的消除 A* 算法是一种神秘的，难以理解的感觉。相反，我已经证明了它没有什么神秘之处。事实上，它可以用一种非常直接的方式从0开始推导出来。</p>
+<h3 id="进一步阅读"><a href="#进一步阅读" class="headerlink" title="进一步阅读"></a>进一步阅读</h3><p>阿米特·帕特尔（Amit Patel）有一篇非常好的关于 <a href="https://www.redblobgames.com/pathfinding/a-star/introduction.html" target="_blank" rel="noopener">A* 算法介绍</a>，当然他的其他主题文章也是非常棒的。</p>
+<hr>
+<ul>
+<li><p>系列文章目录：</p>
+<ul>
+<li><a href="/2019/02/18/pathfinding-demystified-01/">寻路算法揭秘（1）：通用搜索</a></li>
+<li><a href="/2019/02/20/pathfinding-demystified-02/">寻路算法揭秘（2）：搜索策略</a></li>
+<li><a href="/2019/02/23/pathfinding-demystified-03/">寻路算法揭秘（2）：A* 解密</a></li>
+<li><a href="/2019/02/28/pathfinding-demystified-04/">寻路算法揭秘（3）：实用 A* 算法</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.gabrielgambetta.com/generic-search.html" target="_blank" rel="noopener">翻译原文</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/寻路算法/" rel="tag"># 寻路算法</a>
+          
+            <a href="/tags/A/" rel="tag"># A*</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/23/pathfinding-demystified-03/" rel="next" title="寻路算法揭秘（3）：A* 解密">
+                <i class="fa fa-chevron-left"></i> 寻路算法揭秘（3）：A* 解密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/02/fast-paced-multiplayer-01/" rel="prev" title="快节奏多人游戏（1）：客户端与服务器架构">
+                快节奏多人游戏（1）：客户端与服务器架构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成本（Cost）函数"><span class="nav-number">2.</span> <span class="nav-text">成本（Cost）函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标（Goal）函数"><span class="nav-number">3.</span> <span class="nav-text">目标（Goal）函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不需要很明确"><span class="nav-number">4.</span> <span class="nav-text">不需要很明确</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超越三重维度"><span class="nav-number">5.</span> <span class="nav-text">超越三重维度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">6.</span> <span class="nav-text">结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进一步阅读"><span class="nav-number">6.1.</span> <span class="nav-text">进一步阅读</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
