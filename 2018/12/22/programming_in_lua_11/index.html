@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Lua编程,Lua 5.3,元表,元方法," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Lua 语言中每中类型的值都有一套可预见的操作集合，比如可以将数字相加，将字符串连接，还可以在表中插入键值对。但我们却无法直接将两个表相加，无法对表进行直接比较，除非我们使用元表。元表可以修改一个值在面对未知操作时的行为。例如，我们对两个表 a 和 b 执行 a + b 操作，Lua 在试图将两个表相加时，会检查其中某个表是否含有元表(metatable)，且元表中是否含有 __add 字段，如果">
+<meta name="keywords" content="Lua编程,Lua 5.3,元表,元方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lua入门教程：元表与元方法">
+<meta property="og:url" content="https://veinin.com/2018/12/22/programming_in_lua_11/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="Lua 语言中每中类型的值都有一套可预见的操作集合，比如可以将数字相加，将字符串连接，还可以在表中插入键值对。但我们却无法直接将两个表相加，无法对表进行直接比较，除非我们使用元表。元表可以修改一个值在面对未知操作时的行为。例如，我们对两个表 a 和 b 执行 a + b 操作，Lua 在试图将两个表相加时，会检查其中某个表是否含有元表(metatable)，且元表中是否含有 __add 字段，如果">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-25T16:17:38.447Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lua入门教程：元表与元方法">
+<meta name="twitter:description" content="Lua 语言中每中类型的值都有一套可预见的操作集合，比如可以将数字相加，将字符串连接，还可以在表中插入键值对。但我们却无法直接将两个表相加，无法对表进行直接比较，除非我们使用元表。元表可以修改一个值在面对未知操作时的行为。例如，我们对两个表 a 和 b 执行 a + b 操作，Lua 在试图将两个表相加时，会检查其中某个表是否含有元表(metatable)，且元表中是否含有 __add 字段，如果">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/12/22/programming_in_lua_11/"/>
+
+
+
+
+
+  <title>Lua入门教程：元表与元方法 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/22/programming_in_lua_11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Lua入门教程：元表与元方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T21:35:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/22/programming_in_lua_11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/12/22/programming_in_lua_11/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Lua 语言中每中类型的值都有一套可预见的操作集合，比如可以将数字相加，将字符串连接，还可以在表中插入键值对。但我们却无法直接将两个表相加，无法对表进行直接比较，除非我们使用元表。<br>元表可以修改一个值在面对未知操作时的行为。例如，我们对两个表 a 和 b 执行 <code>a + b</code> 操作，Lua 在试图将两个表相加时，会检查其中某个表是否含有元表(metatable)，且元表中是否含有 <code>__add</code> 字段，如果 Lua 找到该字段，则调用该字段对应的值，这就是所有的元方法(metamethod)。</p>
+<p>在元表中每个元方法的键的命名都是一个双下划线（__）加事件名的，键关联的那些值被称为元方法。上面说的 <code>_add</code> 就是元方法键名称，而对应的元方法值是执行加操作的函数。</p>
+<h2 id="获取与设置元表"><a href="#获取与设置元表" class="headerlink" title="获取与设置元表"></a>获取与设置元表</h2><p>在 Lua 中每个值都可以有元表，而元表只是一个普通的Lua表。<br>每个表和用户数据类型都具有各自独立的元表，而其他类型的值则共享对于类型所属的同一个元表。<br>我们可以使用 <code>getmetatable</code> 获取一个表的元表，注意，刚创建的新表是没有元表的：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">t = &#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(t))  <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>另外，我们可以使用 <code>setmetatable</code> 来设置和修改任意表的元表：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">t1 = &#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(t, t1)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(t) == t1)    <span class="comment">--&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>在 Lua 中我们只能为表设置元表，如果要为其他类型值设置元表，则必须通过C代码或调试库完成。另外，字符串库为所有字符串都设置了同一个元表，而其他类型默认是没有元表的：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="string">"hello"</span>))    <span class="comment">--&gt; table: 0106F578</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="string">"world"</span>))    <span class="comment">--&gt; table: 0106F578</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="literal">true</span>))       <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="算术运算元方法"><a href="#算术运算元方法" class="headerlink" title="算术运算元方法"></a>算术运算元方法</h2><p>对于数学运算、位运算这些算术运算符，每一个操作都有唯一对应的元方法：</p>
+<ul>
+<li><strong>__add</strong>: + 操作。 如果任何不是数字的值（包括不能转换为数字的字符串）做加法， Lua 就会尝试调用该元方法。</li>
+<li><strong>__sub</strong>: - 操作。 行为和 “add” 操作类似。</li>
+<li><strong>__mul</strong>: * 操作。 行为和 “add” 操作类似。</li>
+<li><strong>__div</strong>: / 操作。 行为和 “add” 操作类似。</li>
+<li><strong>__mod</strong>: % 操作。 行为和 “add” 操作类似。</li>
+<li><strong>__pow</strong>: ^ （次方）操作。 行为和 “add” 操作类似。</li>
+<li><strong>__unm</strong>: - （取负）操作。 行为和 “add” 操作类似。</li>
+<li><strong>__idiv</strong>: // （向下取整除法）操作。 行为和 “add” 操作类似。</li>
+<li><strong>__band</strong>: &amp; （按位与）操作。 行为和 “add” 操作类似， 不同的是 Lua 会在任何一个操作数无法转换为整数时尝试取元方法。</li>
+<li><strong>__bor</strong>: | （按位或）操作。 行为和 “band” 操作类似。</li>
+<li><strong>__bxor</strong>: ~ （按位异或）操作。 行为和 “band” 操作类似。</li>
+<li><strong>__bnot</strong>: ~ （按位非）操作。 行为和 “band” 操作类似。</li>
+<li><strong>__shl</strong>: &lt;&lt; （左移）操作。 行为和 “band” 操作类似。</li>
+<li><strong>__shr</strong>: &gt;&gt; （右移）操作。 行为和 “band” 操作类似。</li>
+</ul>
+<p>比如下面实现一个表用作集合操作，并对集合操作实现加法运算的元方法：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> set = &#123;&#125;</span><br><span class="line"><span class="keyword">local</span> set_mt = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">set.new</span><span class="params">(v)</span></span></span><br><span class="line">    <span class="keyword">local</span> set = <span class="built_in">setmetatable</span>(&#123;&#125;, set_mt)</span><br><span class="line">    <span class="keyword">for</span> _, v <span class="keyword">in</span> <span class="built_in">ipairs</span>(v) <span class="keyword">do</span></span><br><span class="line">        set[v] = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> set</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">set_mt.<span class="built_in">__add</span> = <span class="function"><span class="keyword">function</span><span class="params">(a, b)</span></span></span><br><span class="line">    <span class="keyword">local</span> ret = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">pairs</span>(a) <span class="keyword">do</span> ret[k] = <span class="literal">true</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">pairs</span>(b) <span class="keyword">do</span> ret[k] = <span class="literal">true</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>然后，我们可以按以下方法对一个集合进行加法运算了：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> s1 = set.new&#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>&#125;</span><br><span class="line"><span class="keyword">local</span> s2 = set.new&#123;<span class="number">20</span>, <span class="number">50</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(s1)) <span class="comment">--&gt; table: 00E7E978</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(s2)) <span class="comment">--&gt; table: 00E7E978</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> s3 = s1 + s2</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> t = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">pairs</span>(s3) <span class="keyword">do</span></span><br><span class="line">    t[#t + <span class="number">1</span>] = k</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"&#123;"</span> .. <span class="built_in">table</span>.<span class="built_in">concat</span>(t, <span class="string">", "</span>) .. <span class="string">"&#125;"</span>) <span class="comment">--&gt; &#123;40, 10, 20, 30, 50&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="关系运算符元方法"><a href="#关系运算符元方法" class="headerlink" title="关系运算符元方法"></a>关系运算符元方法</h2><p>我们还可以指定关系运算符元方法，其主要包含以下几种操作：</p>
+<ul>
+<li><strong>__eq</strong>: == （等于）操作。仅在两个值都是表或都是完全用户数据时，且它们不是同一个对象时才尝试该元方法，调用的结果总会被转换为布尔量。</li>
+<li><strong>__lt</strong>: &lt; （小于）操作。 仅在两个值不全为整数也不全为字符串时才尝试元方法，调用的结果总会被转换为布尔量。</li>
+<li><strong>__le</strong>: &lt;= （小于等于）操作。 和其它操作不同， 小于等于操作可能用到两个不同的事件。 首先，像 “lt” 操作的行为那样，Lua 在两个操作数中查找 <code>__le</code> 元方法，如果一个元方法都找不到，就会再次查找 <code>__lt</code> 元方法，Lua 会将 a &lt;= b 转化为 not (b &lt; a)；a ~= b 转换为 not (a == b)；a &gt; b 转换为 b &lt; a；a &gt;= b 转换为 b &lt; a。</li>
+</ul>
+<p>我们可以尝试为上面集合增加一个集合相等操作：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">set_mt.<span class="built_in">__eq</span> = <span class="function"><span class="keyword">function</span><span class="params">(a, b)</span></span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">pairs</span>(a) <span class="keyword">do</span> </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> b[k] <span class="keyword">then</span> <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">pairs</span>(b) <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> a[k] <span class="keyword">then</span> <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>然后我们对集合进行比较：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> s1 = set.new&#123;<span class="number">2</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="keyword">local</span> s2 = set.new&#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line"><span class="keyword">local</span> s3 = set.new&#123;<span class="number">2</span>, <span class="number">4</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(s1 == s2) <span class="comment">--&gt; false</span></span><br><span class="line"><span class="built_in">print</span>(s1 == s3) <span class="comment">--&gt; true</span></span><br></pre></td></tr></table></figure>
+<h2 id="index-与-newindex-元方法"><a href="#index-与-newindex-元方法" class="headerlink" title="index 与 newindex 元方法"></a><strong>index 与 </strong>newindex 元方法</h2><p>Lua 提供了一种能改变表在<strong>访问</strong>和<strong>修改</strong>表中不存在字段时的行为方式。</p>
+<h3 id="index-元方法"><a href="#index-元方法" class="headerlink" title="__index 元方法"></a>__index 元方法</h3><p>当我们访问一个表中不存在的字段时，通常情况下会返回 nil。但实际上，这样的访问方式会引发解释器取查找一个名为 <code>__index</code> 的元方法。如果没有找到这个元方法，则会直接返回 nil，否则会由这个元方法来提供最终的结果。</p>
+<p>下面代码首先定义了一个原型 <code>prototype</code> 用来表示窗口坐标和大小信息，然后定义了一个 <code>new</code> 构造函数来产生一个对象，返回的对象直接设置成了元表 <code>mt</code>，该元表定义了元方法 __index，访问该元方法默认是直接访问 <code>prototype</code> 表的熟悉：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">prototype = &#123;x = <span class="number">0</span>, y = <span class="number">0</span>, width = <span class="number">100</span>, height = <span class="number">100</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> mt = &#123;&#125;</span><br><span class="line"></span><br><span class="line">mt.<span class="built_in">__index</span> = <span class="function"><span class="keyword">function</span><span class="params">(_, key)</span></span></span><br><span class="line">    <span class="keyword">return</span> prototype[key]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">new</span><span class="params">(o)</span></span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">setmetatable</span>(o, mt)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>然后我们可以调用函数 new 创建新对象，并指定对象的宽度和高度属性，可以预见的是，新对象并不包含坐标 x 和 y 的值，当我们访问不存在的 x 值时会触发直接访问 <code>__index</code> 元方法，并返回 <code>prototype</code> 的默认值 0：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w = new&#123;width = <span class="number">50</span>, heigh = <span class="number">50</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(w.x) <span class="comment">--&gt; 0</span></span><br></pre></td></tr></table></figure>
+<p><code>__index</code> 虽然叫做元方法，但不一定非得是一个函数，它还可以是一个表。当元方法是一个函数时，Lua 会把当前表和不存在的参数名作为参数调用该函数；当元方法是一个表时，Lua 会直接访问这个表。<br>上面例子中，我们把 <code>__index</code> 字段直接设置为 <code>prototype</code> 时，访问不存在的值时，会直接返回 <code>prototype</code> 对应的值：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mt.<span class="built_in">__index</span> = prototype</span><br></pre></td></tr></table></figure>
+<h3 id="index-元方法与-rawget-函数"><a href="#index-元方法与-rawget-函数" class="headerlink" title="__index 元方法与 rawget 函数"></a>__index 元方法与 rawget 函数</h3><p>有时候我们希望访问一个表时，不调用 <code>__index</code> 元方法，那么我们可以使用 <code>rawget (table, index)</code> 函数，该函数会在不触发任何元方法的情况下直接获取 <code>table[index]</code> 的值。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w = new&#123;width = <span class="number">50</span>, heigh = <span class="number">50</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">rawget</span>(w, <span class="string">"x"</span>)) <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>可以看到上面代码使用 <code>rawget</code> 访问 x 属性时，并不会触发对元方法 <code>__index</code> 的访问，而是直接返回了 nil。</p>
+<h3 id="newindex-元方法"><a href="#newindex-元方法" class="headerlink" title="__newindex 元方法"></a>__newindex 元方法</h3><p><code>__newindex</code> 与 <code>__index</code> 类似，不同之处在于 <code>__newindex</code> 用于表的更新操作，而 <code>__index</code> 用于表的查询操作。<br>当对一个表中不存在的索引赋值时，解释器就会触发 <code>__newindex</code> 元方法，如果这个元方法存在则会直接调用它，而不会继续执行赋值操作。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mt.<span class="built_in">__newindex</span> = <span class="function"><span class="keyword">function</span><span class="params">(t, key, value)</span></span></span><br><span class="line">    <span class="built_in">error</span>(<span class="string">"attempt to update a nonexistent field"</span>, <span class="number">2</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">obj = new&#123;width = <span class="number">50</span>, height = <span class="number">50</span>&#125;</span><br><span class="line">obj.name = <span class="string">"Window"</span> <span class="comment">-- 赋值不存在的键时，产生错误</span></span><br></pre></td></tr></table></figure>
+<p>上面例子中，我们可以使用 <code>__newindex</code> 元方法来拦截对不存在的字段的赋值操作，当不存在的 <code>name</code> 字段赋值时，会触发 <code>__newindex</code> 元方法，并抛出一个赋值错误的异常。</p>
+<h3 id="newindex-元方法与-rawset-函数"><a href="#newindex-元方法与-rawset-函数" class="headerlink" title="__newindex 元方法与 rawset 函数"></a>__newindex 元方法与 rawset 函数</h3><p>与函数 <code>rawget</code> 类似，原始函数 <code>rawset (t, k, v)</code> 允许我们绕过元方法，直接对某个表进行赋值操作。其中参数 t 必须时一张表，当我们调用 <code>rawset(t, k, v)</code> 时，其等价于 <code>t[k] = v</code>，但不会触发任何元方法。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mt.<span class="built_in">__newindex</span> = <span class="function"><span class="keyword">function</span><span class="params">(t, key, value)</span></span></span><br><span class="line">    <span class="keyword">if</span> key == <span class="string">"name"</span> <span class="keyword">and</span> <span class="built_in">type</span>(value) ~= <span class="string">"string"</span> <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">error</span>(<span class="string">"the assignment must be of type string"</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="built_in">rawset</span>(t, key, value)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">obj = new&#123;width = <span class="number">50</span>, height = <span class="number">50</span>&#125;</span><br><span class="line">obj.name = <span class="number">1</span> <span class="comment">-- 非字符串类型，产生错误</span></span><br></pre></td></tr></table></figure>
+<p>上面例子中，当我们对对象的 <code>name</code> 字段赋值时，会触发 <code>__newindex</code> 元方法，该函数会检查 <code>name</code> 字段的值是否为字符串类型，如果不是则会抛出错误，否则执行正常赋值操作。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Lua编程/" rel="tag"># Lua编程</a>
+          
+            <a href="/tags/Lua-5-3/" rel="tag"># Lua 5.3</a>
+          
+            <a href="/tags/元表/" rel="tag"># 元表</a>
+          
+            <a href="/tags/元方法/" rel="tag"># 元方法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/programming_in_lua_10/" rel="next" title="Lua入门教程：模块与包">
+                <i class="fa fa-chevron-left"></i> Lua入门教程：模块与包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/25/programming_in_lua_14/" rel="prev" title="Lua入门教程：垃圾回收">
+                Lua入门教程：垃圾回收 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置元表"><span class="nav-number">1.</span> <span class="nav-text">获取与设置元表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算术运算元方法"><span class="nav-number">2.</span> <span class="nav-text">算术运算元方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系运算符元方法"><span class="nav-number">3.</span> <span class="nav-text">关系运算符元方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#index-与-newindex-元方法"><span class="nav-number">4.</span> <span class="nav-text">index 与 newindex 元方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#index-元方法"><span class="nav-number">4.1.</span> <span class="nav-text">__index 元方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#index-元方法与-rawget-函数"><span class="nav-number">4.2.</span> <span class="nav-text">__index 元方法与 rawget 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#newindex-元方法"><span class="nav-number">4.3.</span> <span class="nav-text">__newindex 元方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#newindex-元方法与-rawset-函数"><span class="nav-number">4.4.</span> <span class="nav-text">__newindex 元方法与 rawset 函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

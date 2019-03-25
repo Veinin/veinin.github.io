@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Lua编程,Lua 5.3,Lua协程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="从多线程的角度来看，协程（coroutine）与线程（thread）类似：协程时一系列的可执行语句，拥有自己的栈、局部变量和指令指针，同时协程又与其他协程共享全局变量和其他几乎一切资源。 协程与线程的主要区别在于，一个多线程程序可以并行运行多个线程，而协程则需要彼此协作运行，即在任意时刻只能有一个协程运行，且只有当正在运行的协程要求挂起时其执行才会暂停。 协程基础与协程相关的函数都放在表 coro">
+<meta name="keywords" content="Lua编程,Lua 5.3,Lua协程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lua入门教程：协程">
+<meta property="og:url" content="https://veinin.com/2019/01/03/programming_in_lua_15/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="从多线程的角度来看，协程（coroutine）与线程（thread）类似：协程时一系列的可执行语句，拥有自己的栈、局部变量和指令指针，同时协程又与其他协程共享全局变量和其他几乎一切资源。 协程与线程的主要区别在于，一个多线程程序可以并行运行多个线程，而协程则需要彼此协作运行，即在任意时刻只能有一个协程运行，且只有当正在运行的协程要求挂起时其执行才会暂停。 协程基础与协程相关的函数都放在表 coro">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-25T16:17:59.396Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lua入门教程：协程">
+<meta name="twitter:description" content="从多线程的角度来看，协程（coroutine）与线程（thread）类似：协程时一系列的可执行语句，拥有自己的栈、局部变量和指令指针，同时协程又与其他协程共享全局变量和其他几乎一切资源。 协程与线程的主要区别在于，一个多线程程序可以并行运行多个线程，而协程则需要彼此协作运行，即在任意时刻只能有一个协程运行，且只有当正在运行的协程要求挂起时其执行才会暂停。 协程基础与协程相关的函数都放在表 coro">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2019/01/03/programming_in_lua_15/"/>
+
+
+
+
+
+  <title>Lua入门教程：协程 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/01/03/programming_in_lua_15/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Lua入门教程：协程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-03T23:10:10+08:00">
+                2019-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/03/programming_in_lua_15/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/01/03/programming_in_lua_15/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从多线程的角度来看，协程（coroutine）与线程（thread）类似：协程时一系列的可执行语句，拥有自己的栈、局部变量和指令指针，同时协程又与其他协程共享全局变量和其他几乎一切资源。</p>
+<p>协程与线程的主要区别在于，一个多线程程序可以并行运行多个线程，而协程则需要彼此协作运行，即在任意时刻只能有一个协程运行，且只有当正在运行的协程要求挂起时其执行才会暂停。</p>
+<h2 id="协程基础"><a href="#协程基础" class="headerlink" title="协程基础"></a>协程基础</h2><p>与协程相关的函数都放在表 coroutine 中。没个新建立的协程都拥有一个完整的生命周期，其包含四种状态：挂起（suspended）、运行（running）、正常（normal）和死亡（dead)。</p>
+<h3 id="创建协程"><a href="#创建协程" class="headerlink" title="创建协程"></a>创建协程</h3><p>coroutine.create(f)，创建一个以执行代码的函数 f（协程体）的新协程，并返回以类型 <code>thread</code> 为标志的新协程。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="built_in">print</span>(<span class="string">"hello"</span>) <span class="keyword">end</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(co)) <span class="comment">--&gt; thread</span></span><br></pre></td></tr></table></figure>
+<p>当协程被创建时，默认处于<strong>挂起状态</strong>，即协程不会在被创建时自动运行，我们可以通过 <code>coroutine.status</code> 来检查协程的状态：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co)) <span class="comment">--&gt; suspended</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="运行协程"><a href="#运行协程" class="headerlink" title="运行协程"></a>运行协程</h3><p>要想启动或再启动一个协程，我们可以使用函数 <code>coroutine.resume</code> 来执行，并将去状态改为运行：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; hello</span></span><br></pre></td></tr></table></figure>
+<p>上面的协程创建后运行的函数会输出 <code>hello</code> 然后该协程就终止了，最后协程执行完成后会变为<strong>死亡状态</strong>：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co)) <span class="comment">--&gt; dead</span></span><br></pre></td></tr></table></figure>
+<h3 id="挂起协程"><a href="#挂起协程" class="headerlink" title="挂起协程"></a>挂起协程</h3><p>协程的强大之处在于函数 <code>coroutine.yield</code>，该函数可以让一个运行中的协程挂起自己，然后在后续执行中恢复运行：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10</span> <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"co"</span>, i)</span><br><span class="line">        coroutine.<span class="built_in">yield</span>()</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
+<p>上面协程运行着一个循环，在循环中打印输出一个数字后遇到 <code>yield</code> 进入挂起状态：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; co 1</span></span><br></pre></td></tr></table></figure>
+<p>此时我们可以查看协程状态，会发现协程处于挂起状态：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co)) <span class="comment">--&gt; suspended</span></span><br></pre></td></tr></table></figure>
+<p>我们可以继续运行，直到上面 for 循环执行结束：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; co 2</span></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; co 3</span></span><br><span class="line">    ...</span><br><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; co 10</span></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co) <span class="comment">--&gt; 不输出任何数据</span></span><br></pre></td></tr></table></figure>
+<p>当最后一次调用 resume 时，协程体执行完毕并返回，不会输出任何数据，如果我们试图再次唤醒它，函数 resume 会返回 false 已经一条错误信息：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">resume</span>(co)) <span class="comment">--&gt; false  cannot resume dead coroutine</span></span><br></pre></td></tr></table></figure>
+<p>请注意，resume 函数运行在保护模式中，如果协程出错，Lua 不会显示错误信息，而是将错误信息返回给 resume 函数。</p>
+<p>当协程 A 唤醒协程 B 时，协程 A 不是挂起状态（因为不能唤醒协程A），而不是运行状态（因为正在运行协程B），此时的状态称之为<strong>正常状态</strong>。</p>
+<h3 id="交换数据"><a href="#交换数据" class="headerlink" title="交换数据"></a>交换数据</h3><p>协程中一个非常有用的机制是通过一对 <code>resume-yield</code> 来交换数据。第一个 <code>resume</code> 函数会把所有的额外参数传递给协程的主函数：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">(a, b, c)</span></span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"co"</span>, a, b, c)</span><br><span class="line">    <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">--&gt; co 1 2 3</span></span><br></pre></td></tr></table></figure>
+<p>函数 <code>resume</code> 第一个返回值为 <code>true</code> 时表示没有错误，之后的返回值对应函数 <code>yield</code> 的参数：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">(a, b)</span></span></span><br><span class="line">        coroutine.<span class="built_in">yield</span>(a + b, a - b)</span><br><span class="line">    <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">resume</span>(co, <span class="number">10</span>, <span class="number">20</span>)) <span class="comment">--&gt; true  30  -10</span></span><br></pre></td></tr></table></figure>
+<p>函数 <code>yield</code> 返回值则会对应 <code>resume</code> 的参数：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">(x)</span></span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"co1"</span>, x)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"co2"</span>, coroutine.<span class="built_in">yield</span>())</span><br><span class="line">    <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co, <span class="string">"hi"</span>) <span class="comment">--&gt; co1    hi</span></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co, <span class="number">4</span>, <span class="number">5</span>) <span class="comment">--&gt; co2    4    5</span></span><br></pre></td></tr></table></figure>
+<p>当协程运行结束后，主函数所返回的值将变成对应函数 <code>resume</code> 的返回值：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>, <span class="number">2</span></span><br><span class="line">    <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">resume</span>(co)) <span class="comment">--&gt; true    1    2</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用协程解决生产者于消费者问题"><a href="#使用协程解决生产者于消费者问题" class="headerlink" title="使用协程解决生产者于消费者问题"></a>使用协程解决生产者于消费者问题</h2><p>生产者-消费者设计两个函数，一个函数不断的生成值，而另外一个函数则不断的消费这些值，我们可以看以下代码实现：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">producer</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> x = <span class="built_in">io</span>.<span class="built_in">read</span>() <span class="comment">-- 生产新值</span></span><br><span class="line">        send(x)             <span class="comment">-- 发送给消费者</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span><span class="params">(x)</span></span></span><br><span class="line">    coroutine.<span class="built_in">yield</span>(x)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">consume</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> x = receive() <span class="comment">-- 接受来自生产者的值</span></span><br><span class="line">        <span class="built_in">io</span>.<span class="built_in">write</span>(x, <span class="string">"\n"</span>)   <span class="comment">-- 消费</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">receive</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">status</span>, value = coroutine.<span class="built_in">resume</span>(producer)</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">producer = coroutine.<span class="built_in">create</span>(producer) <span class="comment">-- 生成者在协程里面运行</span></span><br><span class="line">consume() <span class="comment">-- 通过消费者启动</span></span><br></pre></td></tr></table></figure>
+<p>上面这种设计中，程序通过消费者启动。当消费者需要新值时就唤醒生成者，生成者向消费者返回新值后挂起，知道消费者再次将其唤醒。因此这种设计称之为消费者驱动式设计。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Lua编程/" rel="tag"># Lua编程</a>
+          
+            <a href="/tags/Lua-5-3/" rel="tag"># Lua 5.3</a>
+          
+            <a href="/tags/Lua协程/" rel="tag"># Lua协程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/25/programming_in_lua_14/" rel="next" title="Lua入门教程：垃圾回收">
+                <i class="fa fa-chevron-left"></i> Lua入门教程：垃圾回收
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/18/pathfinding-demystified-01/" rel="prev" title="寻路算法揭秘（1）：通用搜索">
+                寻路算法揭秘（1）：通用搜索 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协程基础"><span class="nav-number">1.</span> <span class="nav-text">协程基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建协程"><span class="nav-number">1.1.</span> <span class="nav-text">创建协程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行协程"><span class="nav-number">1.2.</span> <span class="nav-text">运行协程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#挂起协程"><span class="nav-number">1.3.</span> <span class="nav-text">挂起协程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交换数据"><span class="nav-number">1.4.</span> <span class="nav-text">交换数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用协程解决生产者于消费者问题"><span class="nav-number">2.</span> <span class="nav-text">使用协程解决生产者于消费者问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

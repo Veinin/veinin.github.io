@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Lua编程,Lua 5.3," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Veinin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Lua 从 5.1 版本开始为模块与包定义了一系列规则，这些规则不需要引入额外的功能特性。对用户来说，一个模块就是一些代码，这些代码可以通过 require 函数加载。 值得注意的是，从 Lua 5.2 开始编写模块的建议方式已经发生改变，而不在是 Lua 5.1 中的 module(“mymodule”, package.seall) 。现在根据推荐的是创建一个本地表，将所有模块函数放入其中并返">
+<meta name="keywords" content="Lua编程,Lua 5.3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lua入门教程：模块与包">
+<meta property="og:url" content="https://veinin.com/2018/12/20/programming_in_lua_10/index.html">
+<meta property="og:site_name" content="Veinin">
+<meta property="og:description" content="Lua 从 5.1 版本开始为模块与包定义了一系列规则，这些规则不需要引入额外的功能特性。对用户来说，一个模块就是一些代码，这些代码可以通过 require 函数加载。 值得注意的是，从 Lua 5.2 开始编写模块的建议方式已经发生改变，而不在是 Lua 5.1 中的 module(“mymodule”, package.seall) 。现在根据推荐的是创建一个本地表，将所有模块函数放入其中并返">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-25T16:16:50.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lua入门教程：模块与包">
+<meta name="twitter:description" content="Lua 从 5.1 版本开始为模块与包定义了一系列规则，这些规则不需要引入额外的功能特性。对用户来说，一个模块就是一些代码，这些代码可以通过 require 函数加载。 值得注意的是，从 Lua 5.2 开始编写模块的建议方式已经发生改变，而不在是 Lua 5.1 中的 module(“mymodule”, package.seall) 。现在根据推荐的是创建一个本地表，将所有模块函数放入其中并返">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://veinin.com/2018/12/20/programming_in_lua_10/"/>
+
+
+
+
+
+  <title>Lua入门教程：模块与包 | Veinin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Veinin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-booklist">
+          <a href="/booklist/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            书单
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/20/programming_in_lua_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Lua入门教程：模块与包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-20T20:34:15+08:00">
+                2018-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/20/programming_in_lua_10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/12/20/programming_in_lua_10/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Lua 从 5.1 版本开始为模块与包定义了一系列规则，这些规则不需要引入额外的功能特性。对用户来说，一个模块就是一些代码，这些代码可以通过 require 函数加载。</p>
+<p>值得注意的是，从 Lua 5.2 开始编写模块的建议方式已经发生改变，而不在是 Lua 5.1 中的 module(“mymodule”, package.seall) 。现在根据推荐的是创建一个本地表，将所有模块函数放入其中并返回表，其最大的区别是不会再使用全局命名空间来注册模块。</p>
+<h2 id="模块的基本方法"><a href="#模块的基本方法" class="headerlink" title="模块的基本方法"></a>模块的基本方法</h2><p>定义一个简单的模块，该模块在文件 <code>test_module.lua</code> 中，其模块有两个函数 <code>foo</code> 和 <code>bar</code>：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- test_module.lua</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> M = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.foo</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"foo"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.bar</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"bar"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> M</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>另外，还有一种编写模块的方法是把所有函数定义为局部变量，然后在最后构造模块并返回一个表：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- test_module.lua</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"foo"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"bar"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">    foo = foo,</span><br><span class="line">    bar = bar,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种编写模块的方式与上一种运行结果是一样的，其优点是无需在每个函数前使用表示符 M. 或类似的这种东西，最后再显示的导出相应的表。但这种方式有一个缺点就是导出表处在模块的最后，我们需要把导出的名字都写两边，会有点冗余。</p>
+<p>当然，不管怎么，最后我们都能通过 require 函数获取到模块并使用它：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- module_main.lua</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> tm = <span class="built_in">require</span> <span class="string">"test_module.lua"</span></span><br><span class="line"></span><br><span class="line">tm.foo() <span class="comment">--&gt; foo</span></span><br><span class="line">tm.bar() <span class="comment">--&gt; bar</span></span><br></pre></td></tr></table></figure>
+<h2 id="require-函数"><a href="#require-函数" class="headerlink" title="require 函数"></a>require 函数</h2><p>require 只是一个简单的加载模块的函数，我们如果需要使用某个模块，我们只需向其传入模块名作为参数，就可以获取指定的模块代码。 require 使用方式通常有两种：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 使用括号</span></span><br><span class="line"><span class="keyword">local</span> m = <span class="built_in">require</span>(<span class="string">"test_module"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 不使用括号</span></span><br><span class="line"><span class="keyword">local</span> m = <span class="built_in">require</span> <span class="string">"tet_module"</span></span><br></pre></td></tr></table></figure>
+<p>这两种方式并没有什么差异性，它们的运行方式是一样的。但对于 require 执行方式，我们还是有必要了解以下其运行原理的：</p>
+<ul>
+<li>首先 rquire 函数调用时，会去一个叫做 package.loaded 的全局表中查找模块是否已经加载，如果已经加载则返回对于的值。</li>
+<li>如果 package.loaded 没有找到对于的模块名，则会进一步搜索具有自定模块名的 Lua 文件（搜索路径由 package.path 决定），如果找打对于文件则调用 loadfile 函数加载。</li>
+<li>进一步，如果找不到指定模块名的 Lua 文件，那么会继续搜索对于名称的的 C 标准库文件（搜索路径由 package.cpath 决定），如果找到 C 标准库，则会使用 package.loadlib 函数进行加载。</li>
+<li>最后，如果找到模块由返回值，那么 require 会返回这个值，并保存在表 package.loaded 中，以便下次加载时返回相同的值。如果找到的模块没有任何返回值，返回值会设置为 true。</li>
+</ul>
+<p>因为由 package.loaded 的存在，除了第一次加载会执行一系列搜索模块规则外，后续的调用都会直接返回 package.loaded 中的值，如果我们希望再次强制加载一此模块，以达到比如重新更新模块的代码，我们可以这样做：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">package</span>.<span class="built_in">loaded</span>.modname = <span class="literal">nil</span></span><br><span class="line"><span class="keyword">local</span> m = <span class="built_in">require</span> <span class="string">"modname"</span></span><br></pre></td></tr></table></figure>
+<h2 id="require-搜索路径"><a href="#require-搜索路径" class="headerlink" title="require 搜索路径"></a>require 搜索路径</h2><p>require 使用的路径是一组模板，其中每一项都指定了如何将模块名转换为文件名的方式，其中每一个模板都是一个包含了可选问好的文件名， require 会将传入的模块名替换每一个问号，然后再一次检查每一项是否存在该文件名，如果目标不存在，则检查下一个模板。我们可以看下面这组路径：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\Lua\bin\lua\?;D:\Lua\bin\lua\?\?.lua;</span><br></pre></td></tr></table></figure>
+<p>如果使用 require “test” 加载模块，则会将上面路径转换为：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\Lua\bin\lua\test</span><br><span class="line">D:\Lua\bin\lua\test\test.lua</span><br></pre></td></tr></table></figure>
+<p>前面提到了 require 用于搜索 Lua 文件路径的变量是 package.path，其默认值初始化后会设置为环境变量 <code>LUA_PATH_5_3</code> 的值，如果没有 <code>LUA_PATH_5_3</code> 这个环境变量则会尝试找到 <code>LUA_PATH</code> 这个变量进行设置。</p>
+<p>对于 C 标准库的路径其用变量名叫做 package.cpath，其默认值来自环境变量 <code>LUA_CPATH_5_3</code> 或者 <code>LUA_CPATH</code>。需要注意的是，package.cpath 的值在 POSIX 系统和 Windows 系统中是由差异的，比如在 POSIX 系统中，其典型的值为：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./?.so;/usr/<span class="keyword">local</span>/lib/lua/<span class="number">5.3</span>/?.so</span><br></pre></td></tr></table></figure>
+<p>可以看到 POSIX 系统中，库名称都是 .so 结尾，而在 Windows 中会变成 .dll：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\?.dll;D:\Lua\lua53\lib\?dll</span><br></pre></td></tr></table></figure>
+<p>另外，我们还需要了解函数 <code>package.searchpath(name, path)</code> 函数，该函数实现了搜索库的所有规则，我们可以传入一个模块名和路径来搜索文件，该函数会返回抵押给存在的文件，如果不存在则会返回 nil 和无法加载成功的错误信息。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">path</span> = <span class="string">".\\?.dll;D:\\lua\\lib\\?.dll"</span></span><br><span class="line">&gt; <span class="built_in">print</span>(<span class="built_in">package</span>.searchpath(<span class="string">"test"</span>, <span class="built_in">path</span>))</span><br><span class="line"><span class="literal">nil</span></span><br><span class="line">        no file <span class="string">'.\test.dll'</span></span><br><span class="line">        no file <span class="string">'D:\lua\lib\test.dll'</span></span><br></pre></td></tr></table></figure>
+<h2 id="加载器"><a href="#加载器" class="headerlink" title="加载器"></a>加载器</h2><p>加载器的作用是用来搜索 Lua 文件或者 C 标准库文件。在变量数组 <code>package.searchers</code> 中存放了 require 所需要使用的所有类型的加载器，当查找一个模块是，require 会按次序使用这些加载器，并传入模块名进行搜索。如果某个加载器找到模块，则停止搜索并返回，如果使用完所有加载器都没有找到模块，则 require 函数会抛出异常。</p>
+<p>Lua 用四个查找器函数初始化 <code>package.searchers</code> 表：</p>
+<ul>
+<li>第一个查找器就是简单的在 package.preload 表中查找加载器。</li>
+<li>第二个查找器用于查找 Lua 库文件，它使用变量 package.path 中的路径来做查找工作。</li>
+<li>第三个查找器用于查找 C 库文件，它使用变量 package.cpath 中的路径来做查找工作。</li>
+<li>第四个查找器我们称之为一体化加载器，它从 C 库路径中查找指定模块的根名字，比如请求 a.b.c　时，它将查找 a 这个 C 库，如果找到，再加载函数，这个例子中则是 <code>luaopen_a_b_c</code>。利用这个机制，可以把若干 C 子模块打包进单个库，每个子模块都可以有原本的加载函数名。</li>
+</ul>
+<p>除了上面所说的加载器之外，我们也可以为一些特殊模块定义预加载器，预加载查找器会使用要给名为 <code>package.preload</code> 的表来映射模块名称和加载函数，当加载指定模块时，如果检查到 <code>package.preload</code> 定义了预加载器函数，则会直接使用该函数作为模块加载，并使用其返回值返回。</p>
+<h2 id="子模块与包"><a href="#子模块与包" class="headerlink" title="子模块与包"></a>子模块与包</h2><p>在一个负责的软件系统中，其一般会包含多个软件模块，每个模块又会分配多个子模块，而 Lua 是支持这种具有层次结构的模块分配的。比如，一个名为 <code>mod.sub</code> 的模块是模块 <code>mod</code> 的一个子模块 <code>sub</code>，我们可以看下面这样的树形结构的模块示意：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">    mod</span><br><span class="line">        sub</span><br><span class="line">    mod2</span><br><span class="line">        sub2</span><br><span class="line">        sub3</span><br></pre></td></tr></table></figure>
+<p>当搜索一个子模块时，函数 require 会将点转换为对于操作系统中的分隔符，如 POSIX 操作系统中的斜杠或 Windows 操作系统中的反斜杠。转换完成后，再对搜索路径的问号进行替换，然后走上面介绍的的模块搜索流程。如下面路径：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\?.lua;D:\Lua\?.lua;</span><br></pre></td></tr></table></figure>
+<p>当调用 <code>require &quot;a.b&quot;</code> 时，会生成以下搜索路径：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.\a\b.lua</span><br><span class="line">D:\Lua\a\b.lua;</span><br><span class="line">D:\Lua\a\b\init.lua;</span><br></pre></td></tr></table></figure>
+<p>这种搜索行为可以让我们很容易的把一个模块中的所有文件放置到同一个目录下，比如模块 m、m.a、m.b 对于的文件可以分别时 m/init.lua、m/a.lua、m/b.lua，而目录 m 可以放置在合适的任意位置，其他模块搜索只需要设置其搜索路径即可。</p>
+<p>另外，C 语言中名称是不能包含点，因此在编写 C 标准库时，子模块 a.b 是无法导出函数 lua_a.b的，这时，require 函数会将点替换为下划线，即名为 lua_a_b 的 C 标准库函数。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Lua编程/" rel="tag"># Lua编程</a>
+          
+            <a href="/tags/Lua-5-3/" rel="tag"># Lua 5.3</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/17/programming_in_lua_09/" rel="next" title="Lua入门教程：编译、执行和错误">
+                <i class="fa fa-chevron-left"></i> Lua入门教程：编译、执行和错误
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/programming_in_lua_11/" rel="prev" title="Lua入门教程：元表与元方法">
+                Lua入门教程：元表与元方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Veinin Guo" />
+            
+              <p class="site-author-name" itemprop="name">Veinin Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/veinin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:veininguo@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/veinin" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.douban.com/people/97080173" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块的基本方法"><span class="nav-number">1.</span> <span class="nav-text">模块的基本方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#require-函数"><span class="nav-number">2.</span> <span class="nav-text">require 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#require-搜索路径"><span class="nav-number">3.</span> <span class="nav-text">require 搜索路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载器"><span class="nav-number">4.</span> <span class="nav-text">加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子模块与包"><span class="nav-number">5.</span> <span class="nav-text">子模块与包</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veinin Guo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'Veinin',
+            repo: 'Gitment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9deb0ffa39d2e542a066c1b8ccd66c798fef2cd6',
+            
+                client_id: '675fbd84b4d35820edf5'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

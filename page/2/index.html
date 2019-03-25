@@ -276,6 +276,926 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/22/programming_in_lua_11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/programming_in_lua_11/" itemprop="url">Lua入门教程：元表与元方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T21:35:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Lua 语言中每中类型的值都有一套可预见的操作集合，比如可以将数字相加，将字符串连接，还可以在表中插入键值对。但我们却无法直接将两个表相加，无法对表进行直接比较，除非我们使用元表。<br>元表可以修改一个值在面对未知操作时的行为。例如，我们对两个表 a 和 b 执行 <code>a + b</code> 操作，Lua 在试图将两个表相加时，会检查其中某个表是否含有元表(metatable)，且元表中是否含有 <code>__add</code> 字段，如果 Lua 找到该字段，则调用该字段对应的值，这就是所有的元方法(metamethod)。</p>
+<p>在元表中每个元方法的键的命名都是一个双下划线（__）加事件名的，键关联的那些值被称为元方法。上面说的 <code>_add</code> 就是元方法键名称，而对应的元方法值是执行加操作的函数。</p>
+<h2 id="获取与设置元表"><a href="#获取与设置元表" class="headerlink" title="获取与设置元表"></a>获取与设置元表</h2><p>在 Lua 中每个值都可以有元表，而元表只是一个普通的Lua表。<br>每个表和用户数据类型都具有各自独立的元表，而其他类型的值则共享对于类型所属的同一个元表。<br>我们可以使用 <code>getmetatable</code> 获取一个表的元表，注意，刚创建的新表是没有元表的：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">t = &#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(t))  <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>另外，我们可以使用 <code>setmetatable</code> 来设置和修改任意表的元表：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">t1 = &#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(t, t1)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(t) == t1)    <span class="comment">--&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>在 Lua 中我们只能为表设置元表，如果要为其他类型值设置元表，则必须通过C代码或调试库完成。另外，字符串库为所有字符串都设置了同一个元表，而其他类型默认是没有元表的：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="string">"hello"</span>))    <span class="comment">--&gt; table: 0106F578</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="string">"world"</span>))    <span class="comment">--&gt; table: 0106F578</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">getmetatable</span>(<span class="literal">true</span>))       <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/22/programming_in_lua_11/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/20/programming_in_lua_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/20/programming_in_lua_10/" itemprop="url">Lua入门教程：模块与包</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-20T20:34:15+08:00">
+                2018-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Lua 从 5.1 版本开始为模块与包定义了一系列规则，这些规则不需要引入额外的功能特性。对用户来说，一个模块就是一些代码，这些代码可以通过 require 函数加载。</p>
+<p>值得注意的是，从 Lua 5.2 开始编写模块的建议方式已经发生改变，而不在是 Lua 5.1 中的 module(“mymodule”, package.seall) 。现在根据推荐的是创建一个本地表，将所有模块函数放入其中并返回表，其最大的区别是不会再使用全局命名空间来注册模块。</p>
+<h2 id="模块的基本方法"><a href="#模块的基本方法" class="headerlink" title="模块的基本方法"></a>模块的基本方法</h2><p>定义一个简单的模块，该模块在文件 <code>test_module.lua</code> 中，其模块有两个函数 <code>foo</code> 和 <code>bar</code>：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- test_module.lua</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> M = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.foo</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"foo"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.bar</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"bar"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> M</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/20/programming_in_lua_10/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/17/programming_in_lua_09/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/17/programming_in_lua_09/" itemprop="url">Lua入门教程：编译、执行和错误</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-17T21:13:20+08:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="dofile-与-loadfile-函数"><a href="#dofile-与-loadfile-函数" class="headerlink" title="dofile 与 loadfile 函数"></a>dofile 与 loadfile 函数</h2><p>dofile 是一个辅助函数，函数 loadfile 才完成了真正的核心工作。 两个函数都是从文件中加载 Lua 代码，但它不会运行，只是编译代码，然后把编译后的代码作为函数返回。<br>与 dofile 不同，loadfile 不会抛出异常，只会返回错误码。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dofile</span><span class="params">(filename)</span></span></span><br><span class="line">    <span class="keyword">local</span> f = <span class="built_in">assert</span>(<span class="built_in">loadfile</span>(filename))</span><br><span class="line">    <span class="keyword">return</span> f()</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="load-函数"><a href="#load-函数" class="headerlink" title="load 函数"></a>load 函数</h2><p>与 loadfile 类似，但该函数是从一个字符串中读取代码。</p>
+<p>编写用后即弃的代码：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">0</span></span><br><span class="line">s = <span class="string">"i = i + 1"</span></span><br><span class="line"><span class="built_in">load</span>(s)() <span class="comment">--&gt; 1</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/17/programming_in_lua_09/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/15/programming_in_lua_01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/15/programming_in_lua_01/" itemprop="url">Lua入门教程：数值</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-15T20:12:33+08:00">
+                2018-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Lua 5.2 以及之前的版本，所有数值类型都是以双精度浮点数表示，并且所有浮点型数值最大都是 <code>2^54</code>，但是 Lua 5.3 版本引入了整形，最大可用 64 位表示。</p>
+<h2 id="数值表示方式"><a href="#数值表示方式" class="headerlink" title="数值表示方式"></a>数值表示方式</h2><p>Lua 数值默认是十进制表示，除了整形之外，其他小数或者指数都会当做浮点型数值。我们可以使用函数 <code>type</code> 来获数值类型，他们都是使用 <code>number</code> 表示数值：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="number">1</span>         <span class="comment">--&gt; 1</span></span><br><span class="line">&gt; <span class="number">1.0</span>       <span class="comment">--&gt; 1.0</span></span><br><span class="line">&gt; <span class="number">1.2e5</span>     <span class="comment">--&gt; 120000.0</span></span><br><span class="line">&gt; <span class="number">0.2e4</span>     <span class="comment">--&gt; 2000.0</span></span><br><span class="line">&gt; <span class="number">0xff</span>      <span class="comment">--&gt; 255</span></span><br><span class="line">&gt; <span class="built_in">type</span>(<span class="number">1</span>)   <span class="comment">--&gt; number</span></span><br><span class="line">&gt; <span class="built_in">type</span>(<span class="number">1.0</span>) <span class="comment">--&gt; number</span></span><br></pre></td></tr></table></figure>
+<p>在 Lua 5.3 中为了区分整形和浮点型数值，引入了 <code>math.type</code> 函数，如果是整形该函数返回 <code>integer</code>，浮点型则返回 <code>float</code>：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">math</span>.<span class="built_in">type</span>(<span class="number">1</span>)      <span class="comment">--&gt; integer</span></span><br><span class="line">&gt; <span class="built_in">math</span>.<span class="built_in">type</span>(<span class="number">1.0</span>)    <span class="comment">--&gt; float</span></span><br></pre></td></tr></table></figure>
+<p>同时为了方便判断是否可以把一个数转换到整数，Lua 5.3 引入了 <code>math.tointeger</code> 函数，如果目标可以转换为一个整数，返回该整数，否则返回 <code>nil</code> ：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">math</span>.tointeger(<span class="number">3.0</span>)   <span class="comment">--&gt; 3</span></span><br><span class="line">&gt; <span class="built_in">math</span>.tointeger(<span class="number">3.1</span>)   <span class="comment">--&gt; nil</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/15/programming_in_lua_01/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/11/30/hyper-windows-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/30/hyper-windows-tutorial/" itemprop="url">玩转终端软件 Hyper</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T01:20:00+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hyper/" itemprop="url" rel="index">
+                    <span itemprop="name">Hyper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作 Linux 系统还是会觉得缺了点什么。</p>
+<p>目前市面上很多终端软件都比 Windows 自带终端好太多，比如这篇文章就介绍了 20 个比较好用终端软件：</p>
+<p><a href="https://www.slant.co/topics/1552/~best-terminal-emulators-for-windows" target="_blank" rel="noopener">THE BEST 1 OF 20 OPTIONS</a></p>
+<p>之前用过一个不错得软件叫做 <a href="http://cmder.net/" target="_blank" rel="noopener">Cmder</a>，但它不是今天得主角，我们今天要介绍得是另一款更符合我口味得终端软件 Hyper。</p>
+<h2 id="获取并安装-Hyper"><a href="#获取并安装-Hyper" class="headerlink" title="获取并安装 Hyper"></a>获取并安装 Hyper</h2><p>你可以在一下几个地方获取到 Hyper：</p>
+<ul>
+<li>官方网站：<a href="http://cmder.net/" target="_blank" rel="noopener">入口</a></li>
+<li>Github：<a href="https://github.com/zeit/hyper" target="_blank" rel="noopener">入口</a></li>
+</ul>
+<p>下载到二进制安装包后，直接安装就可以运行，本文运行环境是 Windows。</p>
+<h2 id="基础插件安装"><a href="#基础插件安装" class="headerlink" title="基础插件安装"></a>基础插件安装</h2><p>Hyper 本身是支持插件系统的，在安装扩展插件时，你需要先安装 Hyper 命令行程序，你可以点击菜单，选择 <code>Plugin</code> 选项，点击 <code>Install Hyper CLI command in PATH</code>。</p>
+<p><img src="/images/hyper/insall-path.png" alt="install"></p>
+<p>其官方在首页推荐了4个比较易用的插件，推荐直接全部安装。安装地址请点击 <a href="https://hyper.is/plugins" target="_blank" rel="noopener">链接</a>。其中4款插件分别为：</p>
+<ul>
+<li><a href="https://hyper.is/plugins/hypercwd" target="_blank" rel="noopener">hypercwd</a>，它可以让你的终端在新建标签页时，保持上一个终端的目录地址。安装命令： <code>hyper i hypercwd</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-search" target="_blank" rel="noopener">hyper-search</a>，它可以让你搜索整个终端的所有文本内容。安装命令： <code>hyper i hyper-search</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyper-pane</a>，增强窗口导航，对于支持多个页签的软件来说这是个利器。安装命令： <code>hyper i hyper-pane</code>。</li>
+<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyperpower</a>，这是一个让你的终端变得更加绚丽的插件，当然这么炫酷的效果是不是会影响你的工作呢，还是要视个人情而定。安装命令： <code>hyper i hyperpower</code>。</li>
+</ul>
+<p><img src="https://cloud.githubusercontent.com/assets/13041/16820268/13c9bfe6-4905-11e6-8fe4-baf8fc8d9293.gif" alt="hyperpower"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/30/hyper-windows-tutorial/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/08/08/ai_behavior_tree_design_and_implementation_02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/" itemprop="url">AI 行为树设计与实现-实现篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-08T21:15:00+08:00">
+                2018-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index">
+                    <span itemprop="name">AI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>上一篇文章中，我们主要介绍了有限状态机和行为树的各自特点以及他们之间的优劣势，本文着重讲解如何实现一个可用的行为树，手动实现一个行为树的库，这个库代码不到200行，代码库采用面向对象方式实现，语言采用的是 Lua，当然你也可以翻译成其他任何你顺手的语言。</p>
+<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><p>行为树时一个树形结构，我们AI系统要做的是执行每个节点，所以我们最开始必须先抽象一个节点出来，该节点作为所有其他类型节点的父节点：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> Node = class(<span class="string">'Node'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Node:ctor</span><span class="params">(opts)</span></span></span><br><span class="line">    self.blackboard = opts.blackboard</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Node:doAction</span><span class="params">()</span></span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> Node</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，节点拥有一个可选的成员变量 <code>blackboard</code>，我们称它为黑板，你可以搜索查看设计模式关于 <a href="https://www.google.com.hk/search?hl=zh-CN&amp;q=%E9%BB%91%E6%9D%BF%E6%A8%A1%E5%BC%8F&amp;gws_rd=ssl" target="_blank" rel="noopener">黑板模式</a> 的详细介绍。</p>
+<p>引入黑板，是因为很多节点在处理AI逻辑时是需要对数据进行处理，黑板中包含了整个行为树可以操作的数据结构。比如上一节我们提到的关于一个NPC守夜巡逻的实现中，整个行为树要处理的对象其实是NPC，NPC打伞、NPC巡逻动作其实是NPC自身的一个行为，而行为树各个节点要处理的目标就是存放在黑板中的这个NPC。</p>
+<p>我们实现的行为树节点对外部来说只有一个入口 <code>doAction</code> 函数，下面实现的所有其他类型的行为树节点都继承自 <code>Node</code> 节点。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/08/07/ai_behavior_tree_design_and_implementation_01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -863,894 +1783,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/17/programming_with_posix_pthreads_06/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/17/programming_with_posix_pthreads_06/" itemprop="url">POSIX 多线程程序设计-POSIX 针对线程的调整</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-17T19:38:12+08:00">
-                2018-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="多线程与fork"><a href="#多线程与fork" class="headerlink" title="多线程与fork"></a>多线程与fork</h2><p>多线程进程调用 <code>fork</code> 创造的子进程，只有调用 <code>fork</code> 的线程在子进程内存在，除了当前调用的线程，其他线程在子进程中都会消失，但消失的线程状态仍然保留为调用 <code>fork</code> 时的相同状态，线程会拥有与在父进程内当前调用线程的相同状态，拥有相同的互斥量，同样的线程私有数据键值等。</p>
-<p>在 <code>forked</code> 的进程中只有一个线程，消失的其他线程并不会调用诸如 <code>pthread_exit</code> 退出，线程也不会再运用线程私有数据 <code>destructors</code> 或清除处理函数。<br>这里就存在一个很危险的局面，其他线程可能正好位于临界区之内，持有了某个锁，而它突然死亡，也就再也没有机会去解锁了。而如果子进程试图去对某个 <code>mutex</code> 加锁，那么马上就会造成死锁的局面。</p>
-<p>综上所述，除非你打算很快地在子进程中调用 <code>exec</code> 执行一个新程序， 否则应避免在一个多线程的程序中使用 <code>fork</code>。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/17/programming_with_posix_pthreads_06/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/12/programming_with_posix_pthreads_05/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/12/programming_with_posix_pthreads_05/" itemprop="url">POSIX 多线程程序设计-线程高级编程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T23:12:32+08:00">
-                2018-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="一次性初始化"><a href="#一次性初始化" class="headerlink" title="一次性初始化"></a>一次性初始化</h2><p>一些事情仅仅需要做一次，不管是什么。在主函数中并且在调用任何其他依赖于初始化的事物之前，这时初始化应用最容易，特别是在创造任何线程之前初始化它需要的数据，如互斥量、线程特定数据键等。</p>
-<p>在传统的顺序编程中，一次性初始化经常通过使用布尔变量来管理。控制变量被静态地初始化为 0,而任何依赖于初始化的代码都能测试该变量。如果变量值仍然为 0, 则它能实行初始化，然后将变量置为 1，以后检查的代码将跳过初始化。如下面代码示例：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> initialized = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialized)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">    initialized = <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/12/programming_with_posix_pthreads_05/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/09/programming_with_posix_pthreads_04/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/09/programming_with_posix_pthreads_04/" itemprop="url">POSIX 多线程程序设计-使用线程方式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-09T21:15:44+08:00">
-                2018-06-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="线程编程模型"><a href="#线程编程模型" class="headerlink" title="线程编程模型"></a>线程编程模型</h2><p>线程变成模型主要有以下3种：</p>
-<ul>
-<li>流水线。每个线程反复地在数据系列集上执行冋一种操作，并把操作结果传递给下一步驟的其他线程。</li>
-<li>工作组。每个线程在自己的数据上执行操作，工作组中的线程可能执行同样的操作，也可能执行不同的操作，但是它们一定独立地执行。</li>
-<li>客户端/服务器。一个客户为每一件工作与一个独立的服务器“订契约”。通常“订契约”是匿名的，即一个请求通过某种接提交。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/09/programming_with_posix_pthreads_04/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/07/programming_with_posix_pthreads_03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/07/programming_with_posix_pthreads_03/" itemprop="url">POSIX 多线程程序设计-同步</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T20:16:55+08:00">
-                2018-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="不变量、临界区和谓词"><a href="#不变量、临界区和谓词" class="headerlink" title="不变量、临界区和谓词"></a>不变量、临界区和谓词</h2><p>不变量（invariant) 是由程序作出的假设， 特别是有关变量组间关系的假设。不变量可能会被破坏， 而且会经常被独立的代码段破坏。<br>临界区（critical section）有时称为“串行区域”，是指影响共享数据的代码段，临界区总能够对应到一个数据不变量。例如，你从队列中删除数据时， 你可以将删除数据的代码视为临界区。<br>谓词（Predicate) 是描述代码所需不变量的状态的语句。在英语中，谓词可以是如“队列为空”、 “资源可用” 之类的陈述。</p>
-<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p>大部分多线程程序需要在线程间共享数据。如果两个线程同时访问共享数据就可能会有问，因为一个线程可能在另一个线程修改共享数据的过程中使用该数据，并认为共享数据保持末变。<br>使线程同步最通用和常用的方法就是确保对相同数据的内存访问“互斥地”进行，即一次只能允许一个线程写数据，其他线程必须等待。<br>同步不仅仅在修改数据时重要， 当线程需要读取其他线程写入的数据时，而且数据写入的顺序也有影响时，同样需要同步。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/07/programming_with_posix_pthreads_03/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/05/programming_with_posix_pthreads_02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/05/programming_with_posix_pthreads_02/" itemprop="url">POSIX 多线程程序设计-线程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T22:22:01+08:00">
-                2018-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="建立和使用线程"><a href="#建立和使用线程" class="headerlink" title="建立和使用线程"></a>建立和使用线程</h2><h3 id="线程标识符"><a href="#线程标识符" class="headerlink" title="线程标识符"></a>线程标识符</h3><p>程序中使用线程标识符 ID 来表示线程。线程 ID 属于封装的 pthreadLt 类型。<br>为建立线程，你需要在程序中声明一个 <code>pthread_t</code> 类型的变量。 如果只需在某个函数中使用线程 ID，或者函数直到线程终止时才返回，则可以将线程 ID 声明为自动存储变量，不过大部分时间内， 线程 ID 保存在共享变量中（静态或外部）， 或者保存在堆空间的结构体中。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pthread_t</span> thread;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/05/programming_with_posix_pthreads_02/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/01/programming_with_posix_pthreads_01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/01/programming_with_posix_pthreads_01/" itemprop="url">POSIX 多线程程序设计-概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-01T19:32:05+08:00">
-                2018-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="术语定义"><a href="#术语定义" class="headerlink" title="术语定义"></a>术语定义</h2><h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><p>同步（synchronous）意味着同时在一起工作。例如聊天室和在线会议就是同步的好例子，在聊天室中，人们对彼此的对话会立即得到反应。<br>同步相对来说比较简单，但开销相对较大。</p>
-<p>异步（asynchronous) 表明事情相互独立地发生， 异步双方不需要共同的时钟，也就是接收方不知道发送方什么时候发送。例如论坛和电子邮件就是采用异步通信的一个好例子，这样沟通的双方都会有足够的时间去思考。<br>异步增加了复杂性以及更加麻烦的调试过程。如果你没有同时执行多个活动， 那么异步就没有什么优势。 如果你开始了一个异步活动， 然后什么也不做等待它结束， 则你并没有从异步那儿获得太多好处。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/01/programming_with_posix_pthreads_01/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1805,7 +1837,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1816,7 +1848,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1827,7 +1859,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

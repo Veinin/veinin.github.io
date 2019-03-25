@@ -1486,7 +1486,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/11/30/hyper-windows-tutorial/">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/01/03/programming_in_lua_15/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Veinin Guo">
@@ -1505,7 +1505,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/30/hyper-windows-tutorial/" itemprop="url">玩转终端软件 Hyper</a></h1>
+                <a class="post-title-link" href="/2019/01/03/programming_in_lua_15/" itemprop="url">Lua入门教程：协程</a></h1>
         
 
         <div class="post-meta">
@@ -1517,8 +1517,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T01:20:00+08:00">
-                2018-11-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-03T23:10:10+08:00">
+                2019-01-03
               </time>
             
 
@@ -1540,8 +1540,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hyper/" itemprop="url" rel="index">
-                    <span itemprop="name">Hyper</span>
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
                   </a>
                 </span>
 
@@ -1578,29 +1578,16 @@
 
       
         
-          <p>相信有很多人开发环境是我 Windows 上面，有时候又不得不面临在 Windows 上面开发 Linux 环境的程序。还好 Windows 10 系统为我们提供了一个叫 WSL（Windows Subsystem for Linux） 的子系统。但是，尽管微软已经很努力得在改善 Windows 开发环境了，但我们却始终得不到一个比较简单易用得终端软件，最起码你用 Window 自带得终端来操作 Linux 系统还是会觉得缺了点什么。</p>
-<p>目前市面上很多终端软件都比 Windows 自带终端好太多，比如这篇文章就介绍了 20 个比较好用终端软件：</p>
-<p><a href="https://www.slant.co/topics/1552/~best-terminal-emulators-for-windows" target="_blank" rel="noopener">THE BEST 1 OF 20 OPTIONS</a></p>
-<p>之前用过一个不错得软件叫做 <a href="http://cmder.net/" target="_blank" rel="noopener">Cmder</a>，但它不是今天得主角，我们今天要介绍得是另一款更符合我口味得终端软件 Hyper。</p>
-<h2 id="获取并安装-Hyper"><a href="#获取并安装-Hyper" class="headerlink" title="获取并安装 Hyper"></a>获取并安装 Hyper</h2><p>你可以在一下几个地方获取到 Hyper：</p>
-<ul>
-<li>官方网站：<a href="http://cmder.net/" target="_blank" rel="noopener">入口</a></li>
-<li>Github：<a href="https://github.com/zeit/hyper" target="_blank" rel="noopener">入口</a></li>
-</ul>
-<p>下载到二进制安装包后，直接安装就可以运行，本文运行环境是 Windows。</p>
-<h2 id="基础插件安装"><a href="#基础插件安装" class="headerlink" title="基础插件安装"></a>基础插件安装</h2><p>Hyper 本身是支持插件系统的，在安装扩展插件时，你需要先安装 Hyper 命令行程序，你可以点击菜单，选择 <code>Plugin</code> 选项，点击 <code>Install Hyper CLI command in PATH</code>。</p>
-<p><img src="/images/hyper/insall-path.png" alt="install"></p>
-<p>其官方在首页推荐了4个比较易用的插件，推荐直接全部安装。安装地址请点击 <a href="https://hyper.is/plugins" target="_blank" rel="noopener">链接</a>。其中4款插件分别为：</p>
-<ul>
-<li><a href="https://hyper.is/plugins/hypercwd" target="_blank" rel="noopener">hypercwd</a>，它可以让你的终端在新建标签页时，保持上一个终端的目录地址。安装命令： <code>hyper i hypercwd</code>。</li>
-<li><a href="https://hyper.is/plugins/hyper-search" target="_blank" rel="noopener">hyper-search</a>，它可以让你搜索整个终端的所有文本内容。安装命令： <code>hyper i hyper-search</code>。</li>
-<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyper-pane</a>，增强窗口导航，对于支持多个页签的软件来说这是个利器。安装命令： <code>hyper i hyper-pane</code>。</li>
-<li><a href="https://hyper.is/plugins/hyper-pane" target="_blank" rel="noopener">hyperpower</a>，这是一个让你的终端变得更加绚丽的插件，当然这么炫酷的效果是不是会影响你的工作呢，还是要视个人情而定。安装命令： <code>hyper i hyperpower</code>。</li>
-</ul>
-<p><img src="https://cloud.githubusercontent.com/assets/13041/16820268/13c9bfe6-4905-11e6-8fe4-baf8fc8d9293.gif" alt="hyperpower"></p>
+          <p>从多线程的角度来看，协程（coroutine）与线程（thread）类似：协程时一系列的可执行语句，拥有自己的栈、局部变量和指令指针，同时协程又与其他协程共享全局变量和其他几乎一切资源。</p>
+<p>协程与线程的主要区别在于，一个多线程程序可以并行运行多个线程，而协程则需要彼此协作运行，即在任意时刻只能有一个协程运行，且只有当正在运行的协程要求挂起时其执行才会暂停。</p>
+<h2 id="协程基础"><a href="#协程基础" class="headerlink" title="协程基础"></a>协程基础</h2><p>与协程相关的函数都放在表 coroutine 中。没个新建立的协程都拥有一个完整的生命周期，其包含四种状态：挂起（suspended）、运行（running）、正常（normal）和死亡（dead)。</p>
+<h3 id="创建协程"><a href="#创建协程" class="headerlink" title="创建协程"></a>创建协程</h3><p>coroutine.create(f)，创建一个以执行代码的函数 f（协程体）的新协程，并返回以类型 <code>thread</code> 为标志的新协程。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="built_in">print</span>(<span class="string">"hello"</span>) <span class="keyword">end</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(co)) <span class="comment">--&gt; thread</span></span><br></pre></td></tr></table></figure>
+<p>当协程被创建时，默认处于<strong>挂起状态</strong>，即协程不会在被创建时自动运行，我们可以通过 <code>coroutine.status</code> 来检查协程的状态：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co)) <span class="comment">--&gt; suspended</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/11/30/hyper-windows-tutorial/#more" rel="contents">
+            <a class="btn" href="/2019/01/03/programming_in_lua_15/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1651,7 +1638,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/08/08/ai_behavior_tree_design_and_implementation_02/">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/25/programming_in_lua_14/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Veinin Guo">
@@ -1670,7 +1657,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/" itemprop="url">AI 行为树设计与实现-实现篇</a></h1>
+                <a class="post-title-link" href="/2018/12/25/programming_in_lua_14/" itemprop="url">Lua入门教程：垃圾回收</a></h1>
         
 
         <div class="post-meta">
@@ -1682,8 +1669,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-08T21:15:00+08:00">
-                2018-08-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T23:10:10+08:00">
+                2018-12-25
               </time>
             
 
@@ -1705,8 +1692,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index">
-                    <span itemprop="name">AI</span>
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
                   </a>
                 </span>
 
@@ -1743,15 +1730,21 @@
 
       
         
-          <p>上一篇文章中，我们主要介绍了有限状态机和行为树的各自特点以及他们之间的优劣势，本文着重讲解如何实现一个可用的行为树，手动实现一个行为树的库，这个库代码不到200行，代码库采用面向对象方式实现，语言采用的是 Lua，当然你也可以翻译成其他任何你顺手的语言。</p>
-<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><p>行为树时一个树形结构，我们AI系统要做的是执行每个节点，所以我们最开始必须先抽象一个节点出来，该节点作为所有其他类型节点的父节点：</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> Node = class(<span class="string">'Node'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Node:ctor</span><span class="params">(opts)</span></span></span><br><span class="line">    self.blackboard = opts.blackboard</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Node:doAction</span><span class="params">()</span></span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> Node</span><br></pre></td></tr></table></figure>
-<p>我们可以看到，节点拥有一个可选的成员变量 <code>blackboard</code>，我们称它为黑板，你可以搜索查看设计模式关于 <a href="https://www.google.com.hk/search?hl=zh-CN&amp;q=%E9%BB%91%E6%9D%BF%E6%A8%A1%E5%BC%8F&amp;gws_rd=ssl" target="_blank" rel="noopener">黑板模式</a> 的详细介绍。</p>
-<p>引入黑板，是因为很多节点在处理AI逻辑时是需要对数据进行处理，黑板中包含了整个行为树可以操作的数据结构。比如上一节我们提到的关于一个NPC守夜巡逻的实现中，整个行为树要处理的对象其实是NPC，NPC打伞、NPC巡逻动作其实是NPC自身的一个行为，而行为树各个节点要处理的目标就是存放在黑板中的这个NPC。</p>
-<p>我们实现的行为树节点对外部来说只有一个入口 <code>doAction</code> 函数，下面实现的所有其他类型的行为树节点都继承自 <code>Node</code> 节点。</p>
+          <p>Lua 使用的是自动内存管理，所以我们不需要自己手动取删除创建后的对象，Lua 通过垃圾回收（garbage collection）的方式自动删除成为来及的对象，从而将程序员从内存管理的负担中解放出来。</p>
+<p>虽然在理想的环境中，垃圾回收对我们来说是不可见的，但其却不是万能的，比如某些关键的性能点，我们可能需要停止垃圾回收，或者让它只在特定的时间点运行，这就需要额外的垃圾回收方式来辅助。</p>
+<p>Lua 采用了弱引用表（weak table)、析构器（finalizer）和函数 collectgarbage 的机制来作为辅助垃圾回收。</p>
+<h2 id="弱引用表"><a href="#弱引用表" class="headerlink" title="弱引用表"></a>弱引用表</h2><p>所谓弱引用（weak reference）是一种不在垃圾回收考虑范围内的对象引用。弱引用表允许收集 Lua 中还可以被程序访问的对象，它告知 Lua 语言一个引用不应该阻止对一个对象的回收机制。</p>
+<p>一个典型的内存泄漏的场景是如果我们在数组中存储一些活跃的对象，我们只需要把对象插入到数组中去即可，一旦对象成为了数组中一部分，在数组销毁之前，该对象是永远无法回收的，虽然数组中的对象可能没有任何其他地方引用它，但其仍然被数组引用，除非我们告诉 Lua 数组中的引用不应该阻止此对象的回收。</p>
+<p>表由键和值组成，键和值都是强引用，垃圾回收默认不会回收一个可访问的作为表中键和值的对象。而在一个弱引用表中，键和值都可以是弱引用，一旦某个键或值被回收，那么其对应的整个键值对也会被回收。</p>
+<p>一个表是否为弱引用表由其元表中的 <code>__mode</code> 字段决定，其值应该是个字符串：</p>
+<ul>
+<li>当字符串是 “k” 时，这个表的键是弱引用。</li>
+<li>当字符串是 “v” 时，这个表的值时弱引用。</li>
+<li>当字符串是 “kv” 时，表中的键和值都是弱引用。</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/08/ai_behavior_tree_design_and_implementation_02/#more" rel="contents">
+            <a class="btn" href="/2018/12/25/programming_in_lua_14/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1843,7 +1836,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1854,7 +1847,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1865,7 +1858,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
