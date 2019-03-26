@@ -276,6 +276,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/03/26/why-can-not-send-udp-from-browser/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/26/why-can-not-send-udp-from-browser/" itemprop="url">为什么不能在浏览器上发送 UDP 数据包</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-26T19:59:00+08:00">
+                2019-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UDP/" itemprop="url" rel="index">
+                    <span itemprop="name">UDP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在2017年有一个非常流行的Web游戏出现在网络上，他的名字叫 <a href="https://agar.io/index.html" target="_blank" rel="noopener">agar.io</a>，这是一个休闲类的IO类游戏，这个游戏使用的网络协议通过 TCP 实现的 WebSockets。而近年来，随着 HTML5 强势崛起，各个小游戏平台的如雨后春笋的冒出来，越来越多的联网的小游戏出现在了我们的面前。</p>
+<p>对于很多联网的游戏，特别是很多休闲的实时对战类游戏，不用下载点击就可游玩，很适合发布到小游戏平台，但这些游戏通常对网络的传输的实时性有很高的要求。如果我们使用 UDP 协议就能极大地改善网络连接，基于此原因，那有没有基于 UDP 的等效 WebSockets 协议能在浏览器中使用呢？</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我们都知道 Web 浏览器构建在 HTTP 协议之上，HTTP 最初开始设计的时候只是为了访问静态网页的无状态请求/响应而设计的。而 HTTP 协议又是建立在 TCP 协议基础上的，而 TCP 是一种更低层次的协议，可以保证互联网的数据按发送的顺序可靠的送达到目的地。</p>
+<p>但是随着网站业务的逐渐复杂化，对用户的交互实时性要求越来越高，HTTP 请求/响应的协议规范逐渐难以适应。当然，对于这样的跳转，随之而来的出现了一系列的现在 Web 协议：WebSockets、WebRTC、QUIC、HTTP/2 等等。</p>
+<p>不幸的是，虽然很多新的协议被开发出来，但并没有一个协议由针对性的提供多人游戏所需的内容，或者说，如果你要开发多人游戏而使用上面的某些协议，它会让你的应用变得非常复杂。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/26/why-can-not-send-udp-from-browser/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://veinin.com/2019/03/14/fast-paced-multiplayer-04/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1588,163 +1738,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/01/03/programming_in_lua_15/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/25/programming_in_lua_14/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/25/programming_in_lua_14/" itemprop="url">Lua入门教程：垃圾回收</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T23:10:10+08:00">
-                2018-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua入门教程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Lua 使用的是自动内存管理，所以我们不需要自己手动取删除创建后的对象，Lua 通过垃圾回收（garbage collection）的方式自动删除成为来及的对象，从而将程序员从内存管理的负担中解放出来。</p>
-<p>虽然在理想的环境中，垃圾回收对我们来说是不可见的，但其却不是万能的，比如某些关键的性能点，我们可能需要停止垃圾回收，或者让它只在特定的时间点运行，这就需要额外的垃圾回收方式来辅助。</p>
-<p>Lua 采用了弱引用表（weak table)、析构器（finalizer）和函数 collectgarbage 的机制来作为辅助垃圾回收。</p>
-<h2 id="弱引用表"><a href="#弱引用表" class="headerlink" title="弱引用表"></a>弱引用表</h2><p>所谓弱引用（weak reference）是一种不在垃圾回收考虑范围内的对象引用。弱引用表允许收集 Lua 中还可以被程序访问的对象，它告知 Lua 语言一个引用不应该阻止对一个对象的回收机制。</p>
-<p>一个典型的内存泄漏的场景是如果我们在数组中存储一些活跃的对象，我们只需要把对象插入到数组中去即可，一旦对象成为了数组中一部分，在数组销毁之前，该对象是永远无法回收的，虽然数组中的对象可能没有任何其他地方引用它，但其仍然被数组引用，除非我们告诉 Lua 数组中的引用不应该阻止此对象的回收。</p>
-<p>表由键和值组成，键和值都是强引用，垃圾回收默认不会回收一个可访问的作为表中键和值的对象。而在一个弱引用表中，键和值都可以是弱引用，一旦某个键或值被回收，那么其对应的整个键值对也会被回收。</p>
-<p>一个表是否为弱引用表由其元表中的 <code>__mode</code> 字段决定，其值应该是个字符串：</p>
-<ul>
-<li>当字符串是 “k” 时，这个表的键是弱引用。</li>
-<li>当字符串是 “v” 时，这个表的值时弱引用。</li>
-<li>当字符串是 “kv” 时，表中的键和值都是弱引用。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/25/programming_in_lua_14/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

@@ -276,6 +276,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/25/programming_in_lua_14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Veinin Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Veinin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/25/programming_in_lua_14/" itemprop="url">Lua入门教程：垃圾回收</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T23:10:10+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua入门教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua入门教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Lua 使用的是自动内存管理，所以我们不需要自己手动取删除创建后的对象，Lua 通过垃圾回收（garbage collection）的方式自动删除成为来及的对象，从而将程序员从内存管理的负担中解放出来。</p>
+<p>虽然在理想的环境中，垃圾回收对我们来说是不可见的，但其却不是万能的，比如某些关键的性能点，我们可能需要停止垃圾回收，或者让它只在特定的时间点运行，这就需要额外的垃圾回收方式来辅助。</p>
+<p>Lua 采用了弱引用表（weak table)、析构器（finalizer）和函数 collectgarbage 的机制来作为辅助垃圾回收。</p>
+<h2 id="弱引用表"><a href="#弱引用表" class="headerlink" title="弱引用表"></a>弱引用表</h2><p>所谓弱引用（weak reference）是一种不在垃圾回收考虑范围内的对象引用。弱引用表允许收集 Lua 中还可以被程序访问的对象，它告知 Lua 语言一个引用不应该阻止对一个对象的回收机制。</p>
+<p>一个典型的内存泄漏的场景是如果我们在数组中存储一些活跃的对象，我们只需要把对象插入到数组中去即可，一旦对象成为了数组中一部分，在数组销毁之前，该对象是永远无法回收的，虽然数组中的对象可能没有任何其他地方引用它，但其仍然被数组引用，除非我们告诉 Lua 数组中的引用不应该阻止此对象的回收。</p>
+<p>表由键和值组成，键和值都是强引用，垃圾回收默认不会回收一个可访问的作为表中键和值的对象。而在一个弱引用表中，键和值都可以是弱引用，一旦某个键或值被回收，那么其对应的整个键值对也会被回收。</p>
+<p>一个表是否为弱引用表由其元表中的 <code>__mode</code> 字段决定，其值应该是个字符串：</p>
+<ul>
+<li>当字符串是 “k” 时，这个表的键是弱引用。</li>
+<li>当字符串是 “v” 时，这个表的值时弱引用。</li>
+<li>当字符串是 “kv” 时，表中的键和值都是弱引用。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/25/programming_in_lua_14/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/12/22/programming_in_lua_11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1599,153 +1756,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/25/programming_with_posix_pthreads_08/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://veinin.com/2018/06/20/programming_with_posix_pthreads_07/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Veinin Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Veinin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/20/programming_with_posix_pthreads_07/" itemprop="url">POSIX 多线程程序设计-线程扩展</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T22:12:24+08:00">
-                2018-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="栅栏（Barriers）"><a href="#栅栏（Barriers）" class="headerlink" title="栅栏（Barriers）"></a>栅栏（Barriers）</h2><p>barrier 字面意思时栅栏，barrier 是将一组成员保持在一起的一种方式，它可以实现让一组线程等待至某个状之后再全部同时执行。一个 barrier 通常被用来确保某些井行算法中的所有合作线程在任何线程可以继续运行之前到达算法中的一个特定点。</p>
-<p>barrier 的核心是一个计数器，我们可以称之为“阈值”，即在一个 barrier 上必须等待的线程数。计时器计算着当前线程的返回数量，如果数量未达到指定点，那么之前返回的线程都必须继续等待，直到最后一个线程返回，才能开始下一步。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/20/programming_with_posix_pthreads_07/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
